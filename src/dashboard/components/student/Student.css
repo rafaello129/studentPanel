@@ -1,0 +1,78 @@
+  /* studentCardList.css */
+  .student-card {
+    width: 17rem;
+    margin: 4px;
+    padding: 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  
+  .student-card:hover {
+    transform: translateY(-0.5rem);
+    box-shadow: 0 1rem 1.5rem rgba(0, 0, 0, 0.2);
+  }
+  
+  .student-card img {
+    border-radius: 50%;
+    background: #f5f4f1;
+  }
+  
+  .student-card .card-title {
+    margin-top: 0.75rem;
+  }
+  
+  .student-card .badge {
+    background-color: #17a2b8;
+  }
+  
+  .student-card .btn {
+    margin: 1rem 0;
+  }
+
+  /* modal.css */
+.modal-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.modal-header .modal-title {
+  display: flex;
+  align-items: center;
+}
+
+.modal-header img {
+  border-radius: 50%;
+  background: #f5f4f1;
+  margin-right: 10px;
+}
+
+.modal-body {
+  padding: 2rem;
+}
+
+.modal-body .form-label {
+  font-weight: bold;
+}
+
+.modal-body .form-control,
+.modal-body .form-select {
+  margin-top: 0.5rem;
+}
+
+.modal-body .text-danger {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.modal-footer {
+  border-top: 1px solid #dee2e6;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.modal-footer .btn {
+  margin-left: 1rem;
+}

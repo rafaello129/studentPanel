@@ -1,0 +1,7 @@
+{
+  "version": "0.2",
+  "language": "en,es",
+  "allowCompoundWords": true,
+  "caseSensitive": false,
+  "words": ["formik", "redux", "reduxjs"]
+}

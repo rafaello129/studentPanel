@@ -1,0 +1,49 @@
+/* subjectsList.css */
+.card {
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    font-weight: bold;
+  }
+  
+  .semester-card {
+    width: 8rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    margin: 2px;
+  }
+  
+  .subject-card {
+    width: 12rem;
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    margin: 2px;
+  }
+  
+  .btn-add-subject {
+    width: 12rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0.5rem;
+  }
+  
+  .btn-add-subject .fa-plus {
+    margin-left: 0.5rem;
+  }
+  
