@@ -17,7 +17,7 @@ COPY . .
 RUN npm run build
 
 # Exponer el puerto
-EXPOSE 80
+EXPOSE 6300
 
 # Iniciar Nginx
 CMD ["npm", "run", "preview"]
