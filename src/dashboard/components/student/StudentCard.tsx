@@ -19,7 +19,7 @@ const StudentCard: React.FC<StudentCardProps> = ({ student, onSelect }) => {
       <div className="card-body d-flex flex-column">
         <span>
           <strong>N. Control:</strong>{" "}
-          <span className="badge">{student.noControl}</span>
+          <span className="badge text-bg-success">{student.noControl}</span>
         </span>
         <span>
           <strong>Semestre:</strong> {student.semester}

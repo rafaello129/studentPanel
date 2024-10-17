@@ -100,7 +100,7 @@ export const Sidebar = () => {
               </ul>
             </li>
 
-            
+
 
 
             <li className='nav-item'>
@@ -121,6 +121,8 @@ export const Sidebar = () => {
                   </NavLink>
                 </li>
 
+
+                {/*
                 <li className='nav-item'>
                   <NavLink
                     style={({ isActive }) => (isActive ? activeStyle : undefined)}
@@ -142,13 +144,13 @@ export const Sidebar = () => {
                     <span className='ms-2'>Plan de Estudio</span>
                   </NavLink>
                 </li>
-
+                */}
               </ul>
             </li>
 
 
 
-            
+
             <li className='nav-item'>
               <NavLink
                 style={({ isActive }) => (isActive ? activeStyle : undefined)}

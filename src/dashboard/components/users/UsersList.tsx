@@ -23,6 +23,7 @@ export const UsersList = () => {
 
   const roles = data || [];
   const users = usersResponse?.data || [];
+  const totalUsers = usersResponse?.total || 0; // Total de usuarios para el paginador
 
   const handleRoleChange = (userId: number, roleId: number) => {
     assignRole({ userId, roleId });
@@ -68,13 +69,13 @@ export const UsersList = () => {
         </tbody>
       </table>
 
-      <div className='container-fluid d-flex align-items-center'>
+      <div className='container-fluid d-flex align-items-center justify-content-center'>
         <Pagination
           currentPage={page}
-          pageSize={1}
-          totalCount={usersResponse?.total || 0}
+          pageSize={limit} // Se usa el mismo `limit` para `pageSize`
+          totalCount={totalUsers}
           onPageChange={setPage}
-          className='mt-3'
+          className='justify-content-center'
         />
       </div>
     </div>
