@@ -1,14 +1,14 @@
-// src/components/sections/DeleteSectionButton.tsx
-
 import React, { useState } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar, Alert } from '@mui/material';
+import { IconButton, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar, Alert, Button } from '@mui/material';
+import { Delete } from '@mui/icons-material';
 import { useDeleteSectionMutation } from '../../../services/api/providers/sectionApi';
 
 interface DeleteSectionButtonProps {
   sectionId: number;
+  refetchEvaluation: () => void;
 }
 
-const DeleteSectionButton: React.FC<DeleteSectionButtonProps> = ({ sectionId }) => {
+const DeleteSectionButton: React.FC<DeleteSectionButtonProps> = ({ sectionId, refetchEvaluation }) => {
   const [deleteSection, { isLoading }] = useDeleteSectionMutation();
   const [openConfirm, setOpenConfirm] = useState(false);
   const [successOpen, setSuccessOpen] = useState(false);
@@ -19,7 +19,7 @@ const DeleteSectionButton: React.FC<DeleteSectionButtonProps> = ({ sectionId }) 
       await deleteSection(sectionId).unwrap();
       setSuccessOpen(true);
       setOpenConfirm(false);
-      // Aquí puedes agregar lógica adicional, como redirigir o actualizar la lista de secciones
+      refetchEvaluation(); // <-- Aquí llamamos a refetchEvaluation para actualizar los datos
     } catch (error) {
       setErrorOpen(true);
     }
@@ -27,9 +27,9 @@ const DeleteSectionButton: React.FC<DeleteSectionButtonProps> = ({ sectionId }) 
 
   return (
     <>
-      <Button variant="contained" color="secondary" onClick={() => setOpenConfirm(true)}>
-        Eliminar Sección
-      </Button>
+      <IconButton onClick={() => setOpenConfirm(true)}>
+        <Delete />
+      </IconButton>
 
       {/* Diálogo de confirmación */}
       <Dialog

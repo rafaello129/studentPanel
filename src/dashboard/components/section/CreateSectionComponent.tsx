@@ -1,5 +1,3 @@
-// src/components/sections/CreateSectionComponent.tsx
-
 import React, { useState } from 'react';
 import {
   Box,
@@ -13,10 +11,11 @@ import { CreateSectionDto } from '../../../interfaces/create-section.dto';
 import { useCreateSectionMutation } from '../../../services/api/providers/sectionApi';
 
 interface CreateSectionProps {
-  evaluationId: number; // ID de la evaluación a la que se añadirá la sección
+  evaluationId: number;
+  refetchEvaluation: () => void;
 }
 
-const CreateSectionComponent: React.FC<CreateSectionProps> = ({ evaluationId }) => {
+const CreateSectionComponent: React.FC<CreateSectionProps> = ({ evaluationId, refetchEvaluation }) => {
   const [createSection, { isLoading }] = useCreateSectionMutation();
 
   const [formData, setFormData] = useState<CreateSectionDto>({
@@ -50,6 +49,7 @@ const CreateSectionComponent: React.FC<CreateSectionProps> = ({ evaluationId }) 
         order: undefined,
         evaluationId: evaluationId,
       });
+      refetchEvaluation(); // Actualizamos los datos en el componente padre
     } catch (error) {
       setErrorOpen(true);
     }
