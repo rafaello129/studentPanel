@@ -3,6 +3,7 @@
 import { AcademicLevel } from './academic-level';
 import { Section } from './section';
 import { User } from './user';
+import {Class} from  './class';
 
 /**
  * Interface for Evaluation entity.
@@ -18,6 +19,7 @@ export interface Evaluation {
   sections: Section[];
   template?: Evaluation;
   assignedUsers: User[];
+  classes: Class[]; // Añadimos el campo classes
 }
 
 /**
@@ -53,8 +55,8 @@ export interface UpdateEvaluation {
 export interface CloneEvaluation {
   templateId: number;
   scheduledDate: string;
+  classIds?: number[];
 }
-
 /**
  * Interface for assigning users to an Evaluation.
  */

@@ -23,7 +23,7 @@ const classApi = peesadApi.injectEndpoints({
         getClasses: builder.query< ApiResponseAll<Class>, PaginationQueryParamsType & { packageId?: number, relationCheck?: boolean }>({
             query: ({ page = 1, limit = 1, isActive, packageId, relationCheck }) =>({
               url:`class/findAll?page=${page}&limit=${limit}` +
-              (isActive !== undefined ? `&isActive=${isActive}` : '') +
+              (isActive !== undefined ? `&isCurrent=${isActive}` : '') +
               (packageId !== undefined ? `&packageId=${packageId}` : '')+
               (relationCheck !== undefined ? `&relationCheck=${relationCheck}` : ''),
               method: 'GET',

@@ -35,7 +35,9 @@ export const peesadApi = createApi({
     'Career',
     'Class',
     'Tutor',
-    'Evaluation'
+    'Evaluation',
+    'AcademicLevel',
+    'Section'
   ],
   endpoints: () => ({}),
 });

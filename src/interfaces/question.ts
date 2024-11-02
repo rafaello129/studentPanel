@@ -1,13 +1,13 @@
 // src/interfaces/question.ts
 
-import { AnswerOption } from './answer-option';
-import { QuestionType } from './question-type';
+import { AnswerOption } from './answerOption';
+import { QuestionType } from './questionType';
 
 export interface Question {
-  id: number;
+  id?: number;
   text: string;
-  order: number;
-  allowMultipleAnswers: boolean;
+  order?: number;
   questionType: QuestionType;
-  answerOptions: AnswerOption[];
+  answerOptions?: AnswerOption[];
+  allowMultipleAnswers?: boolean;
 }

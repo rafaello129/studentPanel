@@ -15,6 +15,19 @@ import { PlanPage } from '../pages/plan/planPage';
 import { useState } from 'react';
 import EvaluationList from '../components/evaluation/EvaluationList';
 import CreateEvaluationForm from '../components/evaluation/CreateEvaluationForm';
+import { EvaluationPage } from '../pages/evaluation/EvaluationPage';
+import CloneEvaluationButton from '../components/evaluation/CloneEvaluationButton';
+import AssignUsersToEvaluation from '../components/evaluation/AssignUsersToEvaluation';
+import AcademicLevelList from '../components/academic-level/AcademicLevelList';
+import AcademicLevelPaginatedList from '../components/academic-level/AcademicLevelPaginatedList';
+import CreateAcademicLevelForm from '../components/academic-level/CreateAcademicLevelForm';
+import UpdateAcademicLevelForm from '../components/academic-level/UpdateAcademicLevelForm';
+import AcademicLevelPage from '../pages/academicLevel/AcademicLevelPage';
+import EvaluationDetails from '../components/evaluation/EvaluationDetails';
+import CreateSectionComponent from '../components/section/CreateSectionComponent';
+import SectionDetails from '../components/section/SectionDetails';
+import SectionsList from '../components/section/SectionsList';
+import UpdateSectionComponent from '../components/section/UpdateSectionComponent';
 
 export const DashboardRoutes = () => {
   
@@ -38,6 +51,16 @@ export const DashboardRoutes = () => {
         /*Probando */
         <Route path='ListEvaluaciones' element={<EvaluationList></EvaluationList>} />
         <Route path='CrearEvaluaciones' element={<CreateEvaluationForm></CreateEvaluationForm>} />
+        <Route path='ClonarEvaluacion' element={<CloneEvaluationButton></CloneEvaluationButton>} />
+        <Route path='AsignarEvaluation' element={<AssignUsersToEvaluation></AssignUsersToEvaluation>} />
+       <Route path="/sections/:sectionId" element={<SectionDetails />} />
+      
+
+        <Route path='AcademicLevelPage' element={<AcademicLevelPage></AcademicLevelPage>} />
+        <Route path="/evaluations/:evaluationId" element={<EvaluationDetails />} />
+
+
+        <Route path='Evaluation' element={<EvaluationPage></EvaluationPage>} />
 
         <Route
           path='assign'

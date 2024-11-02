@@ -15,23 +15,26 @@ import { ApiResponse } from "../../../interfaces/api-response";
 // Define los endpoints para Evaluation
 const evaluationApi = peesadApi.injectEndpoints({
   endpoints: (builder) => ({
-    // Obtener todas las evaluaciones con parámetros de paginación y filtros
-    getEvaluations: builder.query<ApiResponseAll<Evaluation>, {
-      page?: number;
-      limit?: number;
-      isActive?: boolean;
-      packageId?: number;
-      relationCheck?: boolean;
-    }>({
-      query: ({ page = 1, limit = 10, isActive, packageId, relationCheck }) => ({
-        url: `evaluation/paginated?page=${page}&limit=${limit}` +
-             (isActive !== undefined ? `&isActive=${isActive}` : '') +
-             (packageId !== undefined ? `&packageId=${packageId}` : '') +
-             (relationCheck !== undefined ? `&relationCheck=${relationCheck}` : ''),
-        method: 'GET',
-      }),
-      providesTags: ['Evaluation'],
-    }),
+  // Obtener evaluaciones con filtros
+  getEvaluations: builder.query<
+  ApiResponseAll<Evaluation>,
+  {
+    page?: number;
+    limit?: number;
+    isTemplate?: boolean;
+    isActive?: boolean;
+    academicLevelId?: number;
+  }
+>({
+  query: ({ page = 1, limit = 10, isTemplate, isActive, academicLevelId }) => ({
+    url: `evaluation/paginated?page=${page}&limit=${limit}` +
+      (isTemplate !== undefined ? `&isTemplate=${isTemplate}` : '') +
+      (isActive !== undefined ? `&isActive=${isActive}` : '') +
+      (academicLevelId !== undefined ? `&academicLevelId=${academicLevelId}` : ''),
+    method: 'GET',
+  }),
+  providesTags: ['Evaluation'],
+}),
 
     // Obtener una evaluación por ID
     getEvaluation: builder.query<ApiResponse<Evaluation>, number>({
@@ -71,15 +74,15 @@ const evaluationApi = peesadApi.injectEndpoints({
       invalidatesTags: (result, error, id) => [{ type: 'Evaluation', id }],
     }),
 
-    // Clonar una evaluación plantilla
-    cloneEvaluation: builder.mutation<ApiResponse<Evaluation>, CloneEvaluation>({
-      query: (body) => ({
-        url: 'evaluation/clone',
-        method: 'POST',
-        body,
+      // Clonar una evaluación plantilla con clases asignadas
+      cloneEvaluation: builder.mutation<ApiResponse<Evaluation>, CloneEvaluation>({
+        query: (body) => ({
+          url: 'evaluation/clone',
+          method: 'POST',
+          body,
+        }),
+        invalidatesTags: ['Evaluation'],
       }),
-      invalidatesTags: ['Evaluation'],
-    }),
 
     // Asignar usuarios a una evaluación
     assignUsers: builder.mutation<ApiResponse<Evaluation>, { id: number; assignUsersDto: AssignUsers }>({
