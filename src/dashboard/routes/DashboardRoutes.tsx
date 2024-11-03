@@ -29,6 +29,8 @@ import SectionDetails from '../components/section/SectionDetails';
 import SectionsList from '../components/section/SectionsList';
 import UpdateSectionComponent from '../components/section/UpdateSectionComponent';
 import EvaluationView from '../components/evaluation/EvaluationView';
+import MyEvaluation from '../pages/MyEvaluation/MyEvaluationPage';
+import MyEvaluationDetail from '../components/MyEvaluation/MyEvaluationDetail';
 
 export const DashboardRoutes = () => {
   
@@ -55,8 +57,8 @@ export const DashboardRoutes = () => {
         <Route path='ClonarEvaluacion' element={<CloneEvaluationButton></CloneEvaluationButton>} />
         <Route path='AsignarEvaluation' element={<AssignUsersToEvaluation></AssignUsersToEvaluation>} />
        <Route path="/sections/:sectionId" element={<SectionDetails />} />
-      
-
+       <Route path="/evaluation/:id/:idClass" element={<MyEvaluationDetail />} />
+       <Route path="Myevaluation" element={<MyEvaluation></MyEvaluation>} />
         <Route path='AcademicLevelPage' element={<AcademicLevelPage></AcademicLevelPage>} />
         <Route path="/evaluations/:evaluationId" element={<EvaluationDetails />} />
   {/* Nueva ruta para ver detalles de una evaluación en modo solo lectura */}
