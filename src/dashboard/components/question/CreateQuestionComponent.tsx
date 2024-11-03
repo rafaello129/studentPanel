@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { useCreateQuestionMutation } from '../../../services/api/providers/questionApi';
 export enum QuestionTypeEnum {
-    SINGLE_CHOICE = 'SINGLE_CHOICE',
-    MULTIPLE_CHOICE = 'MULTIPLE_CHOICE',
-    OPEN_ENDED = 'OPEN_ENDED',
+  SINGLE_CHOICE = 'MULTIPLE_CHOICE',
+  MULTIPLE_CHOICE = 'MULTIPLE_SELECT',
+  OPEN_ENDED = 'OPEN_ENDED',
     // Agrega otros tipos de pregunta según tu definición
   }
 

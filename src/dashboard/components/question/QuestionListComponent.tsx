@@ -1,12 +1,15 @@
+// src/components/questions/QuestionListComponent.tsx
+
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, IconButton } from '@mui/material';
+import { Box, Typography, IconButton, Paper } from '@mui/material';
 import { Edit } from '@mui/icons-material';
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
 import { Question } from '../../../interfaces/question';
 import { useGetQuestionsBySectionQuery, useUpdateQuestionMutation } from '../../../services/api/providers/questionApi';
-import CreateQuestionComponent from './CreateQuestionComponent';
+import CreateQuestionComponent, { QuestionTypeEnum } from './CreateQuestionComponent';
 import DeleteQuestionButton from './DeleteQuestionButton';
 import UpdateQuestionComponent from './UpdateQuestionComponent';
+import AnswerOptionListComponent from '../answerOption/AnswerOptionListComponent';
 
 interface QuestionListComponentProps {
   sectionId: number;
@@ -71,7 +74,7 @@ const QuestionListComponent: React.FC<QuestionListComponentProps> = ({ sectionId
               {questions.map((question, index) => (
                 <Draggable key={question.id} draggableId={question.id.toString()} index={index}>
                   {(draggableProvided) => (
-                    <Box
+                    <Paper
                       ref={draggableProvided.innerRef}
                       {...draggableProvided.draggableProps}
                       sx={{
@@ -94,8 +97,12 @@ const QuestionListComponent: React.FC<QuestionListComponentProps> = ({ sectionId
                         </IconButton>
                         <DeleteQuestionButton questionId={question.id} refetchQuestions={refetch} />
                       </Box>
-                      {/* Puedes agregar más detalles de la pregunta aquí */}
-                    </Box>
+                      {/* Lista de opciones de respuesta para esta pregunta */}
+                      <AnswerOptionListComponent 
+                        questionId={question.id} 
+                        questionType={question.questionType.name as QuestionTypeEnum} // Pasar el tipo de pregunta
+                      />
+                    </Paper>
                   )}
                 </Draggable>
               ))}

@@ -38,7 +38,8 @@ export const peesadApi = createApi({
     'Evaluation',
     'AcademicLevel',
     'Section',
-    'Question'
+    'Question',
+    'AnswerOption'
   ],
   endpoints: () => ({}),
 });

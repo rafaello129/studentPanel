@@ -76,8 +76,14 @@ const EvaluationList: React.FC = () => {
   };
 
   // Manejador para navegar a los detalles de una evaluación
-  const handleEvaluationClick = (evaluationId: number) => {
-    navigate(`/evaluations/${evaluationId}`);
+  const handleEvaluationClick = (evaluationId: number, isTemplate: boolean) => {
+    if (isTemplate) {
+      // Si es una plantilla, navegar al componente de edición/detalle
+      navigate(`/evaluations/${evaluationId}`);
+    } else {
+      // Si no es una plantilla, navegar al componente de vista solo lectura
+      navigate(`/evaluations/view/${evaluationId}`);
+    }
   };
 
   return (
@@ -152,7 +158,7 @@ const EvaluationList: React.FC = () => {
           <List>
             {data?.data.map((evaluation) => (
               <ListItem disablePadding key={evaluation.id}>
-                <ListItemButton onClick={() => handleEvaluationClick(evaluation.id)}>
+                <ListItemButton onClick={() => handleEvaluationClick(evaluation.id, evaluation.isTemplate)}>
                   <ListItemText
                     primary={evaluation.title}
                     secondary={

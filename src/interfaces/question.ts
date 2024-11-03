@@ -1,17 +1,9 @@
 import { QuestionTypeEnum } from "../dashboard/components/question/CreateQuestionComponent";
+import { AnswerOption } from "./answer-option";
 import { QuestionType } from "./question-type";
 
 
-/**
- * Interface para una opción de respuesta.
- */
-export interface AnswerOption {
-  id?: number;
-  text: string;
-  score: number;
-  order?: number;
-  // Si tienes más campos, agrégalos aquí
-}
+
 
 /**
  * Interface para una pregunta completa.
@@ -44,7 +36,7 @@ export interface CreateQuestionDto {
  */
 export interface UpdateQuestionDto {
   text?: string;
-  questionType?: QuestionType;
+  questionType?: QuestionTypeEnum;
   allowMultipleAnswers?: boolean;
   order?: number;
   answerOptions?: AnswerOption[];

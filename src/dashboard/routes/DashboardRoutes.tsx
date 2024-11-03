@@ -28,6 +28,7 @@ import CreateSectionComponent from '../components/section/CreateSectionComponent
 import SectionDetails from '../components/section/SectionDetails';
 import SectionsList from '../components/section/SectionsList';
 import UpdateSectionComponent from '../components/section/UpdateSectionComponent';
+import EvaluationView from '../components/evaluation/EvaluationView';
 
 export const DashboardRoutes = () => {
   
@@ -58,6 +59,8 @@ export const DashboardRoutes = () => {
 
         <Route path='AcademicLevelPage' element={<AcademicLevelPage></AcademicLevelPage>} />
         <Route path="/evaluations/:evaluationId" element={<EvaluationDetails />} />
+  {/* Nueva ruta para ver detalles de una evaluación en modo solo lectura */}
+  <Route path="/evaluations/view/:id" element={<EvaluationView />} />
 
 
         <Route path='Evaluation' element={<EvaluationPage></EvaluationPage>} />
