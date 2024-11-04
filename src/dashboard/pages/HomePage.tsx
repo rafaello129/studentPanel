@@ -46,28 +46,6 @@ export const HomePage = () => {
           </div>
         </div>
       </div>
-      {/* Opcional: Sección de tarjetas comentada */}
-      {/*
-      <div className="d-flex p-4">
-        <div className="d-flex w-75 flex-column">
-          <div className="card m-3">
-            <div className="card-body">
-              <img
-                width={600}
-                className="me-2 rounded-circle"
-                src={`https://i.stack.imgur.com/RmQxL.png`}
-                alt="User image"
-                loading="lazy"
-              />
-            </div>
-          </div>
-          <div className="m-3">
-            <UsersListHome />
-          </div>
-        </div>
-        <CardListLog />
-      </div>
-      */}
     </div>
   );
 }
