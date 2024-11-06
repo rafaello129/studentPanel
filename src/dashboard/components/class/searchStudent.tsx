@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { Class } from '../../../interfaces/class';
 import Swal from 'sweetalert2';
-import { useGetStudentsQuery } from '../../../services/api/providers/studentApi';
+import { useGetAvailableStudentsQuery, useGetStudentsQuery } from '../../../services/api/providers/studentApi';
 import { useGetCareersQuery } from '../../../services/api/providers/careerApi';
 import { apiAssignStudent } from '../../../api/classes-Providers';
 import Pagination from '../shared/Pagination';
@@ -21,12 +21,13 @@ const SearchStudent = ({ cls, updateClass, onFilterChange }: RegisteredClassProp
     const [semesters, setSemesters] = useState<number[] | undefined>(undefined);
     const limit = 10;
 
-    const { data: studentResponse } = useGetStudentsQuery({
+    const { data: studentResponse, refetch: refetchStudents } = useGetAvailableStudentsQuery({
         page,
         limit,
         careerId: selectedCareer || undefined,
         semester: selectedSemester || undefined,
-        idUnitCampus: cls.package.unitCampus.id // Filtrar por la unidad de la clase
+        idUnitCampus: cls.package.unitCampus.id,
+        classId: cls.id,
     });
 
     const students = useMemo(() => studentResponse?.data || [], [studentResponse]);
@@ -82,6 +83,8 @@ const SearchStudent = ({ cls, updateClass, onFilterChange }: RegisteredClassProp
                 });
 
                 updateClass(updatedClass);
+
+                refetchStudents(); 
             }
         } catch (error) {
             console.error('Error:', error);
