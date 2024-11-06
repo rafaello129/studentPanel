@@ -8,7 +8,6 @@ import { showErrorMessage, showLoading } from "../../../helpers/alerts";
 import Swal from "sweetalert2";
 
 
-
 const studentApi = peesadApi.injectEndpoints({
 
     endpoints: (builder) => ({
@@ -44,9 +43,28 @@ const studentApi = peesadApi.injectEndpoints({
             }),
 
             providesTags: (body) => [{ type: 'Student', id: body?.data?.id }]
-        })
+        }),
 
-        ,
+        getAvailableStudents: builder.query<
+            ApiResponseAll<Student>,
+            PaginationQueryParamsType & { careerId?: number; semester?: string; idUnitCampus?: number; classId: number }
+        >({
+            query: ({ page = 1, limit = 10, careerId, semester, idUnitCampus, classId }) => ({
+                url: `students/findAvailable?page=${page}&limit=${limit}`
+                    + (careerId !== undefined ? `&careerId=${careerId}` : '')
+                    + (semester !== undefined ? `&semester=${semester}` : '')
+                    + (idUnitCampus !== undefined ? `&idUnitCampus=${idUnitCampus}` : '')
+                    + `&classId=${classId}`,  
+                method: 'GET'
+            }),
+            providesTags: (result) =>
+                result
+                    ? [
+                        ...result.data.map(({ id }) => ({ type: 'Student' as const, id })),
+                        { type: 'Student', id: 'AVAILABLE_LIST' },
+                    ]
+                    : [{ type: 'Student', id: 'AVAILABLE_LIST' }],
+        }),
 
         addStudent: builder.mutation<ApiResponse<Student>, CreateStudent>({
 
@@ -123,7 +141,7 @@ const studentApi = peesadApi.injectEndpoints({
     overrideExisting: 'throw'
 })
 
-export const { useGetStudentQuery, useGetStudentsQuery, useAddStudentMutation, useMultiAddStudentMutation, useEditStudentMutation, useSearchStudentsQuery, useSearchStudentsByNoControlQuery } = studentApi
+export const { useGetStudentQuery, useGetStudentsQuery, useGetAvailableStudentsQuery, useAddStudentMutation, useMultiAddStudentMutation, useEditStudentMutation, useSearchStudentsQuery, useSearchStudentsByNoControlQuery } = studentApi
 
 export const createMultipleStudents = (file: File, idCareer: number, idUnit: number, semester: number, multiCreateFunction: Function, result: any) => {
 
