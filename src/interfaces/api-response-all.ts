@@ -9,9 +9,9 @@
  * @returns The API response with all data
  */
 export interface ApiResponseAll<T> {
+  status: boolean;
   data: T[];
   page: number;
   limit: number;
   total: number;
-  status: boolean;
 }

@@ -9,6 +9,7 @@ import { useGetTutorsQuery } from '../../../services/api/providers/tutorsApi';
 import Button from '../shared/Button';
 import Modal from '../shared/Modal';
 import Select from '../shared/Select';
+import { useGetActivePeriodSubperiodsQuery } from '../../../services/api/providers/periodApi';
 
 type CreateClassModalProps = {
   onDismiss: () => void;
@@ -36,26 +37,33 @@ export default function CreateClassModal({ onDismiss }: CreateClassModalProps) {
     isActive: true,
   });
   const [addClass] = useAddClassMutation();
+  const { data: subperiodsData } = useGetActivePeriodSubperiodsQuery();
 
   const packages = useMemo(() => packagesData?.data || [], [packagesData]);
   const subjects = useMemo(() => subjectsData?.data || [], [subjectsData]);
   const teachers = useMemo(() => teachersData?.data || [], [teachersData]);
   const tutors = useMemo(() => tutorsData?.data || [], [tutorsData]);
+  const subperiods = useMemo(() => Array.isArray(subperiodsData) ? subperiodsData : subperiodsData?.data || [], [subperiodsData]);
+
+  console.log(subperiods);
 
   const { values, errors, touched, handleChange, handleSubmit } = useFormik({
     initialValues: {
       package: '',
       subject: '',
       teacher: '',
-      tutor: ''
+      tutor: '',
+      subperiodId: ''
     },
     onSubmit: async () => {
       const tutorId = values.tutor ? +values.tutor : undefined;
-      addClass({
+      const subperiodId = values.subperiodId ? +values.subperiodId : undefined;
+      await addClass({
         package_id: +values.package,
         subject_id: +values.subject,
         teacher_id: +values.teacher,
-        tutor_id: tutorId
+        tutor_id: tutorId,
+        subperiodId: subperiodId,
       });
       onDismiss();
     },
@@ -124,6 +132,28 @@ export default function CreateClassModal({ onDismiss }: CreateClassModalProps) {
                   <span className='text-danger'>{errors.subject}</span>
                 )}
               </div>
+            </div>
+            <div className="mb-3">
+              <label htmlFor="subperiodId">Subperiodo</label>
+
+              <Select
+                id="subperiodId"
+                name="subperiodId"
+                value={values.subperiodId}
+                onChange={handleChange}
+              >
+                <Select.Option value="">Selecciona un subperiodo</Select.Option>
+
+                {subperiods.map((subperiod) => (
+                  <Select.Option key={subperiod.id} value={subperiod.id}>
+                    {subperiod.name}
+                  </Select.Option>
+                ))}
+              </Select>
+
+              {errors.subperiodId && touched.subperiodId && (
+                <span className="text-danger">{errors.subperiodId}</span>
+              )}
             </div>
             <div className='mb-3'>
               <label htmlFor='teacher'>Maestro</label>

@@ -1,0 +1,25 @@
+.period-page {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  thead {
+    font-weight: bold;
+    background-color: #f5f5f5;
+  }
+  
+  .period-row {
+    font-weight: bold;
+    cursor: pointer;
+    background-color: #fafafa;
+  }
+  
+  .subperiod-row td {
+    padding-left: 20px;
+  }
+  
+  .flag-icon {
+    width: 20px;
+    height: 15px;
+  }
+  

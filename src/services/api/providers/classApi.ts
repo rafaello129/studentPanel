@@ -17,51 +17,61 @@ export interface ClassQueryParams {
 }
 
 const classApi = peesadApi.injectEndpoints({
+  endpoints: (builder) => ({
+    getClasses: builder.query<ApiResponseAll<Class>, PaginationQueryParamsType & { packageId?: number, relationCheck?: boolean }>({
+      query: ({ page = 1, limit = 1, isActive, packageId, relationCheck }) => ({
+        url: `class/findAll?page=${page}&pageSize=${limit}` +
+          (isActive !== undefined ? `&isCurrent=${isActive}` : '') +
+          (packageId !== undefined ? `&packageId=${packageId}` : '') +
+          (relationCheck !== undefined ? `&relationCheck=${relationCheck}` : ''),
+        method: 'GET',
+      }),
+      providesTags: ['Class'],
+    }),
 
-    endpoints: (builder) => ({
+    addClass: builder.mutation<ApiResponse<Class>, CreateClass>({
+      query: (body) => ({
+        url: 'class/create',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Class'],
+    }),
 
-        getClasses: builder.query< ApiResponseAll<Class>, PaginationQueryParamsType & { packageId?: number, relationCheck?: boolean }>({
-            query: ({ page = 1, limit = 1, isActive, packageId, relationCheck }) =>({
-              url:`class/findAll?page=${page}&limit=${limit}` +
-              (isActive !== undefined ? `&isActive=${isActive}` : '') +
-              (packageId !== undefined ? `&packageId=${packageId}` : '')+
-              (relationCheck !== undefined ? `&relationCheck=${relationCheck}` : ''),
-              method: 'GET',
-      
-            }),
-              
-            providesTags: ['Class'],
-          }),
-      
-      
-          addClass: builder.mutation<ApiResponse<Class>, CreateClass>({
-            query: (body) => ({
-              url: 'class/create',
-              method: 'POST',
-              body,
-            }),
-            invalidatesTags: ['Class'],
-          }),
-      
-      
-          editClass: builder.mutation< ApiResponse<Class>, UpdateClass & { id: number } /* Partial<Class> & Pick<Class, 'id'>*/ >({
-            query: (body) => ({
-              url: `class/update/${body.id}`,
-              method: 'PATCH',
-              body: { ...body, id: undefined },
-            }),
-            invalidatesTags: ['Class'],
-          }),
-        }),
+    editClass: builder.mutation<ApiResponse<Class>, UpdateClass & { id: number }>({
+      query: (body) => ({
+        url: `class/update/${body.id}`,
+        method: 'PATCH',
+        body: { ...body, id: undefined },
+      }),
+      invalidatesTags: ['Class'],
+    }),
 
-        overrideExisting:'throw'
+    downloadTemplate: builder.query<Blob, void>({
+      query: () => ({
+        url: 'class/download-template',
+        method: 'GET',
+        responseHandler: (response) => response.blob(),
+      }),
+    }),
 
-      });
+    uploadClassExcel: builder.mutation<ApiResponse<any>, FormData>({
+      query: (body) => ({
+        url: 'class/upload-excel',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Class'],
+    }),
+  }),
+  overrideExisting: 'throw',
+});
 
-    
+export const {
+  useGetClassesQuery,
+  useAddClassMutation,
+  useEditClassMutation,
+  useDownloadTemplateQuery,
+  useUploadClassExcelMutation,
+} = classApi;
 
-    
-
-
-
-export const {useGetClassesQuery, useAddClassMutation, useEditClassMutation} = classApi

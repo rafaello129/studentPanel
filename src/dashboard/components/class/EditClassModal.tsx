@@ -7,7 +7,7 @@ import { useGetPackagesQuery } from '../../../services/api/providers/packageApi'
 import { useGetSubjectsQuery } from '../../../services/api/providers/subjectsApi';
 import { useGetTeachersQuery } from '../../../services/api/providers/teacherApi';
 import { useGetTutorsQuery } from '../../../services/api/providers/tutorsApi';
-
+import { useGetActivePeriodSubperiodsQuery } from '../../../services/api/providers/periodApi';
 import Button from '../shared/Button';
 import Modal from '../shared/Modal';
 import Select from '../shared/Select';
@@ -41,13 +41,20 @@ export default function EditClassModal({
     limit: 0,
     isActive: true,
   });
+  const { data: subperiodsData } = useGetActivePeriodSubperiodsQuery();
   const [editClass] = useEditClassMutation();
 
+  // Extracción de datos y asignación por defecto
   const packages = useMemo(() => packagesData?.data || [], [packagesData]);
   const subjects = useMemo(() => subjectsData?.data || [], [subjectsData]);
   const teachers = useMemo(() => teachersData?.data || [], [teachersData]);
   const tutors = useMemo(() => tutorsData?.data || [], [tutorsData]);
-  const tutorid = cls.tutor? cls.tutor.id : ''
+  const subperiods = useMemo(
+    () => Array.isArray(subperiodsData) ? subperiodsData : subperiodsData?.data || [],
+    [subperiodsData]
+  );
+  const tutorid = cls.tutor ? cls.tutor.id : '';
+  const initialSubperiodId = cls.subperiod ? cls.subperiod.id : '';
 
   const { values, errors, touched, handleChange, handleSubmit } = useFormik({
     initialValues: {
@@ -57,21 +64,23 @@ export default function EditClassModal({
       isCurrent: cls.isCurrent,
       isDeleted: cls.isDeleted,
       tutor: tutorid,
+      subperiodId: initialSubperiodId
     },
-    onSubmit: () => {
-      const tutoridSubmit = values.tutor? +values.tutor : undefined
-      editClass({
+    onSubmit: async () => {
+      const tutorId = values.tutor ? +values.tutor : undefined;
+      const subperiodId = values.subperiodId ? +values.subperiodId : undefined;
+
+      await editClass({
         id: cls.id,
         packageId: values.package,
         subjectId: values.subject,
         teacherId: values.teacher,
         isCurrent: values.isCurrent,
         isDeleted: values.isDeleted,
-        tutorId: tutoridSubmit
+        tutorId: tutorId,
+        subperiodId: subperiodId, // Solo se envía el subperiodo
       });
-      console.log(
-        `Edited with: ${values.package}, ${values.subject} and ${values.teacher}`,
-      );
+
       onDismiss();
     },
     validationSchema: updateClassSchema,
@@ -81,161 +90,125 @@ export default function EditClassModal({
     <Modal>
       <Modal.Header>
         <Modal.Header.Title>Editar clase</Modal.Header.Title>
-
         <Button
-          variant='outlinePrimary'
-          data-bs-dismiss='modal'
-          aria-label='close'
-          className='btn-close'
+          variant="outlinePrimary"
+          data-bs-dismiss="modal"
+          aria-label="close"
+          className="btn-close"
           onClick={onDismiss}
         ></Button>
       </Modal.Header>
 
       <Modal.Body>
-        <div className='container'>
-          <form noValidate onSubmit={handleSubmit} autoComplete='off'>
-            <div className='row'>
-              <div className='col-md-6 mb-3'>
-                <label htmlFor='package' className='btn-outline-secondary'>
+        <div className="container">
+          <form noValidate onSubmit={handleSubmit} autoComplete="off">
+            <div className="row">
+              <div className="col-md-6 mb-3">
+                <label htmlFor="package" className="btn-outline-secondary">
                   Paquete
                 </label>
-
                 <Select
-                  id='package'
-                  name='package'
+                  id="package"
+                  name="package"
                   value={values.package}
                   onChange={handleChange}
                 >
-                  <Select.Option value=''>Selecciona una opción</Select.Option>
-
+                  <Select.Option value="">Selecciona una opción</Select.Option>
                   {packages.map((pkg) => (
                     <Select.Option key={pkg.id} value={pkg.id}>
                       {pkg.name}
                     </Select.Option>
                   ))}
                 </Select>
-
                 {errors.package && touched.package && (
-                  <span className='text-danger'>{errors.package}</span>
+                  <span className="text-danger">{errors.package}</span>
                 )}
               </div>
-              <div className='col-md-6 mb-3'>
-                <label htmlFor='subject' className='btn-outline-secondary'>
+              <div className="col-md-6 mb-3">
+                <label htmlFor="subject" className="btn-outline-secondary">
                   Materia
                 </label>
-
                 <Select
-                  id='subject'
-                  name='subject'
+                  id="subject"
+                  name="subject"
                   value={values.subject}
                   onChange={handleChange}
                 >
-                  <Select.Option value=''>Selecciona una opción</Select.Option>
-
+                  <Select.Option value="">Selecciona una opción</Select.Option>
                   {subjects.map((subject) => (
                     <Select.Option key={subject.id} value={subject.id}>
                       {subject.name}
                     </Select.Option>
                   ))}
                 </Select>
-
                 {errors.subject && touched.subject && (
-                  <span className='text-danger'>{errors.subject}</span>
+                  <span className="text-danger">{errors.subject}</span>
                 )}
               </div>
             </div>
-            <div className='mb-3'>
-              <label htmlFor='teacher' className='btn-outline-secondary'>
+            <div className="mb-3">
+              <label htmlFor="subperiodId" className="btn-outline-secondary">
+                Subperiodo
+              </label>
+              <Select
+                id="subperiodId"
+                name="subperiodId"
+                value={values.subperiodId}
+                onChange={handleChange}
+              >
+                <Select.Option value="">Selecciona un subperiodo</Select.Option>
+                {subperiods.map((subperiod) => (
+                  <Select.Option key={subperiod.id} value={subperiod.id}>
+                    {subperiod.name}
+                  </Select.Option>
+                ))}
+              </Select>
+        
+            </div>
+            <div className="mb-3">
+              <label htmlFor="teacher" className="btn-outline-secondary">
                 Maestro
               </label>
-
               <Select
-                id='teacher'
-                name='teacher'
+                id="teacher"
+                name="teacher"
                 value={values.teacher}
                 onChange={handleChange}
               >
-                <Select.Option value=''>Selecciona una opción</Select.Option>
-
+                <Select.Option value="">Selecciona una opción</Select.Option>
                 {teachers.map((teacher) => (
                   <Select.Option key={teacher.id} value={teacher.id}>
                     {teacher.user.fullName}
                   </Select.Option>
                 ))}
               </Select>
-
               {errors.teacher && touched.teacher && (
-                <span className='text-danger'>{errors.teacher}</span>
+                <span className="text-danger">{errors.teacher}</span>
               )}
             </div>
-
-            <div className='mb-3'>
-              <label htmlFor='tutor' className='btn-outline-secondary'>
+            <div className="mb-3">
+              <label htmlFor="tutor" className="btn-outline-secondary">
                 Tutor
               </label>
-
               <Select
-                id='tutor'
-                name='tutor'
+                id="tutor"
+                name="tutor"
                 value={values.tutor}
                 onChange={handleChange}
               >
-                <Select.Option value=''>Selecciona una opción</Select.Option>
-
+                <Select.Option value="">Sin Asignar</Select.Option>
                 {tutors.map((tutor) => (
                   <Select.Option key={tutor.id} value={tutor.id}>
                     {tutor.user.fullName}
                   </Select.Option>
                 ))}
               </Select>
-
               {errors.teacher && touched.teacher && (
-                <span className='text-danger'>{errors.teacher}</span>
+                <span className="text-danger">{errors.teacher}</span>
               )}
             </div>
 
-            <div className='row'>
-              <div className='col-md-6 mb-3'>
-                <div className='form-check form-switch form-check-reverse'>
-                  <input
-                    type='checkbox'
-                    name='isCurrent'
-                    id='isCurrent'
-                    className='form-check-input'
-                    role='switch'
-                    checked={values.isCurrent}
-                    onChange={handleChange}
-                  />
-                  <label htmlFor='isCurrent' className='btn-outline-secondary'>
-                    Está habilitada
-                  </label>
-                  {errors.isCurrent && touched.isCurrent && (
-                    <span className='text-danger'>{errors.isCurrent}</span>
-                  )}
-                </div>
-              </div>
-              <div className='col-md-6 mb-3'>
-                <div className='form-check form-switch form-check-reverse'>
-                  <input
-                    type='checkbox'
-                    name='isDeleted'
-                    id='isDeleted'
-                    className='form-check-input'
-                    role='switch'
-                    checked={values.isDeleted}
-                    onChange={handleChange}
-                  />
-                  <label htmlFor='isDeleted' className='btn-outline-secondary'>
-                    Está eliminada
-                  </label>
-                  {errors.isDeleted && touched.isDeleted && (
-                    <span className='text-danger'>{errors.isDeleted}</span>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <Button type='submit'>Guardar clase</Button>
+            <Button type="submit">Guardar clase</Button>
           </form>
         </div>
       </Modal.Body>

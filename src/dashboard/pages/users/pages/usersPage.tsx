@@ -22,31 +22,8 @@ export const UsersPage = () => {
         <div className="p-5">
 
 
-            <div className="card container p-2">
-                <div className="d-flex flex-row">
-                    <div className="input-group p-2">
-                        <input type="text" placeholder="Buscar..." className="form-control" aria-label="Text input with dropdown button" />
-                    </div>
-                </div>
-            </div>
-
 
             <UsersList />
-
-            {
-                usersResponse ?
-
-
-                    usersResponse.total > 20 &&
-                    (
-                        <Paginator
-                            currentPage={page}
-                            totalResults={usersResponse.total}
-                            setCurrentPage={(page: number) => setPage(page)} />
-                    )
-                :
-                <></>
-            }
 
         </div>
 

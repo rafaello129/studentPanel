@@ -33,7 +33,6 @@ export default function ClassList({
             <th scope='col'>Materia</th>
             <th scope='col'>Maestro</th>
             <th scope='col'>Tutor</th>
-            <th scope='col'>Habilitar/Deshabilitar</th>
             <th scope='col'>Editar</th>
           </tr>
         </thead>
@@ -44,16 +43,6 @@ export default function ClassList({
               <td>{cls.subject.name}</td>
               <td>{cls.teacher.user.fullName}</td>
               {cls.tutor ? (<td>{cls.tutor.user.fullName}</td>):(<td>Sin asignar</td>)}
-              <td className='form-switch'>
-                <input
-                  className='form-check-input'
-                  type='checkbox'
-                  role='switch'
-                  id='isActiveClass'
-                  checked={cls.isCurrent}
-                  onChange={(e) => onActiveClassChange(cls, e.target.checked)}
-                />
-              </td>
               <td>
                 <Button size='small' onClick={() => onClassClick(cls)}>
                   <span className='fa-solid fa-pen'></span>

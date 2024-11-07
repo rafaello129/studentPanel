@@ -16,6 +16,26 @@ import { PlanPage } from '../pages/plan/planPage';
 import { AcademicEnviromentLayout } from '../layouts/AcademicEnviromentLayout';
 import { Specialty } from '../../interfaces/specialty';
 import { AddSubjectToSpecialtyPage } from '../components/specialty/AddSubjectToSpecialty';
+import EvaluationList from '../components/evaluation/EvaluationList';
+import CreateEvaluationForm from '../components/evaluation/CreateEvaluationForm';
+import { EvaluationPage } from '../pages/evaluation/EvaluationPage';
+import CloneEvaluationButton from '../components/evaluation/CloneEvaluationButton';
+import AssignUsersToEvaluation from '../components/evaluation/AssignUsersToEvaluation';
+import AcademicLevelList from '../components/academic-level/AcademicLevelList';
+import AcademicLevelPaginatedList from '../components/academic-level/AcademicLevelPaginatedList';
+import CreateAcademicLevelForm from '../components/academic-level/CreateAcademicLevelForm';
+import UpdateAcademicLevelForm from '../components/academic-level/UpdateAcademicLevelForm';
+import AcademicLevelPage from '../pages/academicLevel/AcademicLevelPage';
+import EvaluationDetails from '../components/evaluation/EvaluationDetails';
+import CreateSectionComponent from '../components/section/CreateSectionComponent';
+import SectionDetails from '../components/section/SectionDetails';
+import SectionsList from '../components/section/SectionsList';
+import UpdateSectionComponent from '../components/section/UpdateSectionComponent';
+import EvaluationView from '../components/evaluation/EvaluationView';
+import MyEvaluation from '../pages/MyEvaluation/MyEvaluationPage';
+import MyEvaluationDetail from '../components/MyEvaluation/MyEvaluationDetail';
+
+import PeriodPage from '../pages/period/PeriodPage';
 
 export const DashboardRoutes = () => {
   
@@ -41,6 +61,23 @@ export const DashboardRoutes = () => {
         </Route>
         <Route path='management' element={<ManagementPage setSelectedClass={setSelectedClass} />} />
         
+        /*Probando */
+        <Route path='ListEvaluaciones' element={<EvaluationList></EvaluationList>} />
+        <Route path='CrearEvaluaciones' element={<CreateEvaluationForm></CreateEvaluationForm>} />
+        <Route path='ClonarEvaluacion' element={<CloneEvaluationButton></CloneEvaluationButton>} />
+        <Route path='AsignarEvaluation' element={<AssignUsersToEvaluation></AssignUsersToEvaluation>} />
+       <Route path="/sections/:sectionId" element={<SectionDetails />} />
+       <Route path="/evaluation/:id/:idClass" element={<MyEvaluationDetail />} />
+       <Route path="Myevaluation" element={<MyEvaluation></MyEvaluation>} />
+        <Route path='AcademicLevelPage' element={<AcademicLevelPage></AcademicLevelPage>} />
+        <Route path="/evaluations/:evaluationId" element={<EvaluationDetails />} />
+  {/* Nueva ruta para ver detalles de una evaluación en modo solo lectura */}
+  <Route path="/evaluations/view/:id" element={<EvaluationView />} />
+
+
+        <Route path='Evaluation' element={<EvaluationPage></EvaluationPage>} />
+        <Route path='period' element={<PeriodPage/>} />
+
         <Route
           path='assign'
           element={

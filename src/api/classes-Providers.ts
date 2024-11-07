@@ -12,7 +12,7 @@ export const apiGetAllClass = async (queryParams:ClassQueryParams) =>{
         }
       
         if (queryParams.limit !== undefined) {
-          searchParams.append('limit', queryParams.limit.toString());
+          searchParams.append('pageSize', queryParams.limit.toString());
         }
       
         if (queryParams.teacherId !== undefined) {

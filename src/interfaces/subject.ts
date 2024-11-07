@@ -8,7 +8,7 @@ export interface Subject {
   isActive?: boolean;
   specialty?: Specialty
   
-}
+} 
 
 export interface CreateSubject {
 
