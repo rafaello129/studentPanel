@@ -9,6 +9,7 @@ import unidIcon from '../../assets/icons/unid.png';
 import user from '../../assets/icons/user.png';
 import logo from '../../assets/logo.svg';
 import academicLoad from '../../assets/icons/academicLoad.png'
+import period from '../../assets/icons/period.png'
 
 import centerAcademicIcon from '../../assets/icons/centerAcademic.png';
 
@@ -40,13 +41,23 @@ export const Sidebar = () => {
                 to='/home'
               >
                 <span className='material-icons'>home</span>
-                <span className='ms-2'>Home</span>
+                <span className='ms-2'>HOME</span>
+              </NavLink>
+            </li>
+            <li className='nav-item'>
+              <NavLink
+                style={({ isActive }) => (isActive ? activeStyle : undefined)}
+                className='nav-link d-flex align-items-center'
+                to='/period'
+              >
+                <img src={period} width={28} alt='Class Icon' />
+                <span className='ms-2'>PERIODOS</span>
               </NavLink>
             </li>
             <li className='nav-item'>
               <span className='nav-link d-flex align-items-center'>
                 <img src={centerAcademicIcon} width={28} alt='Academic Center Icon' />
-                <span className='ms-1 fw-light'>Entorno Académico</span>
+                <span className='ms-1 fw-light'>ENTORNO ACADÉMICO</span>
               </span>
 
               <ul className='navbar-nav'>
@@ -57,7 +68,7 @@ export const Sidebar = () => {
                     to='/carrer'
                   >
                     <img src={carrerIcon} width={28} alt='Carrer Icon' />
-                    <span className='ms-2'>Carreras</span>
+                    <span className='ms-2'>CARRERAS</span>
                   </NavLink>
                 </li>
 
@@ -70,22 +81,10 @@ export const Sidebar = () => {
                     to='/unit'
                   >
                     <img src={unidIcon} width={28} alt='Unit Icon' />
-                    <span className='ms-2'>Unidades</span>
+                    <span className='ms-2'>UNIDADES</span>
                   </NavLink>
                 </li>
 
-                {/*
-                  <li className='nav-item'>
-                    <NavLink
-                      style={({ isActive }) => (isActive ? activeStyle : undefined)}
-                      className='nav-link d-flex align-items-center'
-                      to='/period'
-                    >
-                      <img src={semesterIcon} width={28} alt='Semester Icon' />
-                      <span className='ms-2'>Períodos</span>
-                    </NavLink>
-                  </li>*/
-                }
                 <li className='nav-item'>
                   <NavLink
                     style={({ isActive }) => (isActive ? activeStyle : undefined)}
@@ -93,7 +92,7 @@ export const Sidebar = () => {
                     to='/student'
                   >
                     <img src={student} width={28} alt='Student Icon' />
-                    <span className='ms-2'>Alumnos</span>
+                    <span className='ms-2'>ALUMNOS</span>
                   </NavLink>
                 </li>
 
@@ -106,7 +105,7 @@ export const Sidebar = () => {
             <li className='nav-item'>
               <span className='nav-link d-flex align-items-center'>
                 <img src={academicLoad} width={37} alt='Academic Load Icon' />
-                <span className='ms-1 fw-light'>Carga Académica</span>
+                <span className='ms-1 fw-light'>CARGA ACADÉMICA</span>
               </span>
 
               <ul className='navbar-nav'>
@@ -117,7 +116,7 @@ export const Sidebar = () => {
                     to='/subjects'
                   >
                     <img src={modulos} width={28} alt='Subjects Icon' />
-                    <span className='ms-2'>Materias</span>
+                    <span className='ms-2'>MATERIAS</span>
                   </NavLink>
                 </li>
 
@@ -158,7 +157,7 @@ export const Sidebar = () => {
                 to='/class'
               >
                 <img src={classIcon} width={28} alt='Class Icon' />
-                <span className='ms-2'>Clases</span>
+                <span className='ms-2'>CLASES</span>
               </NavLink>
             </li>
             <li className='nav-item'>
@@ -168,7 +167,7 @@ export const Sidebar = () => {
                 to='/management'
               >
                 <img src={gestionar} width={28} alt='Management Icon' />
-                <span className='ms-2'>Asignar alumnos</span>
+                <span className='ms-2'>ASIGNAR ALUMNOS</span>
               </NavLink>
             </li>
 
@@ -179,7 +178,7 @@ export const Sidebar = () => {
                 to='/users'
               >
                 <img src={user} width={28} alt='User Icon' />
-                <span className='ms-2'>Usuarios</span>
+                <span className='ms-2'>USUARIOS</span>
               </NavLink>
             </li>
 
