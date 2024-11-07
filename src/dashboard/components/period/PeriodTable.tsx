@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Accordion, Badge, Button, Table, Alert, Card } from 'react-bootstrap';
+import { Accordion, Badge, Button, Table, Card } from 'react-bootstrap';
 import SubperiodRow from './SubperiodRow';
 import CreatePeriodModal from './CreatePeriodModal';
 import {
@@ -46,17 +46,31 @@ const PeriodTable = () => {
 
   return (
     <>
-      <Card className="p-2 mb-4">
-        <Alert variant="info">
-          <strong>Instrucciones:</strong> Para gestionar los periodos y subperiodos, primero cree un nuevo periodo utilizando el botón "Crear Periodo". Una vez creado, puede agregar subperiodos y activar o desactivar periodos y subperiodos según sea necesario. Solo un periodo puede estar activo a la vez, y cada subperiodo depende del estado del periodo principal.
-          <br /> <br />
-          <strong>Nota:</strong> Las clases vinculadas solo estarán activas cuando tanto el periodo como el subperiodo correspondiente estén activos, así como las entidades relacionadas necesarias. Si no ve todas las clases esperadas, verifique el estado de activación del periodo y los subperiodos asociados o contacte al administrador.
-        </Alert>
-        <div className="d-flex justify-content-center mb-4">
-          <Button variant="primary" onClick={() => setShowPeriodModal(true)} className="px-4 py-2 d-flex align-items-center gap-1">
-            <i className="fa-solid fa-calendar-plus"></i> Crear Periodo
-          </Button>
-        </div>
+      {/* Accordion for Instructions */}
+      <Accordion defaultActiveKey={null} className="mb-4">
+        <Accordion.Item eventKey="0">
+          <Accordion.Header>
+            <strong>Instrucciones para la Gestión de Periodos y Subperiodos (Haz clic para expandir)</strong>
+          </Accordion.Header>
+          <Accordion.Body>
+            <p>
+              Para gestionar los periodos y subperiodos, primero cree un nuevo periodo utilizando el botón "Crear Periodo". 
+              Una vez creado, puede agregar subperiodos y activar o desactivar periodos y subperiodos según sea necesario. 
+              Solo un periodo puede estar activo a la vez, y cada subperiodo depende del estado del periodo principal.
+            </p>
+            <p>
+              <strong>Nota:</strong> Las clases vinculadas solo estarán activas cuando tanto el periodo como el subperiodo correspondiente 
+              estén activos, así como las entidades relacionadas necesarias. Si no ve todas las clases esperadas, verifique el estado 
+              de activación del periodo y los subperiodos asociados o contacte al administrador.
+            </p>
+          </Accordion.Body>
+        </Accordion.Item>
+      </Accordion>
+
+      <Card className="p-2 mb-4 text-center">
+        <Button variant="primary" onClick={() => setShowPeriodModal(true)} className="px-4 py-2 d-flex align-items-center gap-1">
+          <i className="fa-solid fa-calendar-plus"></i> Crear Periodo
+        </Button>
       </Card>
 
       <CreatePeriodModal
@@ -76,14 +90,14 @@ const PeriodTable = () => {
         {Array.isArray(data) && data.map((period, index) => (
           <Accordion.Item eventKey={index.toString()} key={period.id}>
             <Accordion.Header>
-            <img
-                  style={{ borderRadius: '100%' }}
-                  width='35'
-                  className='me-2'
-                  src={periodIcon}
-                  alt='unit image'
-                />
-              <strong>{period.name}</strong>
+              <img
+                style={{ borderRadius: '100%' }}
+                width='35'
+                className='me-2'
+                src={periodIcon}
+                alt='unit image'
+              />
+              <strong>{period.name}</strong> 
               <Badge
                 bg={period.isCurrent ? "success" : "danger"}
                 className="ms-2"
