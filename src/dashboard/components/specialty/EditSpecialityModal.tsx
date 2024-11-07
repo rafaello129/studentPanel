@@ -30,7 +30,8 @@ export const EditSpecialtyModal: FC<Props> = ({ setShowModal, specialty, plans})
         getFieldProps } = useFormik({
             initialValues: {
                 name: specialty?.name,
-                plan: specialty?.plan,
+                planId: specialty?.plan?.id ,
+                key: specialty?.key,
                 isCurrent: specialty?.isCurrent,
                 isDeleted: specialty?.isDeleted,
             },
@@ -46,11 +47,13 @@ export const EditSpecialtyModal: FC<Props> = ({ setShowModal, specialty, plans})
                         cancelButtonText: '¡No, cancelar!',
                         cancelButtonColor: '#f23e3e',
                     })
-
+                    
                     if (!isConfirmed) return;
                     console.log("Edit Specialty Values", values);
                     console.log("Mutation Result",result);
-                    const patchResult = await editSpecialty({id, ...values});
+                    console.log("PlanID", values.planId);
+                    console.log("PlanID", values.planId);
+                    const patchResult = await editSpecialty({id, name: values.name, planId: values.planId, key: values.key, isCurrent: values.isCurrent, isDeleted: values.isDeleted});
                     console.log("Patch Result", patchResult);
                     resetForm();
                     setShowModal(false);
@@ -60,8 +63,10 @@ export const EditSpecialtyModal: FC<Props> = ({ setShowModal, specialty, plans})
             validationSchema: Yup.object({
                 name: Yup.string()
                     .required('Este campo es requerido.'),
-                plan: Yup.number()
+                planId: Yup.number()
                     .required('El plan es requerido.'),
+                key: Yup.string()
+                    .required('La clave es necesaria'),
             }),
 
         })
@@ -98,25 +103,57 @@ export const EditSpecialtyModal: FC<Props> = ({ setShowModal, specialty, plans})
                                 {touched.name && errors.name && <span className="text-danger">{errors.name}</span>}
 
                             </div>
-                            <Select
-                                id='plan'
-                                name='plan'
-                                value = {values.plan?.name}
-                                onChange={handleChange}
-                                >
-                                <Select.Option value=''>Selecciona una opción</Select.Option>
 
-                                {
-                                    plans?
-                                        plans.map((pln) => (
-                                            <Select.Option key={pln.id} value={pln.id}>
-                                            {pln.name}
-                                            </Select.Option>
-                                        ))
-                                    :
-                                        <></>
-                                }
-                            </Select>
+
+                            <div className=" mt-3">
+                                <label className="btn-outline-secondary">Clave de la especialidad</label>
+                                <input
+                                    type="text"
+                                    {...getFieldProps('key')}
+                                    className="form-control mt-2"
+                                    autoComplete="off"
+                                />
+                                {touched.key && errors.key && <span className="text-danger">{errors.key}</span>}
+
+                            </div>
+
+
+                            <div className="mt-3">
+
+                                <label className="btn-outline-secondary mb-2">Plan Asignado</label>
+                                <Select
+                                    id='planId'
+                                    name='planId'
+                                    key={values.planId-1}
+                                    onChange={handleChange}
+                                    >
+                                    {
+                                        values.planId ?
+                                                <Select.Option key={values.planId} value={values.planId}>{plans.find((pln)=>pln.id == values.planId).name}</Select.Option>
+                                            :
+                                            <Select.Option value="">Sin Asignar</Select.Option>
+                                    }
+                                    
+
+                                    {
+                                        plans?
+                                                plans.map((pln) => (
+                                                    
+                                                    (values.planId && pln.id == values.planId  ) 
+                                                        ?
+                                                            <></>
+                                                        :
+                                                            <Select.Option key={pln.id} value={pln.id}>
+                                                                {pln.name}
+                                                            </Select.Option>
+                                                ))
+                                            :
+                                                <></>
+                                    }
+                                </Select>
+
+                            </div>
+                            
 
 
 

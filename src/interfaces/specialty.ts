@@ -7,6 +7,8 @@ export interface Specialty {
 
     name: string;
 
+    key: string;
+
     isCurrent: boolean;
 
     isDeleted: boolean;
@@ -20,14 +22,16 @@ export interface Specialty {
 export interface CreateSpecialty {
     
     name: string;
-    plan_Id?: number;
+    key: string;
+    
 
   }
   
   export interface UpdateSpecialty {
     
     name?:string;
-    plan_id?:number;
+    planId?:number;
+    key?: string;
     isCurrent?: boolean;
     isDeleted?: boolean;
   }

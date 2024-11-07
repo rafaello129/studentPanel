@@ -18,8 +18,6 @@ interface Props {
     
       const [createSpecialty, result] = useAddSpecialtyMutation();
 
-
-
     const {values,
         handleSubmit,
         errors,
@@ -29,22 +27,23 @@ interface Props {
             initialValues: {
                 name: '',
                 plan_id: '',
+                key:'',
             },
             onSubmit: async (values) => {
                 
                 
-                if(values.plan_id === ''){
+                if(values.key === ''){
                     await Swal.fire({
                         icon: 'warning',
                         title: 'FORMULARIO INCOMPLETO',
-                        text: `Seleccione un plan`,
+                        text: `Ingrese una Clave`,
                         closeButtonAriaLabel: 'Entendido'
                         }   
                     )
                 }
                 else{
                     console.log(values)
-                    const res = await createSpecialty({plan_Id: +values.plan_id, name: values.name });
+                    const res = await createSpecialty({ name: values.name, key: values.key });
                     console.log(res);
                     console.log(result)
                     resetForm();
@@ -55,7 +54,7 @@ interface Props {
             validationSchema: Yup.object({
                 name: Yup.string()
                     .required('Este campo es requerido.'),
-                plan_id: Yup.string()
+                key: Yup.string()
                     .required('Este campo es requerido.'),
             }),
 
@@ -93,10 +92,21 @@ interface Props {
                                 {touched.name && errors.name && <span className="text-danger">{errors.name}</span>}
 
                             </div>
-                            <label className= "mt-3" htmlFor='plans'>Planes Disponibles</label>
                             
                             <div className="mt-3 mb-3">
 
+                            <label className="btn-outline-secondary">Clave del Plan de Especialidad</label>
+                                <input
+                                    type="text"
+                                    {...getFieldProps('key')}
+                                    className="form-control mt-2"
+                                    autoComplete="off"
+                                />
+                                {touched.key && errors.key && <span className="text-danger">{errors.key}</span>}
+
+                                {
+                                    /*
+                                    
                                 <Select 
                                     
                                     id='plan'
@@ -116,6 +126,8 @@ interface Props {
                                             <></>
                                     }
                                 </Select>
+                                */
+                            }
 
 
                             </div>

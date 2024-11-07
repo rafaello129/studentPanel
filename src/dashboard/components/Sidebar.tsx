@@ -104,48 +104,15 @@ export const Sidebar = () => {
 
 
             <li className='nav-item'>
-              <span className='nav-link d-flex align-items-center'>
+              <NavLink
+                style={({ isActive }) => (isActive ? activeStyle : undefined)}
+                className='nav-link d-flex align-items-center'
+                to='/academic-enviroment'
+              >
                 <img src={academicLoad} width={37} alt='Academic Load Icon' />
-                <span className='ms-1 fw-light'>Carga Académica</span>
-              </span>
+                <span className='ms-2'>Entorno Académico</span>
+              </NavLink>
 
-              <ul className='navbar-nav'>
-                <li className='nav-item'>
-                  <NavLink
-                    style={({ isActive }) => (isActive ? activeStyle : undefined)}
-                    className='nav-link d-flex align-items-center'
-                    to='/subjects'
-                  >
-                    <img src={modulos} width={28} alt='Subjects Icon' />
-                    <span className='ms-2'>Materias</span>
-                  </NavLink>
-                </li>
-
-
-                {/*
-                <li className='nav-item'>
-                  <NavLink
-                    style={({ isActive }) => (isActive ? activeStyle : undefined)}
-                    className='nav-link d-flex align-items-center'
-                    to='/specialty'
-                  >
-                    <img src={modulos} width={28} alt='Subjects Icon' />
-                    <span className='ms-2'>Especialidad</span>
-                  </NavLink>
-                </li>
-
-                <li className='nav-item'>
-                  <NavLink
-                    style={({ isActive }) => (isActive ? activeStyle : undefined)}
-                    className='nav-link d-flex align-items-center'
-                    to='/plan'
-                  >
-                    <img src={unidIcon} width={28} alt='Unit Icon' />
-                    <span className='ms-2'>Plan de Estudio</span>
-                  </NavLink>
-                </li>
-                */}
-              </ul>
             </li>
 
 

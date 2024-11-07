@@ -1,29 +1,36 @@
 
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import question from '../../../assets/icons/question.svg';
 
 import { Specialty } from "../../../interfaces/specialty";
 import EditSpecialtyModal from "./EditSpecialityModal";
 import { Plan } from "../../../interfaces/plan";
+import { Link, NavLink, Outlet } from "react-router-dom";
+import { AddSubjectToSpecialtyPage } from './AddSubjectToSpecialty';
 
 interface params {
     specialties: Specialty[];
     isLoading: boolean;
-    plans: Plan[]
+    plans: Plan[];
 }
 
 export const SpecialtyList = ({specialties, isLoading, plans}:params) => {
     
     const [selectedSpecialty, setSelectedSpecialty] = useState<Specialty | null>(null);
     const [showEditSpecialtyModal, setShowEditSpecialtyModal] = useState<boolean>(false);
+    const [showAddSubjectModal, setShowAddSubjectModal] = useState<boolean>(false);
 
     const handleSelectSpecialty = (selectedSpecialty: Specialty) => {
         setSelectedSpecialty(selectedSpecialty);
+        
         setShowEditSpecialtyModal(true);
     };
 
     
-    
+    const handleAddSubjectToSpecialty = (selectedSpecialty: Specialty) => {
+        setSelectedSpecialty(selectedSpecialty);
+        setShowAddSubjectModal(true);
+    };
 
 
 
@@ -44,10 +51,16 @@ export const SpecialtyList = ({specialties, isLoading, plans}:params) => {
             {showEditSpecialtyModal && selectedSpecialty && (
                 <EditSpecialtyModal setShowModal={setShowEditSpecialtyModal} specialty={selectedSpecialty} plans={plans}/>
             )}
+
+            {showAddSubjectModal && selectedSpecialty && (
+                <AddSubjectToSpecialtyPage setShowModal={setShowAddSubjectModal} sty={selectedSpecialty}/>
+            )}
             <table className="table text-center">
                 <thead >
                     <tr>
                         <th scope="col">Nombre</th>
+                        <th scope="col">Clave</th>
+
                         <th scope="col">Plan</th>
                         <th scope="col">Carrera</th>
                     </tr>
@@ -59,15 +72,44 @@ export const SpecialtyList = ({specialties, isLoading, plans}:params) => {
                             specialties.map((specialty: Specialty) => (
                                 <tr key={specialty.id}>
                                     <td>{specialty.name}</td>
-                                    <td>{specialty.plan.name}</td>
-                                    <td>{specialty.plan.career?.name}</td>
+                                    <td>{specialty.key}</td>
+                                    <td>{
+                                        specialty.plan ?
+                                                specialty.plan.name
+                                            :
+                                                "Sin Asignar"
+                                    }</td>
+                                    <td>{
+                                        specialty.plan ?
+                                                specialty.plan.career?.name
+                                            :
+                                                "Sin Asignar"
+                                    }</td>
                                     <td>
-                                        <button
-                                            type="button"
-                                            className="btn btn-primary btn-sm"
-                                            onClick={() => handleSelectSpecialty(specialty)}>
-                                            <i className="fa-solid fa-pen"></i>
-                                        </button>
+                                        <div className=" d-flex flex-row justify-content-evenly">
+
+
+                                            <button
+                                                type="button"
+                                                className="btn btn-primary btn-sm"
+                                                onClick={() => handleSelectSpecialty(specialty)}>
+                                                <i className="fa-solid fa-pen"></i>
+                                            </button>
+                                            
+                                            <hr />
+                                            
+
+                                            <button
+                                                className='btn btn-primary btn-sm"r'
+                                                onClick={() => handleAddSubjectToSpecialty(specialty)}
+                                                
+                                            >
+                                                <i className="fa-solid fa-plus"></i>
+                                                <span className='ms-2'  >Materias</span>
+                                            </button>
+
+                                        </div>
+                                        
 
                                     </td>
                                 </tr>
@@ -89,6 +131,7 @@ export const SpecialtyList = ({specialties, isLoading, plans}:params) => {
                 :
                 <></>
             }
+            <Outlet></Outlet>
         </div>
 
     )
