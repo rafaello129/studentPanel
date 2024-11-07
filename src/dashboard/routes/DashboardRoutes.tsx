@@ -13,6 +13,7 @@ import GeneralSubjectPage from '../pages/subjects/page/generalSubjectPage';
 import { SpecialtyPage } from '../pages/specialty/pages/specialtyPage';
 import { PlanPage } from '../pages/plan/planPage';
 import { useState } from 'react';
+import PeriodPage from '../pages/period/PeriodPage';
 
 export const DashboardRoutes = () => {
   
@@ -32,7 +33,8 @@ export const DashboardRoutes = () => {
         <Route path='specialty' element={<SpecialtyPage />} />
         <Route path='plan' element={<PlanPage />} />
         <Route path='management' element={<ManagementPage setSelectedClass={setSelectedClass} />} />
-        
+        <Route path='period' element={<PeriodPage/>} />
+
         <Route
           path='assign'
           element={
