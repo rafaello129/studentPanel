@@ -35,7 +35,7 @@ export const Sidebar = () => {
         <div className='d-flex justify-content-center'>
           <ul className='navbar-nav'>
             <li className='nav-item'>
-              <NavLink
+              <NavLink  
                 style={({ isActive }) => (isActive ? activeStyle : undefined)}
                 className='nav-link d-flex align-items-center'
                 to='/home'
@@ -182,7 +182,36 @@ export const Sidebar = () => {
               </NavLink>
             </li>
 
-
+            <li className='nav-item'>
+              <NavLink
+                style={({ isActive }) => (isActive ? activeStyle : undefined)}
+                className='nav-link d-flex align-items-center'
+                to='/evaluation'
+              >
+                <img src={user} width={28} alt='User Icon' />
+                <span className='ms-2'>Evaluaciones</span>
+              </NavLink>
+            </li>
+            <li className='nav-item'>
+              <NavLink
+                style={({ isActive }) => (isActive ? activeStyle : undefined)}
+                className='nav-link d-flex align-items-center'
+                to='/AcademicLevelPage'
+              >
+                <img src={user} width={28} alt='User Icon' />
+                <span className='ms-2'>Niveles Academicos</span>
+              </NavLink>
+            </li>
+            <li className='nav-item'>
+              <NavLink
+                style={({ isActive }) => (isActive ? activeStyle : undefined)}
+                className='nav-link d-flex align-items-center'
+                to='/MyEvaluation'
+              >
+                <img src={user} width={28} alt='User Icon' />
+                <span className='ms-2'>Mis evaluaciones</span>
+              </NavLink>
+            </li>
           </ul>
         </div>
       </div>

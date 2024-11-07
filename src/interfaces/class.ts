@@ -1,3 +1,4 @@
+import { Evaluation } from './evaluation';
 import { Package } from './package';
 import { Partial } from './partial';
 import { Student } from './student';
@@ -10,6 +11,7 @@ export interface Class {
   id: number;
   isCurrent: boolean;
   isDeleted: boolean;
+  
   teacher: Teacher;
   tutor: Tutor;
   subject: Subject;
@@ -17,8 +19,21 @@ export interface Class {
   partial: Partial[];
   students: Student[];
   semester?: number;
+  subjectName?: string; // Nombre de la asignatura que representa el nombre de la clase
+
+}
+export interface ClassWithDetails {
+  id: number;
+  subjectName: string; // Nombre de la asignatura que representa el nombre de la clase
+  subject: Subject;
+  teacher: Teacher;
+  // Añade otras propiedades de la clase si es necesario
 }
 
+export interface EvaluationWithClassDto {
+  evaluation: Evaluation;
+  class: ClassWithDetails;
+}
 export interface CreateClass {
   package_id: number;
   subject_id: number;

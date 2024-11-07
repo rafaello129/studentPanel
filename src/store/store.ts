@@ -3,13 +3,14 @@ import { peesadApi } from '../services/api/peesadApi';
 import { authSlice } from './auth/authSlice';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import { authApi } from '../services/api/providers/authProvider';
+import responseReducer from './slices/responseSlice';
 
 export const store = configureStore({
   reducer: {
     auth: authSlice.reducer,
     [peesadApi.reducerPath]: peesadApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
-    
+    responses: responseReducer,
 
   },
   middleware: (getDefaultMiddleware) =>
