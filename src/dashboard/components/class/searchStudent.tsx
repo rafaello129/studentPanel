@@ -1,8 +1,7 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { Class } from '../../../interfaces/class';
 import Swal from 'sweetalert2';
-import { Student } from '../../../interfaces/student';
-import { useGetStudentsQuery } from '../../../services/api/providers/studentApi';
+import { useGetAvailableStudentsQuery, useGetStudentsQuery } from '../../../services/api/providers/studentApi';
 import { useGetCareersQuery } from '../../../services/api/providers/careerApi';
 import { apiAssignStudent } from '../../../api/classes-Providers';
 import Pagination from '../shared/Pagination';
@@ -22,14 +21,15 @@ const SearchStudent = ({ cls, updateClass, onFilterChange }: RegisteredClassProp
     const [semesters, setSemesters] = useState<number[] | undefined>(undefined);
     const limit = 10;
 
-    const { data: studentResponse } = useGetStudentsQuery({
+    const { data: studentResponse, refetch: refetchStudents } = useGetAvailableStudentsQuery({
         page,
         limit,
-        careerId: selectedCareer,
-        semester: selectedSemester,
-        idUnitCampus: cls.package.unitCampus.id // Filtrar por la unidad de la clase
+        careerId: selectedCareer || undefined,
+        semester: selectedSemester || undefined,
+        idUnitCampus: cls.package.unitCampus.id,
+        classId: cls.id,
     });
-    
+
     const students = useMemo(() => studentResponse?.data || [], [studentResponse]);
     const totalStudents = studentResponse?.total || 0;
 
@@ -38,7 +38,7 @@ const SearchStudent = ({ cls, updateClass, onFilterChange }: RegisteredClassProp
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setNumControl(event.target.value);
-        setPage(1); // Resetear la paginación al buscar por número de control
+        setPage(1); // Resetear a la primera página al buscar por número de control
     };
 
     const handleFilterChange = () => {
@@ -67,6 +67,7 @@ const SearchStudent = ({ cls, updateClass, onFilterChange }: RegisteredClassProp
             default:
                 break;
         }
+        setPage(1);
     };
 
     const assignToClass = async (studentId: number | undefined, lastName: string | undefined, motherLastName: string | undefined, name: string | undefined, noControl: string | undefined) => {
@@ -82,6 +83,8 @@ const SearchStudent = ({ cls, updateClass, onFilterChange }: RegisteredClassProp
                 });
 
                 updateClass(updatedClass);
+
+                refetchStudents(); 
             }
         } catch (error) {
             console.error('Error:', error);
@@ -91,7 +94,9 @@ const SearchStudent = ({ cls, updateClass, onFilterChange }: RegisteredClassProp
     useEffect(() => {
         handleFilterChange();
     }, [selectedCareer, selectedSemester]);
-    console.log("prueba",cls)
+
+    console.log("prueba", cls);
+    console.log("carrera: ", selectedCareer, "semestre: ", selectedSemester, "estudiantes: ", students);
 
     return (
         <div className="container mt-4">
@@ -142,22 +147,20 @@ const SearchStudent = ({ cls, updateClass, onFilterChange }: RegisteredClassProp
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {students
-                                        .filter(list => !cls.students.some(student => student.id === list.id))
-                                        .map(list => (
-                                            <tr key={list.id}>
-                                                <td>{list.lastName} {list.motherLastName} {list.name}</td>
-                                                <td>{list.noControl}</td>
-                                                <td className="text-center">
-                                                    <button
-                                                        className="btn btn-outline-secondary btn-sm"
-                                                        onClick={() => assignToClass(list.id, list.lastName, list.motherLastName, list.name, list.noControl)}
-                                                    >
-                                                        Asignar a esta clase
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        ))}
+                                    {students.map((student) => (
+                                        <tr key={student.id}>
+                                            <td>{student.lastName} {student.motherLastName} {student.name}</td>
+                                            <td>{student.noControl}</td>
+                                            <td className="text-center">
+                                                <button
+                                                    className="btn btn-outline-secondary btn-sm"
+                                                    onClick={() => assignToClass(student.id, student.lastName, student.motherLastName, student.name, student.noControl)}
+                                                >
+                                                    Asignar a esta clase
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
                                 </tbody>
                             </table>
                             <Pagination

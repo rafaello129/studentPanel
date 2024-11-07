@@ -7,6 +7,7 @@ import { Teacher } from './teacher';
 import { Tutor } from './tutor';
 
 export interface Class {
+  subperiod?: any;
   id: number;
   isCurrent: boolean;
   isDeleted: boolean;
@@ -38,6 +39,7 @@ export interface CreateClass {
   subject_id: number;
   teacher_id: number;
   tutor_id?: number;
+  subperiodId?: number;
 }
 
 export interface UpdateClass {
@@ -47,4 +49,6 @@ export interface UpdateClass {
   tutorId?: number;
   isCurrent?: boolean;
   isDeleted?: boolean;
+  subperiodId?: number;
+
 }

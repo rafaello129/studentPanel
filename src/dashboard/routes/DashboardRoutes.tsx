@@ -32,6 +32,8 @@ import EvaluationView from '../components/evaluation/EvaluationView';
 import MyEvaluation from '../pages/MyEvaluation/MyEvaluationPage';
 import MyEvaluationDetail from '../components/MyEvaluation/MyEvaluationDetail';
 
+import PeriodPage from '../pages/period/PeriodPage';
+
 export const DashboardRoutes = () => {
   
   const [selectedClass, setSelectedClass] = useState<Class | null>(null)
@@ -66,6 +68,7 @@ export const DashboardRoutes = () => {
 
 
         <Route path='Evaluation' element={<EvaluationPage></EvaluationPage>} />
+        <Route path='period' element={<PeriodPage/>} />
 
         <Route
           path='assign'
