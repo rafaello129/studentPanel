@@ -7,23 +7,27 @@ const AcademicLevelPaginatedList: React.FC = () => {
   const [page, setPage] = useState(1);
   const { data, error, isLoading } = useGetPaginatedAcademicLevelsQuery({ page, limit: 10 });
 
+  const totalPages = data ? Math.ceil(data.total / data.limit) : 1;
+
   if (isLoading) return <div>Cargando niveles académicos...</div>;
   if (error) return <div>Error al cargar los niveles académicos.</div>;
 
-  const totalPages = data ? Math.ceil(data.total / data.limit) : 1;
-
   return (
-    <div>
-      <h2>Lista de Niveles Académicos (Paginada)</h2>
-      <ul>
+    <div className="bg-white p-4 rounded shadow-sm">
+      <h2 className="text-xl font-semibold mb-4 text-center">Lista de Niveles Académicos (Paginada)</h2>
+      <ul className="list-group list-group-flush mb-3">
         {data?.data?.map((level) => (
-          <li key={level.id}>
-            <p>{level.name}</p>
+          <li key={level.id} className="list-group-item d-flex justify-content-between align-items-center">
+            <span>{level.name}</span>
           </li>
         ))}
       </ul>
-      <div>
-        <button onClick={() => setPage((prev) => Math.max(prev - 1, 1))} disabled={page === 1}>
+      <div className="d-flex justify-content-between align-items-center">
+        <button
+          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+          disabled={page === 1}
+          className="btn btn-primary"
+        >
           Anterior
         </button>
         <span>
@@ -32,6 +36,7 @@ const AcademicLevelPaginatedList: React.FC = () => {
         <button
           onClick={() => setPage((prev) => (data && prev < totalPages ? prev + 1 : prev))}
           disabled={data && page >= totalPages}
+          className="btn btn-primary"
         >
           Siguiente
         </button>

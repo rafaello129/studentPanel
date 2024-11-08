@@ -10,6 +10,8 @@ import user from '../../assets/icons/user.png';
 import logo from '../../assets/logo.svg';
 import academicLoad from '../../assets/icons/academicLoad.png'
 import period from '../../assets/icons/period.png'
+import evaluacion from '../../assets/icons/evaluacion.png'
+import nivel from '../../assets/icons/nivel.png'
 
 import centerAcademicIcon from '../../assets/icons/centerAcademic.png';
 
@@ -27,15 +29,14 @@ export const Sidebar = () => {
       aria-labelledby='offcanvasExampleLabel'
     >
       <div className='offcanvas-header d-flex justify-content-center'>
-        <img className='image-logo' src={peesad} width={150} alt='PEESAD Logo' />
-
+      
       </div>
 
       <div className='offcanvas-body p-0'>
         <div className='d-flex justify-content-center'>
           <ul className='navbar-nav'>
             <li className='nav-item'>
-              <NavLink  
+              <NavLink
                 style={({ isActive }) => (isActive ? activeStyle : undefined)}
                 className='nav-link d-flex align-items-center'
                 to='/home'
@@ -155,8 +156,8 @@ export const Sidebar = () => {
                 className='nav-link d-flex align-items-center'
                 to='/evaluation'
               >
-                <img src={user} width={28} alt='User Icon' />
-                <span className='ms-2'>Evaluaciones</span>
+                <img src={evaluacion} width={28} alt='User Icon' />
+                <span className='ms-2'>EVALUACIONES</span>
               </NavLink>
             </li>
             <li className='nav-item'>
@@ -165,11 +166,12 @@ export const Sidebar = () => {
                 className='nav-link d-flex align-items-center'
                 to='/AcademicLevelPage'
               >
-                <img src={user} width={28} alt='User Icon' />
-                <span className='ms-2'>Niveles Academicos</span>
+                <img src={nivel} width={28} alt='User Icon' />
+                <span className='ms-2'>NIVELES ACADEMICOS</span>
               </NavLink>
             </li>
-            <li className='nav-item'>
+            {/*
+                        <li className='nav-item'>
               <NavLink
                 style={({ isActive }) => (isActive ? activeStyle : undefined)}
                 className='nav-link d-flex align-items-center'
@@ -179,6 +181,8 @@ export const Sidebar = () => {
                 <span className='ms-2'>Mis evaluaciones</span>
               </NavLink>
             </li>
+            */}
+
           </ul>
         </div>
       </div>

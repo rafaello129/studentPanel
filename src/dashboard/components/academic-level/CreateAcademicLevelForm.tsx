@@ -19,50 +19,38 @@ const CreateAcademicLevelForm: React.FC = () => {
   };
 
   return (
-    <form
-  onSubmit={handleSubmit}
-  className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg"
->
-    <hr />
-    <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">
-      <hr />Crear Nuevo Nivel Académico <hr />
-    </h2>
-    <hr />
-  <div className=' d-flex justify-content-evenly align-content-center'>
-    
-    <div className="">
-
-      <label className="block text-gray-700 font-medium mb-2" htmlFor="name">
-        <h4>
-          Nombre: 
-        </h4>
-      </label>
-      <input
-        id="name"
-        type="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        required
-        disabled={isLoading}
-        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-200"
-      />
-    </div>
-
-    <button
-      type="submit"
-      disabled={isLoading}
-      className={` font-semibold rounded-md transition-all duration-300 ${
-        isLoading
-          ? 'bg-gray-400 cursor-not-allowed'
-          : 'bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500'
-        }`}
+    <form onSubmit={handleSubmit} className="bg-white p-5 rounded shadow-sm max-w-lg mx-auto">
+      <h2 className="text-center text-2xl font-semibold mb-4 text-gray-800">
+        Crear Nuevo Nivel Académico
+      </h2>
+      <hr className="mb-4" />
+      <div className="mb-3">
+        <label htmlFor="name" className="form-label font-medium text-gray-700">
+          Nombre del Nivel Académico
+        </label>
+        <input
+          id="name"
+          type="text"
+          className="form-control border border-gray-300 rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500 w-100"
+          placeholder="Ingrese el nombre"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+          disabled={isLoading}
+        />
+      </div>
+      <div className="text-center mt-4">
+        <button
+          type="submit"
+          className={`btn w-full font-semibold rounded-md transition-all duration-300 ${
+            isLoading ? 'btn-secondary cursor-not-allowed' : 'btn-primary'
+          }`}
+          disabled={isLoading}
         >
-      {isLoading ? 'Creando...' : 'Crear Nivel Académico'}
-    </button>
-  </div>
-  <hr />
-  <hr />
-</form>
+          {isLoading ? 'Creando...' : 'Crear Nivel Académico'}
+        </button>
+      </div>
+    </form>
   );
 };
 
