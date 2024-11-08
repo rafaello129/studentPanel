@@ -109,7 +109,7 @@ export const Sidebar = () => {
                 to='/academic-enviroment'
               >
                 <img src={academicLoad} width={37} alt='Academic Load Icon' />
-                <span className='ms-2'>Entorno Académico</span>
+                <span className='ms-2'>CARGA ACADÉMICA</span>
               </NavLink>
 
             </li>
