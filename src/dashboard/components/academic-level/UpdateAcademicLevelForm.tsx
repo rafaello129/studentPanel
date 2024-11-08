@@ -9,7 +9,7 @@ interface Props {
 }
 
 const UpdateAcademicLevelForm: React.FC<Props> = ({ id, onUpdateSuccess }) => {
-  const { data, error, isLoading } = useGetAcademicLevelByIdQuery(id);
+  const { data, isLoading } = useGetAcademicLevelByIdQuery(id);
   const [updateAcademicLevel, { isLoading: isUpdating }] = useUpdateAcademicLevelMutation();
   const [name, setName] = useState('');
 
@@ -30,24 +30,22 @@ const UpdateAcademicLevelForm: React.FC<Props> = ({ id, onUpdateSuccess }) => {
     }
   };
 
-  if (isLoading) return <div>Cargando nivel académico...</div>;
-  if (error) return <div>Error al cargar el nivel académico.</div>;
-
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Actualizar Nivel Académico</h2>
-      <div>
-        <label>Nombre:</label>
+    <form onSubmit={handleSubmit} className="bg-white p-4 rounded shadow-sm">
+      <h2 className="text-xl font-semibold mb-3">Actualizar Nivel Académico</h2>
+      <div className="form-group">
+        <label className="form-label">Nombre</label>
         <input
           type="text"
+          className="form-control"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
           disabled={isUpdating}
         />
       </div>
-      <button type="submit" disabled={isUpdating}>
-        {isUpdating ? 'Actualizando...' : 'Actualizar Nivel Académico'}
+      <button type="submit" className="btn btn-primary mt-3" disabled={isUpdating}>
+        {isUpdating ? 'Actualizando...' : 'Actualizar'}
       </button>
     </form>
   );

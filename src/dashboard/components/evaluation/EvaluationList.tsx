@@ -28,9 +28,9 @@ import { useNavigate } from 'react-router-dom';
 const EvaluationList: React.FC = () => {
   // Estado para los filtros y paginación
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(100);
-  const [isActive, setIsActive] = useState<boolean | undefined>(false);
-  const [isTemplate, setIsTemplate] = useState<boolean | undefined>(true);
+  const [limit, setLimit] = useState(10);
+  const [isActive, setIsActive] = useState<boolean>(true); // Por defecto en true
+  const [isTemplate, setIsTemplate] = useState<boolean>(true); // Por defecto en true
   const [academicLevelId, setAcademicLevelId] = useState<number | undefined>(undefined);
 
   // Obtener los niveles académicos para el filtro
@@ -61,11 +61,11 @@ const EvaluationList: React.FC = () => {
 
   // Manejadores de eventos para los filtros
   const handleIsActiveChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setIsActive(event.target.checked ? true : false);
+    setIsActive(event.target.checked);
   };
 
   const handleIsTemplateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setIsTemplate(event.target.checked ? true : false);
+    setIsTemplate(event.target.checked);
   };
 
   const handleAcademicLevelChange = (event: SelectChangeEvent<string>) => {
@@ -85,10 +85,8 @@ const EvaluationList: React.FC = () => {
   // Manejador para navegar a los detalles de una evaluación
   const handleEvaluationClick = (evaluationId: number, isTemplate: boolean) => {
     if (isTemplate) {
-      // Si es una plantilla, navegar al componente de edición/detalle
       navigate(`/evaluations/${evaluationId}`);
     } else {
-      // Si no es una plantilla, navegar al componente de vista solo lectura
       navigate(`/evaluations/view/${evaluationId}`);
     }
   };

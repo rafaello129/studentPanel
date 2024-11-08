@@ -23,8 +23,8 @@ export default function ClassList({
       </div>
     );
   }
+  
   return (
-    
     <div className='card'>
       <table className='table text-center'>
         <thead>
@@ -33,6 +33,7 @@ export default function ClassList({
             <th scope='col'>Materia</th>
             <th scope='col'>Maestro</th>
             <th scope='col'>Tutor</th>
+            <th scope='col'>Subperiodo</th> {/* Nueva columna para el subperiodo */}
             <th scope='col'>Editar</th>
           </tr>
         </thead>
@@ -42,7 +43,8 @@ export default function ClassList({
               <td>{cls.package.name}</td>
               <td>{cls.subject.name}</td>
               <td>{cls.teacher.user.fullName}</td>
-              {cls.tutor ? (<td>{cls.tutor.user.fullName}</td>):(<td>Sin asignar</td>)}
+              {cls.tutor ? (<td>{cls.tutor.user.fullName}</td>) : (<td>Sin asignar</td>)}
+              <td>{cls.subperiod ? cls.subperiod.name : 'Sin subperiodo'}</td> {/* Muestra el nombre del subperiodo si está disponible */}
               <td>
                 <Button size='small' onClick={() => onClassClick(cls)}>
                   <span className='fa-solid fa-pen'></span>

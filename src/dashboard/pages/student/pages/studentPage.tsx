@@ -1,9 +1,10 @@
 import { useMemo, useState } from "react";
-import { CreateStudentModal, StudentCardList, UploadFileStudent } from "../../../components/student";
+import { CreateStudentModal, UploadFileStudent } from "../../../components/student";
 import { Paginator } from "../../../components/shared/Paginator";
 import { useGetStudentsQuery, useSearchStudentsQuery } from "../../../../services/api/providers/studentApi";
 import { StudentFilter } from "../../../components/student/StudentFilter";
 import { UnitCampus } from "../../../../interfaces/unit-campus";
+import StudentTable from "../../../components/student/studentTable";
 
 export const StudentPage = () => {
     const [searchKeyword, setSearchKeyword] = useState<string>("");
@@ -14,6 +15,9 @@ export const StudentPage = () => {
     const [selectedSemester, setSelectedSemester] = useState<string | undefined>();
     const [selectedUnitCampus, setSelectedUnitCampus] = useState<UnitCampus | undefined>(undefined);
     const limit = 10;
+
+    // Determina si hay filtros activos
+    const hasFilters = !!selectedCareer || !!selectedSemester || !!selectedUnitCampus;
 
     const studentRes = (!searchKeyword)
         ? useGetStudentsQuery({
@@ -42,6 +46,8 @@ export const StudentPage = () => {
         setSelectedSemester(semester);
         setSelectedUnitCampus(unitCampus);
         setPage(1);
+        // Limpiar el campo de búsqueda cuando se aplican filtros
+        setSearchKeyword("");
     };
 
     return (
@@ -59,6 +65,7 @@ export const StudentPage = () => {
                             value={searchKeyword}
                             onChange={handleSearchChange}
                             aria-label="Text input with dropdown button"
+                            disabled={hasFilters}  // Deshabilitar si hay filtros activos
                         />
                     </div>
                     <button
@@ -76,14 +83,16 @@ export const StudentPage = () => {
                 </div>
 
                 <div className="student-filter p-2">
-                    <StudentFilter onFilterChange={handleFilterChange} />
+                    <StudentFilter
+                        onFilterChange={handleFilterChange}
+                        isDisabled={!!searchKeyword}  // Deshabilitar los filtros si hay texto en la búsqueda
+                    />
                 </div>
 
-                <div className="d-flex justify-content-center flex-wrap mt-4 mb-5">
+                <div className="mt-4">
                     {studentRes.isFetching
-                        ? <></>
-                        : <StudentCardList students={students} isLoading={studentRes.isLoading} />
-                    }
+                        ? <div className="text-center">Cargando...</div>
+                        : <StudentTable students={students} />}
                 </div>
             </div>
 

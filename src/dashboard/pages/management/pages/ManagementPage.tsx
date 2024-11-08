@@ -4,7 +4,6 @@ import { Class } from "../../../../interfaces/class";
 import unitIcon from "../../../../assets/icons/unit.png";
 import usuarioIcon from "../../../../assets/icons/usuario.png";
 
-import { SearchClass } from "../../../components/class/searchClass";
 import { useGetClassesQuery } from "../../../../services/api/providers/classApi";
 import { useGetUnitsQuery, useSearchUnitsQuery } from "../../../../services/api/providers/unitApi";
 import Pagination from "../../../components/shared/Pagination";
@@ -18,10 +17,10 @@ export const ManagementPage = ({ setSelectedClass }: props) => {
     const [page, setPage] = useState<number>(1);
     const [searchKeyword, setSearchKeyword] = useState<string>("");
 
-    const classRes = useGetClassesQuery({ page, limit, relationCheck: true }); // Usando el estado page para paginación
+    const classRes = useGetClassesQuery({ page, limit, relationCheck: true });
     const { data: classesResponse } = classRes;
     const classes = useMemo(() => classesResponse?.data || [], [classesResponse]);
-    const totalClasses = classesResponse?.total || 0; // Suponiendo que el total de clases se retorna en la respuesta
+    const totalClasses = classesResponse?.total || 0;
 
     const unitRes = (!searchKeyword) 
         ? useGetUnitsQuery({ page: 1, limit: 10 }) 
@@ -29,11 +28,21 @@ export const ManagementPage = ({ setSelectedClass }: props) => {
     const { data: unitResponse } = unitRes;
     const units = useMemo(() => unitResponse?.data || [], [unitResponse]);
 
-    const urlImage = import.meta.env.VITE_API_URL_AUTH;
-
     return (
-        <div className="p-5">
-            <SearchClass />
+        <div className="p-3">
+            {/* Título y sección de instrucciones */}
+            <div className="mb-4">
+                <h1 className="text-center mb-3">Gestión de Clases</h1>
+                <div className="alert alert-info" role="alert">
+                    <strong>Instrucciones:</strong>
+                    <ul className="mt-2">
+                        <li>Revisa la lista de clases disponibles y accede a más detalles haciendo clic en cada clase.</li>
+                        <li>Para agregar alumnos a una clase, selecciona la opción "Agregar alumnos" dentro de cada clase.</li>
+                        <li>Utiliza la paginación al final de la lista para navegar entre las diferentes clases.</li>
+                        <li>Observa los detalles de cada clase, incluyendo el profesor, la unidad, el período actual, y el subperíodo.</li>
+                    </ul>
+                </div>
+            </div>
 
             <div className="d-flex justify-content-center mt-4 mb-5">
                 <div className="accordion w-75" id="accordionExample">
@@ -45,7 +54,7 @@ export const ManagementPage = ({ setSelectedClass }: props) => {
                                         <img
                                             style={{ borderRadius: '100%' }}
                                             width="35"
-                                            className='me-2'
+                                            className="me-2"
                                             alt="class image"
                                             src={unitIcon}
                                         />
@@ -68,17 +77,19 @@ export const ManagementPage = ({ setSelectedClass }: props) => {
                                             />
                                         </div>
                                         <div className="d-flex flex-column m-3">
-                                            <span className=""><strong>Profesor:</strong> {cls.teacher.user.name} {cls.teacher.user.lastName} {cls.teacher.user.motherLastName}</span>
-                                            <span className=""><strong>Unidad: </strong>{cls.package.unitCampus.name}</span>
-                                            <span className=""><strong>Clave: </strong>{cls.subject.clave}</span>
+                                            <span><strong>Profesor:</strong> {cls.teacher.user.name} {cls.teacher.user.lastName} {cls.teacher.user.motherLastName}</span>
+                                            <span><strong>Unidad:</strong> {cls.package.unitCampus.name}</span>
+                                            <span><strong>Clave:</strong> {cls.subject.clave}</span>
+                                            <span><strong>Período Actual:</strong> {cls.period?.name} ({cls.period?.key})</span>
+                                            <span><strong>Subperíodo:</strong> {cls.subperiod?.name} ({cls.subperiod?.key})</span>
                                         </div>
                                         <div className="mt-auto">
                                             <NavLink
                                                 type="button"
                                                 className="btn btn-secondary"
-                                                onClick={() => { setSelectedClass(cls) }}
+                                                onClick={() => { setSelectedClass(cls); }}
                                                 to="/assign">
-                                                <span className='fs-6'>Agregar alumnos</span>
+                                                <span className="fs-6">Agregar alumnos</span>
                                             </NavLink>
                                         </div>
                                     </div>
@@ -89,14 +100,13 @@ export const ManagementPage = ({ setSelectedClass }: props) => {
                 </div>
             </div>
 
-            {/* Renderiza el componente de paginación */}
             <Pagination
                 className="justify-content-center"
                 currentPage={page}
-                totalCount={totalClasses} // Total de clases para la paginación
+                totalCount={totalClasses}
                 pageSize={limit}
                 onPageChange={setPage}
             />
         </div>
     );
-}
+};
