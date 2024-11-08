@@ -14,7 +14,7 @@ import Button from '../../../components/shared/Button';
 import { SpecialtyList } from '../../../components/specialty/SpecialtyList';
 import Pagination from '../../../components/shared/Pagination';
 
-import { useGetSpecialtiesQuery, useSearchSpecialtyQuery } from '../../../../services/api/providers/specialtyApi';
+import { useGetSpecialtiesQuery, useSearchSpecialtyByCareerQuery, useSearchSpecialtyQuery } from '../../../../services/api/providers/specialtyApi';
 import { useGetPlansQuery, useSearchPlansQuery } from '../../../../services/api/providers/planApi';
 import { useGetCareersQuery } from '../../../../services/api/providers/careerApi';
 
@@ -29,13 +29,26 @@ export const SpecialtyPage: FC<props> = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   const [showCreateSpecialtyModal, setShowCreateSpecialtyModal] = useState<boolean>(false);
+  const limit = 10;
 
-  
+  const specialtyRes = (!searchQuery && !selectedCareer) ? 
+                            useGetSpecialtiesQuery({page: page, limit:  10,}) 
+                          : 
+                            selectedCareer
+                              ?
+                                searchQuery ?
+                                    useSearchSpecialtyQuery({page: page, limit:  10, keyword: searchQuery, career_id:selectedCareer},{skip:!searchQuery})
+                                  :
+                                    useSearchSpecialtyByCareerQuery({page: page, limit:  10, career_id: selectedCareer})
+                              :
+                              useSearchSpecialtyQuery({page: page, limit:  10, keyword: searchQuery},{skip:!searchQuery});
 
-  const specialtyRes = (!searchQuery) ? useGetSpecialtiesQuery({page: page, limit:  10,}) : useSearchSpecialtyQuery({page: page, limit:  10, keyword: searchQuery},{skip:!searchQuery});
+
+                            
   const {data: specialtyResponse } = specialtyRes
   const specialties = useMemo(() => specialtyResponse?.data || [], [specialtyResponse]);
   console.log(specialtyRes);
+  const totalSpecialties = specialtyResponse?.total || 0;
 
 
   const planRes = useGetPlansQuery({page: page, limit:  10,}) ;
@@ -54,6 +67,10 @@ export const SpecialtyPage: FC<props> = () => {
   }
   */
 
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+};
+
   return (
     <>
 
@@ -63,10 +80,10 @@ export const SpecialtyPage: FC<props> = () => {
 
       
 
-      <div className='d-flex flex-column p-2 gap-4'>
+      <div className='d-flex flex-column gap-4'>
         
         {
-          /*
+          
 
         <div className='col-md-6'>
           <label htmlFor='package'>Selecciona una carrera</label>
@@ -75,7 +92,7 @@ export const SpecialtyPage: FC<props> = () => {
             name='career'
             id='career'
             onChange={(e) => {
-              setSelectedPlan(+e.target.value);
+              setSelectedCareer(+e.target.value);
               setPage(1);
             }}
           >
@@ -93,21 +110,46 @@ export const SpecialtyPage: FC<props> = () => {
             }
           </Select>
         </div>
-        */
+        
       }
 
-        <SearchBarWithButton query={searchQuery} setQuery={setSearchQuery} placeholder='Buscar'>
-          <Button
-            className='d-flex align-items-center'
-            onClick={() => setShowCreateSpecialtyModal(true)}
-          >
-            Nuevo Plan de Especialidad <i className='fa-solid fa-plus'></i>
-          </Button>
+        
+<div className="card container p-2">
+                <div className="d-flex flex-row">
+                    <div className="input-group p-2">
+                        <input
+                            type="text"
+                            className="form-control"
+                            aria-label="Text input with dropdown button"
+                            value={searchQuery}
+                            onChange={handleSearchChange}
+                            placeholder="Buscar por plan o clave"
+                        />
+                    </div>
 
-        </SearchBarWithButton>
+                    <Button
+                      className='d-flex align-items-center'
+                      onClick={() => setShowCreateSpecialtyModal(true)}
+                    >
+                      Nuevo Plan de Especialidad <i className='fa-solid fa-plus'></i>
+                    </Button>
+
+                </div>
+            </div>
+
+
+         
+        
 
         <SpecialtyList specialties={specialties} isLoading={specialtyRes.isLoading} plans={plans} />
 
+        <Pagination
+                currentPage={page}
+                pageSize={limit}
+                totalCount={totalSpecialties}
+                onPageChange={setPage}
+                className='justify-content-center'
+            />
        
       </div>
     </>

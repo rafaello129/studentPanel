@@ -47,7 +47,7 @@ export const SpecialtyList = ({specialties, isLoading, plans}:params) => {
     
     return (
 
-        <div className="card mt-3 p-2">
+        <div className="card mt-1 p-2">
             {showEditSpecialtyModal && selectedSpecialty && (
                 <EditSpecialtyModal setShowModal={setShowEditSpecialtyModal} specialty={selectedSpecialty} plans={plans}/>
             )}

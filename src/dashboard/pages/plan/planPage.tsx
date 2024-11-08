@@ -14,6 +14,7 @@ import { useGetCareersQuery, useSearchCareersQuery } from "../../../services/api
 import { CreatePlanModal } from "../../components/plan/CreatePlanModal";
 import { PlanList } from "../../components/plan/planList";
 import { Career } from "../../../interfaces/career";
+import Pagination from "../../components/shared/Pagination";
 
 
 
@@ -23,7 +24,13 @@ export const PlanPage = () => {
     const [selectedCareer, setSelectedCareer] = useState<number | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [showCreatePlanModal, setShowCreatePlanModal] = useState<boolean>(false);
-  
+
+    const limit = 10;
+
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchQuery(event.target.value);
+  };
+
   
     const planRes = (!searchQuery && !selectedCareer) ? 
                       useGetPlansQuery({page: page, limit:  10}) 
@@ -41,6 +48,8 @@ export const PlanPage = () => {
     const {data: planResponse } = planRes;
     const plans = useMemo(() => planResponse?.data || [], [planResponse]);
     console.log(planRes);
+
+    const totalPlans = planResponse?.total || 0;
 
     
     const careerRes = useGetCareersQuery({page: page, limit:  10,});
@@ -63,7 +72,7 @@ export const PlanPage = () => {
   
         
   
-        <div className='d-flex flex-column p-5 gap-4'>
+        <div className='d-flex flex-column gap-4'>
           <div className='col-md-6'>
             <label htmlFor='package'>Selecciona una carrera</label>
   
@@ -89,18 +98,42 @@ export const PlanPage = () => {
             </Select>
           </div>
   
-          <SearchBarWithButton query={searchQuery} setQuery={setSearchQuery} placeholder='Buscar'>
-            <Button
-              className='d-flex align-items-center'
-              onClick={() => setShowCreatePlanModal(true)}
-            >
-              Nuevo Plan de Estudios <i className='fa-solid fa-plus'></i>
-            </Button>
+          
+           
   
-          </SearchBarWithButton>
+            <div className="card container p-2">
+                <div className="d-flex flex-row">
+                    <div className="input-group p-2">
+                        <input
+                            type="text"
+                            className="form-control"
+                            aria-label="Text input with dropdown button"
+                            value={searchQuery}
+                            onChange={handleSearchChange}
+                            placeholder="Buscar por plan o clave"
+                        />
+                    </div>
+
+                    <Button
+                      className='d-flex align-items-center'
+                      onClick={() => setShowCreatePlanModal(true)}
+                    >
+                        Nuevo Plan de Estudios <i className='fa-solid fa-plus'></i>
+                    </Button>
+                </div>
+            </div>
+
+
   
           <PlanList plans={plans} isFetching={planRes.isFetching} />
-  
+              
+          <Pagination
+                currentPage={page}
+                pageSize={limit}
+                totalCount={totalPlans}
+                onPageChange={setPage}
+                className='justify-content-center'
+            />
          
         </div>
       </>

@@ -45,7 +45,7 @@ export const PlanList = ({plans, isFetching}: PlanListProps) => {
     
     return (
 
-        <div className="card mt-3 p-2">
+        <div className="card p-2">
             {
                 showModalEdit && <EditPlanModal setShowModal={setShowModalEdit} plan={selectedPlan} />
             }
