@@ -1,5 +1,10 @@
 // src/components/EvaluationList.tsx
 
+              
+import SchoolIcon from '@mui/icons-material/School';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
+
 import React, { useMemo, useState } from 'react';
 import {
   useGetEvaluationsQuery,
@@ -17,6 +22,7 @@ import {
   TextField,
   Typography,
   List,
+  Divider,
   ListItem,
   ListItemText,
   ListItemButton,
@@ -25,7 +31,13 @@ import { SelectChangeEvent } from '@mui/material/Select';
 import { useGetAllAcademicLevelsQuery } from '../../../services/api/providers/academicLevelApi';
 import { useNavigate } from 'react-router-dom';
 
-const EvaluationList: React.FC = () => {
+interface props{
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>,
+  setShowModal2: React.Dispatch<React.SetStateAction<boolean>>,
+  setShowModal3: React.Dispatch<React.SetStateAction<boolean>>,
+}
+
+const EvaluationList: React.FC<props> = ( {setShowModal, setShowModal2, setShowModal3}) => {
   // Estado para los filtros y paginación
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -98,7 +110,7 @@ const EvaluationList: React.FC = () => {
       </Typography>
 
       {/* Controles de Filtro */}
-      <Box sx={{ display: 'flex', gap: 2, mb: 4 }}>
+      <Box sx={{ display: 'flex', gap: 2, mb: 4 , justifyContent:'center', alignContent:'center'}}>
         <FormControlLabel
           control={
             <Checkbox
@@ -121,8 +133,8 @@ const EvaluationList: React.FC = () => {
           label="Mostrar Solo Plantillas"
         />
 
-        <FormControl variant="outlined" sx={{ minWidth: 200 }}>
-          <InputLabel id="academic-level-label">Nivel Académico</InputLabel>
+        <FormControl variant="outlined" sx={{ minWidth: 180, alignContent:'center', justifyContent:'center' }}>
+          <InputLabel className='mt-2' id="academic-level-label">Nivel Académico</InputLabel>
           <Select
             labelId="academic-level-label"
             value={academicLevelId ? String(academicLevelId) : '0'}
@@ -139,6 +151,7 @@ const EvaluationList: React.FC = () => {
         </FormControl>
 
         <TextField
+        className='mt-2'
           label="Evaluaciones por Página"
           type="number"
           value={limit}
@@ -146,6 +159,18 @@ const EvaluationList: React.FC = () => {
           variant="outlined"
           sx={{ width: 150 }}
         />
+
+
+                <Button variant="contained" color="primary" onClick={() => setShowModal(true)}>
+                    Nueva Evaluación
+                </Button>
+                <Button variant="contained" color="primary" onClick={() => setShowModal2(true)}>
+                    Clonar Evaluación
+                </Button>
+                <Button variant="contained" color="primary" onClick={() => setShowModal3(true)}>
+                    Asignar Usuario
+                </Button>
+
       </Box>
 
       {/* Mostrar estado de carga o error */}
@@ -159,45 +184,66 @@ const EvaluationList: React.FC = () => {
         </Typography>
       ) : (
         <>
+          <div className='card'>
+
           {/* Lista de Evaluaciones */}
           <List>
-            {evaluations.map((evaluation) => (
-              <>
-              <hr />
-              <ListItem disablePadding key={evaluation.id} >
-                <ListItemButton onClick={() => handleEvaluationClick(evaluation.id, evaluation.isTemplate)}>
-                  <ListItemText
-                    primary={
-                      <>
-                        <div className=' text-center fs-4 fw-bold'>
-                            {evaluation.title}
-                        </div>
-                      </>
-                    }
-                    secondary={
-                      <>
-                      <hr />
-                        <div className='d-flex flex-row justify-content-evenly' >
-                        
-                          <p>{evaluation.description} </p>{" "}
-                          
-                          <p>
-                            Nivel Académico: {evaluation.academicLevel?.name || 'N/A'}
-                          </p>
-                          
-                          <p>Es Plantilla: {evaluation.isTemplate ? 'Sí' : 'No'}</p>
-                          <p>Está Activa: {evaluation.isActive ? 'Sí' : 'No'}</p>
-                        </div>
-                        
-                      </>
-                    }
-                  />
-                </ListItemButton>
-                
-              </ListItem>
-            </>
-            ))}
-          </List>
+    {evaluations.map((evaluation) => (
+      <React.Fragment key={evaluation.id}>
+        <Divider />
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => handleEvaluationClick(evaluation.id, evaluation.isTemplate)}>
+            <div style={{ display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'space-evenly' }}>
+              {/* Title and Description */}
+              <div style={{ flex: .3 }}>
+                <Typography variant="h6" component="h4" style={{ fontWeight: 'bold', marginBottom: '4px' }}>
+                  {evaluation.title}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  {evaluation.description}
+                </Typography>
+              </div>
+              
+              {/* Academic Level */}
+              <div style={{ textAlign: 'center', padding: '0 10px' }}>
+                <SchoolIcon style={{ color: '#1976d2', marginBottom: '4px' }} />
+                <Typography variant="body2">
+                  Nivel Académico: 
+                </Typography>
+                <Typography variant="body2">
+                  {evaluation.academicLevel?.name || 'N/A'}
+                </Typography>
+              </div>
+              
+              {/* Is Template */}
+              <div style={{ textAlign: 'center', padding: '0 10px' }}>
+                {evaluation.isTemplate ? <CheckCircleIcon color="success" /> : <CancelIcon color="error" />}
+                <Typography variant="body2">
+                  Es Plantilla: 
+                </Typography>
+                <Typography variant="body2">
+                  {evaluation.isTemplate ? 'Sí' : 'No'}
+                </Typography>
+              </div>
+              
+              {/* Is Active */}
+              <div style={{ textAlign: 'center', padding: '0 10px' }}>
+                {evaluation.isActive ? <CheckCircleIcon color="success" /> : <CancelIcon color="error" />}
+                <Typography variant="body2">
+                  Está Activa: 
+                </Typography>
+                <Typography variant="body2">
+                  {evaluation.isActive ? 'Sí' : 'No'}
+                </Typography>
+              </div>
+        
+            </div>
+          </ListItemButton>
+        </ListItem>
+      </React.Fragment>
+    ))}
+  </List>
+  </div>
 
           {/* Controles de Paginación */}
           <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>

@@ -41,7 +41,7 @@ export const GeneralSubjectList = ({subjects, isLoading}: SubjectListProps) => {
                 showModalEdit && <EditSubjectModal setShowModal={setShowModalEdit} subject={selectedSubject} />
             }
 
-            <table className="table text-center">
+            <table className="table text-center table-striped">
                 <thead >
                     <tr>
                         <th scope="col">Materia</th>

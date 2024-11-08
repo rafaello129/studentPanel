@@ -55,7 +55,7 @@ export const SpecialtyList = ({specialties, isLoading, plans}:params) => {
             {showAddSubjectModal && selectedSpecialty && (
                 <AddSubjectToSpecialtyPage setShowModal={setShowAddSubjectModal} sty={selectedSpecialty}/>
             )}
-            <table className="table text-center">
+            <table className="table text-center table-striped">
                 <thead >
                     <tr>
                         <th scope="col">Nombre</th>

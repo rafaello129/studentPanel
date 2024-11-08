@@ -90,7 +90,7 @@ const CloneEvaluationButton: React.FC = () => {
     <Container maxWidth="sm">
       <Box
         sx={{
-          mt: 8,
+          mt: 3,
           p: 4,
           boxShadow: 3,
           borderRadius: 2,

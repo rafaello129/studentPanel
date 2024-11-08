@@ -58,21 +58,23 @@ const EvaluationInstructions = () => (
 export const EvaluationPage = () => {
     const [openModal, setOpenModal] = useState(false);
 
+    const [openModal2, setOpenModal2] = useState(false);
+    const [openModal3, setOpenModal3] = useState(false);
+
     const handleOpenModal = () => setOpenModal(true);
     const handleCloseModal = () => setOpenModal(false);
 
+    const handleCloseModal2 = () => setOpenModal2(false);
+    const handleCloseModal3 = () => setOpenModal3(false);
+
     return (
-        <div className="card p-3 m-3">
+        <div className="card p-4 m-3">
             <div className="mt-4">
                 <EvaluationInstructions />
             </div>
 
             {/* Botón para abrir el modal */}
-            <Box textAlign="center" mt={4}>
-                <Button variant="contained" color="primary" onClick={handleOpenModal}>
-                    Crear Nueva Evaluación
-                </Button>
-            </Box>
+            
 
             {/* Modal para el formulario de creación */}
             <Modal open={openModal} onClose={handleCloseModal}>
@@ -82,7 +84,7 @@ export const EvaluationPage = () => {
                         top: '50%',
                         left: '50%',
                         transform: 'translate(-50%, -50%)',
-                        width: 400,
+                        width: 460,
                         bgcolor: 'background.paper',
                         boxShadow: 24,
                         p: 4,
@@ -96,12 +98,56 @@ export const EvaluationPage = () => {
                 </Box>
             </Modal>
 
-            <EvaluationList />
+        
+            <Modal open={openModal2} onClose={handleCloseModal2}>
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: 600,
+                        bgcolor: 'background.paper',
+                        boxShadow: 24,
+                        p: 1,
+                        borderRadius: 1,
+                    }}
+                >
+                    <CloneEvaluationButton />
+                    <Box textAlign="right" mt={2}>
+                        <Button onClick={handleCloseModal} color="secondary">Cerrar</Button>
+                    </Box>
+                </Box>
+            </Modal>
+
+            <Modal open={openModal3} onClose={handleCloseModal3}>
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: 500,
+                        height: 425,
+                        bgcolor: 'background.paper',
+                        boxShadow: 24,
+                        p: 2,
+                        borderRadius: 1,
+                    }}
+                >
+                    <AssignUsersToEvaluation />
+                    <Box textAlign="right" mt={2}>
+                        <Button onClick={handleCloseModal} color="secondary">Cerrar</Button>
+                    </Box>
+                </Box>
+            </Modal>
+
+            <EvaluationList  setShowModal={setOpenModal} setShowModal2={setOpenModal2} setShowModal3={setOpenModal3}/>
 
             {/* Contenedor para los botones en la misma fila */}
             <Box display="flex" justifyContent="space-between" mt={4} mb={5}>
-                <CloneEvaluationButton />
-                <AssignUsersToEvaluation />
+                
+                
             </Box>
         </div>
     );

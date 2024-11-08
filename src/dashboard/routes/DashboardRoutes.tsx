@@ -72,7 +72,6 @@ export const DashboardRoutes = () => {
         <Route path='management' element={<ManagementPage setSelectedClass={setSelectedClass} />} />
         
         /*Probando */
-        <Route path='ListEvaluaciones' element={<EvaluationList></EvaluationList>} />
         <Route path='CrearEvaluaciones' element={<CreateEvaluationForm></CreateEvaluationForm>} />
         <Route path='ClonarEvaluacion' element={<CloneEvaluationButton></CloneEvaluationButton>} />
         <Route path='AsignarEvaluation' element={<AssignUsersToEvaluation></AssignUsersToEvaluation>} />

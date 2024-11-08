@@ -85,7 +85,7 @@ const AssignUsersToEvaluation: React.FC = () => {
     <Container maxWidth="sm">
       <Box
         sx={{
-          mt: 8,
+          mt: 2,
           p: 4,
           boxShadow: 3,
           borderRadius: 2,

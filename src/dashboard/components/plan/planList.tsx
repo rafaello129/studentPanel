@@ -50,7 +50,7 @@ export const PlanList = ({plans, isFetching}: PlanListProps) => {
                 showModalEdit && <EditPlanModal setShowModal={setShowModalEdit} plan={selectedPlan} />
             }
 
-            <table className="table text-center">
+            <table className="table text-center table-striped">
                 <thead >
                     <tr>
                         <th scope="col">Planes</th>
