@@ -1,6 +1,6 @@
 import React from 'react';
 import logoGob from "../../assets/logo.svg"
-import logoPeesad from "../../assets/peesad-portal.png"
+import logoPeesad from "../../assets/logo.png"
 import logoTecnm from "../../assets/tecnm.svg"
 
 interface Props {
@@ -21,8 +21,10 @@ export const AuthLayout: React.FC<Props> = ({ children }) => {
                 <img src={logoGob} alt="escudo-y-logo" width={320} className="my-3" />
               </div>
               <div className="d-flex flex-column align-items-center justify-content-center w-100 w-md-50 p-1">
-                <div className="d-flex justify-content-center">
-                  <img src={logoPeesad} alt="escudo-y-logo" width={180} />
+                <div className="d-flex flex-column justify-content-center  align-items-center">
+                  <img src={logoPeesad} alt="escudo-y-logo" width={150} />
+                  <h2 className='mt-2'>PEESaD PORTAL</h2>
+                  
                 </div>
                 <div className="w-100">
                   {children}

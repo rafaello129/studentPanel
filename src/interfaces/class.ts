@@ -7,7 +7,6 @@ import { Teacher } from './teacher';
 import { Tutor } from './tutor';
 
 export interface Class {
-  subperiod?: any;
   id: number;
   isCurrent: boolean;
   isDeleted: boolean;
@@ -20,6 +19,26 @@ export interface Class {
   students: Student[];
   semester?: number;
   subjectName?: string; // Nombre de la asignatura que representa el nombre de la clase
+  period?: Period;
+  subperiod?:subperiod;
+}
+
+export interface subperiod {
+  endDate: string;
+  id: number;
+  isCurrent: boolean;
+  key: string;
+  name: string;
+  startDate:string;
+
+}
+export interface Period {
+  endDate: string;
+  id: number;
+  isCurrent: boolean;
+  key: string;
+  name: string;
+  startDate:string;
 
 }
 export interface ClassWithDetails {

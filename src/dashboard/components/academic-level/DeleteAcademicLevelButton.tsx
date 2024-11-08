@@ -22,8 +22,12 @@ const DeleteAcademicLevelButton: React.FC<Props> = ({ id }) => {
   };
 
   return (
-    <button onClick={handleDelete} disabled={isLoading}>
-      {isLoading ? 'Eliminando...' : 'Eliminar Nivel Académico'}
+    <button
+      onClick={handleDelete}
+      disabled={isLoading}
+      className={`btn btn-sm ${isLoading ? 'btn-secondary' : 'btn-danger'} ms-2`}
+    >
+      {isLoading ? 'Eliminando...' : 'Eliminar'}
     </button>
   );
 };
