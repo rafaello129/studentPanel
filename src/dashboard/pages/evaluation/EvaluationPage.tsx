@@ -5,6 +5,8 @@ import EvaluationList from "../../components/evaluation/EvaluationList"
 
 
 export const EvaluationPage = ()=>{
+    
+    
     return (
         <div className="evaluation-page">
             <CreateEvaluationForm></CreateEvaluationForm>

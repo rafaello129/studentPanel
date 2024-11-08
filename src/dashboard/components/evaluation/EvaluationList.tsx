@@ -1,6 +1,6 @@
 // src/components/EvaluationList.tsx
 
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   useGetEvaluationsQuery,
 } from '../../../services/api/providers/evaluationApi';
@@ -28,9 +28,9 @@ import { useNavigate } from 'react-router-dom';
 const EvaluationList: React.FC = () => {
   // Estado para los filtros y paginación
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(100);
   const [isActive, setIsActive] = useState<boolean | undefined>(false);
-  const [isTemplate, setIsTemplate] = useState<boolean | undefined>(false);
+  const [isTemplate, setIsTemplate] = useState<boolean | undefined>(true);
   const [academicLevelId, setAcademicLevelId] = useState<number | undefined>(undefined);
 
   // Obtener los niveles académicos para el filtro
@@ -41,13 +41,20 @@ const EvaluationList: React.FC = () => {
   } = useGetAllAcademicLevelsQuery();
 
   // Obtener las evaluaciones con los filtros aplicados
-  const { data, error, isLoading } = useGetEvaluationsQuery({
+  const evaluationRes = useGetEvaluationsQuery({
     page,
     limit,
-    isActive,
     isTemplate,
     academicLevelId,
   });
+
+  const {data: evaluationResponse} = evaluationRes;
+  const evaluations = useMemo(() => evaluationResponse?.data || [], [evaluationResponse])
+  console.log(evaluationRes);
+  console.log(evaluationResponse);
+
+  
+
 
   // Hook para la navegación
   const navigate = useNavigate();
@@ -144,11 +151,11 @@ const EvaluationList: React.FC = () => {
       </Box>
 
       {/* Mostrar estado de carga o error */}
-      {isLoading || isLoadingAcademicLevels ? (
+      {evaluationRes.isLoading || isLoadingAcademicLevels ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
           <CircularProgress />
         </Box>
-      ) : error || errorAcademicLevels ? (
+      ) : evaluationRes.isError || errorAcademicLevels ? (
         <Typography color="error">
           Error al cargar las evaluaciones o niveles académicos.
         </Typography>
@@ -156,24 +163,41 @@ const EvaluationList: React.FC = () => {
         <>
           {/* Lista de Evaluaciones */}
           <List>
-            {data?.data.map((evaluation) => (
-              <ListItem disablePadding key={evaluation.id}>
+            {evaluations.map((evaluation) => (
+              <>
+              <hr />
+              <ListItem disablePadding key={evaluation.id} >
                 <ListItemButton onClick={() => handleEvaluationClick(evaluation.id, evaluation.isTemplate)}>
                   <ListItemText
-                    primary={evaluation.title}
+                    primary={
+                      <>
+                        <div className=' text-center fs-4 fw-bold'>
+                            {evaluation.title}
+                        </div>
+                      </>
+                    }
                     secondary={
                       <>
-                        <p>{evaluation.description}</p>
-                        <p>
-                          Nivel Académico: {evaluation.academicLevel?.name || 'N/A'}
-                        </p>
-                        <p>Es Plantilla: {evaluation.isTemplate ? 'Sí' : 'No'}</p>
-                        <p>Está Activa: {evaluation.isActive ? 'Sí' : 'No'}</p>
+                      <hr />
+                        <div className='d-flex flex-row justify-content-evenly' >
+                        
+                          <p>{evaluation.description} </p>{" "}
+                          
+                          <p>
+                            Nivel Académico: {evaluation.academicLevel?.name || 'N/A'}
+                          </p>
+                          
+                          <p>Es Plantilla: {evaluation.isTemplate ? 'Sí' : 'No'}</p>
+                          <p>Está Activa: {evaluation.isActive ? 'Sí' : 'No'}</p>
+                        </div>
+                        
                       </>
                     }
                   />
                 </ListItemButton>
+                
               </ListItem>
+            </>
             ))}
           </List>
 
@@ -187,12 +211,12 @@ const EvaluationList: React.FC = () => {
               Anterior
             </Button>
             <Typography variant="body1">
-              Página {data?.page} de {Math.ceil((data?.total || 1) / (data?.limit || 1))}
+              Página {evaluationResponse?.page} de {Math.ceil((evaluationResponse?.total || 1) / (evaluationResponse?.limit || 1))}
             </Typography>
             <Button
               variant="contained"
               onClick={() => handlePageChange(page + 1)}
-              disabled={data && data.data.length < limit}
+              disabled={evaluationResponse && evaluationResponse.data.length < limit}
             >
               Siguiente
             </Button>

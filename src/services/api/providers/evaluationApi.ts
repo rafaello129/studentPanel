@@ -34,7 +34,16 @@ const evaluationApi = peesadApi.injectEndpoints({
           (academicLevelId !== undefined ? `&academicLevelId=${academicLevelId}` : ''),
         method: 'GET',
       }),
-      providesTags: ['Evaluation'],
+      providesTags: (result) =>
+              result 
+              ? 
+              [
+                  ...result.data.map(({id}) => ({type: 'Evaluation' as const, id})),
+                  {type: 'Evaluation', id: 'LIST'},
+              ]
+              :
+              [{type: 'Evaluation', id: 'LIST'}]
+
     }),
 
     // Obtener una evaluación por ID
