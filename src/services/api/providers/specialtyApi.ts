@@ -71,10 +71,21 @@ const specialtyApi = peesadApi.injectEndpoints({
                 [{type: 'Specialty', id: 'SEARCH'}] 
 
         }),
+
+        assignSubjectToSpecialty: builder.mutation<ApiResponse<Specialty>,  {subjectId:number, specialtyId:number}> ({
+
+            query: (body) => ({
+                url: `specialties/assign-subject`,
+                method: 'POST',
+                body: {...body},
+            }),
+
+            invalidatesTags: (body) => [{ type: 'Specialty', id: body?.data?.id }, {type: 'Specialty', id: 'LIST'}],
+        }),
     }),
 
     overrideExisting: 'throw'
 
 })
 
-export const {useGetSpecialtiesQuery, useGetSpecialtyQuery, useAddSpecialtyMutation, useEditSpecialtyMutation, useSearchSpecialtyQuery} = specialtyApi;
+export const {useGetSpecialtiesQuery, useGetSpecialtyQuery, useAddSpecialtyMutation, useEditSpecialtyMutation, useSearchSpecialtyQuery, useAssignSubjectToSpecialtyMutation} = specialtyApi;

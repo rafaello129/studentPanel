@@ -1,4 +1,4 @@
-import { useMemo, useState, Dispatch, useEffect } from 'react';
+import { useMemo, useState, Dispatch, useEffect, SetStateAction, FC } from 'react';
 import { usePageQueryParams } from '../../../hooks/usePageQueryParams';
 import { AppDispatch, RootState } from '../../../../store/store';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,9 +18,10 @@ import { useGetSpecialtiesQuery, useSearchSpecialtyQuery } from '../../../../ser
 import { useGetPlansQuery, useSearchPlansQuery } from '../../../../services/api/providers/planApi';
 import { useGetCareersQuery } from '../../../../services/api/providers/careerApi';
 
+interface props{
+}
 
-
-export const SpecialtyPage = () => {
+export const SpecialtyPage: FC<props> = () => {
 
   const [page, setPage] = useState<number>(1);
   const [selectedPlan, setSelectedPlan] = useState<number | null>(null);
@@ -62,7 +63,11 @@ export const SpecialtyPage = () => {
 
       
 
-      <div className='d-flex flex-column p-5 gap-4'>
+      <div className='d-flex flex-column p-2 gap-4'>
+        
+        {
+          /*
+
         <div className='col-md-6'>
           <label htmlFor='package'>Selecciona una carrera</label>
 
@@ -88,6 +93,8 @@ export const SpecialtyPage = () => {
             }
           </Select>
         </div>
+        */
+      }
 
         <SearchBarWithButton query={searchQuery} setQuery={setSearchQuery} placeholder='Buscar'>
           <Button
@@ -99,7 +106,7 @@ export const SpecialtyPage = () => {
 
         </SearchBarWithButton>
 
-        <SpecialtyList specialties={specialties} isLoading={specialtyRes.isLoading} plans={plans}/>
+        <SpecialtyList specialties={specialties} isLoading={specialtyRes.isLoading} plans={plans} />
 
        
       </div>

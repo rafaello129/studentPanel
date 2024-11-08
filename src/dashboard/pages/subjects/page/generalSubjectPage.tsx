@@ -15,16 +15,18 @@ function GeneralSubjectPage() {
         ? useGetSubjectsQuery({ page, limit }) 
         : useSearchSubjectsQuery({ page, limit, keyword: searchKeyword }, { skip: !searchKeyword });
 
+
     const { data: subjectResponse } = res;
     const subjects = useMemo(() => subjectResponse?.data || [], [subjectResponse]);
     const totalSubjects = subjectResponse?.total || 0; // Total de materias para la paginación
+
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchKeyword(event.target.value);
     };
 
     return (
-        <div className="p-5">
+        <div className="p-2">
             {showModalCreate && (
                 <CreateSubjectModal setShowModal={setShowModalCreate} />
             )}
