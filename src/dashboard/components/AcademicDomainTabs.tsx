@@ -1,9 +1,13 @@
 import { FC } from 'react'
 import { NavLink } from 'react-router-dom'
 
-import carrerIcon from '../../assets/icons/carrer.png';
 
-export const AcademicEnviromentTabs: FC = () => {
+
+import career from '../../assets/icons/carrer.png';
+import unit from '../../assets/icons/unit.png';
+import student from '../../assets/icons/student.png';
+
+export const AcademicDomainTabs: FC = () => {
 
   const activeStyle = {
     background: '#f3f3f3',
@@ -28,27 +32,27 @@ export const AcademicEnviromentTabs: FC = () => {
                     <NavLink
                         style={({ isActive }) => (isActive ? activeStyle : unactiveStyle)}
                         className='nav-link d-flex align-items-center'
-                        to='subjects'
+                        to='career'
                     >   
-                        <span className='ms-2 fs-4'> 📘 </span>
-                        <span className='ms-2'> Materias</span>
+                        <img src={career} width={24} alt='Class Icon' />
+                        <span className='ms-2'> CARRERAS</span>
                     </NavLink>
                     <NavLink
                         style={({ isActive }) => (isActive ? activeStyle : unactiveStyle)}
                         className='nav-link d-flex align-items-center'
-                        to='specialty'
+                        to='unit'
                     >
                         
-                        <span className='ms-2 fs-3'>🎓</span>
-                        <span className='ms-2'>Especialidad</span>
+                        <img src={unit} width={30} alt='Class Icon' />
+                        <span className='ms-2'>UNIDADES</span>
                     </NavLink>
                     <NavLink
                         style={({ isActive }) => (isActive ? activeStyle : unactiveStyle)}
                         className='nav-link d-flex align-items-center'
-                        to='plan'
+                        to='student'
                     >
-                        <span className='ms-2 fs-4'>🗂️</span>
-                        <span className='ms-2'>Planes</span>
+                        <img src={student} width={28} alt='Class Icon' />
+                        <span className='ms-2'>ESTUDIANTES</span>
                     </NavLink>
                     </div>
                 </nav>
