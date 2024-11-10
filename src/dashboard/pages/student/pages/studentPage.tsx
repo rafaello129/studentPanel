@@ -4,11 +4,8 @@ import { Paginator } from "../../../components/shared/Paginator";
 import { useGetStudentsQuery, useSearchStudentsQuery, useDownloadCreateStudentTemplateQuery, useUploadCreateStudentExcelMutation } from "../../../../services/api/providers/studentApi";
 import { StudentFilter } from "../../../components/student/StudentFilter";
 import { UnitCampus } from "../../../../interfaces/unit-campus";
-<<<<<<< Updated upstream
 import StudentTable from "../../../components/student/studentTable";
-=======
 import { Accordion, Button } from 'react-bootstrap';
->>>>>>> Stashed changes
 
 export const StudentPage = () => {
     const [searchKeyword, setSearchKeyword] = useState<string>("");
@@ -41,7 +38,7 @@ export const StudentPage = () => {
     const totalStudents = studentResponse?.total || 0;
 
     const { data: template, refetch: refetchTemplate } = useDownloadCreateStudentTemplateQuery();
-  const [uploadCreateStudentExcel] = useUploadCreateStudentExcelMutation();
+    const [uploadCreateStudentExcel] = useUploadCreateStudentExcelMutation();
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchKeyword(event.target.value);
@@ -59,24 +56,24 @@ export const StudentPage = () => {
 
     const handleDownloadCreateStudentTemplate = () => {
         if (template) {
-          const url = URL.createObjectURL(template);
-          const link = document.createElement('a');
-          link.href = url;
-          link.setAttribute('download', 'student-template.xlsx');
-          document.body.appendChild(link);
-          link.click();
-          link.remove();
+            const url = URL.createObjectURL(template);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'student-template.xlsx');
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
         }
-      };
-    
-      const handleCreateStudentUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    };
+
+    const handleCreateStudentUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
-          const formData = new FormData();
-          formData.append('file', file);
-          await uploadCreateStudentExcel(formData);
+            const formData = new FormData();
+            formData.append('file', file);
+            await uploadCreateStudentExcel(formData);
         }
-      };
+    };
 
     return (
         <div className="p-5">
@@ -104,69 +101,64 @@ export const StudentPage = () => {
                     </button>
                 </div>
 
-<<<<<<< Updated upstream
+                {/* Sección de instrucciones y opciones de Excel */}
+                <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 m-2 mb-0">
+                    {/* Instrucciones para carga rápida */}
+                    <Accordion className="col-md-8">
+                        <Accordion.Item eventKey="0">
+                            <Accordion.Header>
+                                <strong>Instrucciones para la Creación Rápida de Estudiantes</strong>
+                            </Accordion.Header>
+                            <Accordion.Body>
+                                <p>
+                                    Para crear estudiantes en lote, descarga la plantilla de Excel, completa los datos necesarios en cada columna y luego carga el archivo de regreso aquí. Asegúrate de seguir las instrucciones en cada columna de la plantilla.
+                                </p>
+                            </Accordion.Body>
+                        </Accordion.Item>
+                    </Accordion>
+
+                    {/* Botones de descarga y carga de plantilla */}
+                    <div className="d-flex gap-2">
+                        <Button
+                            variant="warning"
+                            className="d-flex align-items-center"
+                            onClick={handleDownloadCreateStudentTemplate}
+                        >
+                            Descargar Plantilla <i className="fa-solid fa-download ms-1"></i>
+                        </Button>
+                        <label htmlFor="uploadExcel" className="btn btn-outline-secondary d-flex align-items-center mb-0">
+                            Subir Excel <i className="fa-solid fa-upload ms-1"></i>
+                        </label>
+                        <input
+                            type="file"
+                            id="uploadExcel"
+                            onChange={handleCreateStudentUpload}
+                            style={{ display: 'none' }}
+                        />
+                    </div>
+                </div>
+
                 <div className="student-filter p-2">
                     <StudentFilter
                         onFilterChange={handleFilterChange}
                         isDisabled={!!searchKeyword}  // Deshabilitar los filtros si hay texto en la búsqueda
                     />
-=======
-                {/* Sección de instrucciones y opciones de Excel */}
-          <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 m-2 mb-0">
-            {/* Instrucciones para carga rápida */}
-            <Accordion className="col-md-8">
-              <Accordion.Item eventKey="0">
-                <Accordion.Header>
-                  <strong>Instrucciones para la Creación Rápida de Estudiantes</strong>
-                </Accordion.Header>
-                <Accordion.Body>
-                  <p>
-                    Para crear estudiantes en lote, descarga la plantilla de Excel, completa los datos necesarios en cada columna y luego carga el archivo de regreso aquí. Asegúrate de seguir las instrucciones en cada columna de la plantilla.
-                  </p>
-                </Accordion.Body>
-              </Accordion.Item>
-            </Accordion>
 
-            {/* Botones de descarga y carga de plantilla */}
-            <div className="d-flex gap-2">
-              <Button
-                variant="warning"
-                className="d-flex align-items-center"
-                onClick={handleDownloadCreateStudentTemplate}
-              >
-                Descargar Plantilla <i className="fa-solid fa-download ms-1"></i>
-              </Button>
-              <label htmlFor="uploadExcel" className="btn btn-outline-secondary d-flex align-items-center mb-0">
-                Subir Excel <i className="fa-solid fa-upload ms-1"></i>
-              </label>
-              <input
-                type="file"
-                id="uploadExcel"
-                onChange={handleCreateStudentUpload}
-                style={{ display: 'none' }}
-              />
-            </div>
-          </div>
-
-                <div className="student-filter m-2 mt-0">
-                    <StudentFilter onFilterChange={handleFilterChange} />
->>>>>>> Stashed changes
+                    <div className="mt-4">
+                        {studentRes.isFetching
+                            ? <div className="text-center">Cargando...</div>
+                            : <StudentTable students={students} />}
+                    </div>
                 </div>
 
-                <div className="mt-4">
-                    {studentRes.isFetching
-                        ? <div className="text-center">Cargando...</div>
-                        : <StudentTable students={students} />}
-                </div>
+                {studentResponse && totalStudents > limit && (
+                    <Paginator
+                        currentPage={page}
+                        totalResults={totalStudents}
+                        setCurrentPage={(page: number) => setPage(page)}
+                    />
+                )}
             </div>
-
-            {studentResponse && totalStudents > limit && (
-                <Paginator
-                    currentPage={page}
-                    totalResults={totalStudents}
-                    setCurrentPage={(page: number) => setPage(page)}
-                />
-            )}
         </div>
-    );
+            );
 };
