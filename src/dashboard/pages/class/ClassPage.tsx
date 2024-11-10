@@ -43,7 +43,6 @@ export default function ClassPage() {
   const { data: template, refetch: refetchTemplate } = useDownloadTemplateQuery();
   const [uploadClassExcel] = useUploadClassExcelMutation();
 
-
   if (isLoading) {
     return <Loading />;
   }
