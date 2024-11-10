@@ -63,6 +63,24 @@ const classApi = peesadApi.injectEndpoints({
       }),
       invalidatesTags: ['Class'],
     }),
+
+    downloadTemplateAssignStudent: builder.query<Blob, void>({
+      query: () => ({
+        url: 'class/download-assign-student-template',
+        method: 'GET',
+        responseHandler: (response) => response.blob(),
+      }),
+    }),
+
+    uploadStudentExcel: builder.mutation<ApiResponse<any>, FormData>({
+      query: (body) => ({
+        url: 'class/upload-assign-student-excel',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Class'],
+    }),
+
   }),
   overrideExisting: 'throw',
 });
@@ -73,5 +91,7 @@ export const {
   useEditClassMutation,
   useDownloadTemplateQuery,
   useUploadClassExcelMutation,
+  useDownloadTemplateAssignStudentQuery,
+  useUploadStudentExcelMutation
 } = classApi;
 
