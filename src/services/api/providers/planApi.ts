@@ -96,10 +96,21 @@ const planApi = peesadApi.injectEndpoints({
             
         }),
 
+        assignSubjectToPlan: builder.mutation<ApiResponse<Plan>,  {subjectId:number, planId:number}> ({
+
+            query: (body) => ({
+                url: `plans/assign-subject`,
+                method: 'POST',
+                body: {...body},
+            }),
+
+            invalidatesTags: (body) => [{ type: 'Plan', id: body?.data?.id }, {type: 'Plan', id: 'LIST'}],
+        }),
+
     }),
 
     overrideExisting: 'throw'
 
 })
 
-export const {useGetPlanQuery, useGetPlansQuery, useAddPlanMutation, useEditPlanMutation, useSearchPlansQuery, useSearchPlansByCareerQuery} = planApi
+export const {useGetPlanQuery, useGetPlansQuery, useAddPlanMutation, useEditPlanMutation, useSearchPlansQuery, useSearchPlansByCareerQuery, useAssignSubjectToPlanMutation} = planApi

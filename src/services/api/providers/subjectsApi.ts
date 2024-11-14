@@ -7,10 +7,10 @@ const subjectApi = peesadApi.injectEndpoints({
 
     endpoints: (builder) => ({
 
-        getSubjects: builder.query< ApiResponseAll<Subject>,PaginationQueryParamsType>({
-            query: ({ page = 1, limit = 1, isActive }) =>({
+        getSubjects: builder.query< ApiResponseAll<Subject>,PaginationQueryParamsType & {specialty?: boolean}>({
+            query: ({ page = 1, limit = 1, isActive, specialty }) =>({
                 url: `subjects/findAll?page=${page}&limit=${limit}` +
-                (isActive !== undefined ? `&isActive=${isActive}` : ''),
+                (isActive !== undefined ? `&isActive=${isActive}` : '')+ (specialty !== undefined ? `&specialty=${specialty}` : ''),
                 method: 'GET',
             }),
             providesTags: (result) => 
@@ -23,6 +23,23 @@ const subjectApi = peesadApi.injectEndpoints({
                     ]
                     :
                     [{type: 'Subject', id: 'LIST'}]
+        }),
+        getSpecialitySubjects: builder.query< ApiResponseAll<Subject>,PaginationQueryParamsType & {specialty: boolean}>({
+            query: ({ page = 1, limit = 1, isActive, specialty }) =>({
+                url: `subjects/findAll?page=${page}&limit=${limit}&specialty=${specialty}` +
+                (isActive !== undefined ? `&isActive=${isActive}` : ''),
+                method: 'GET',
+            }),
+            providesTags: (result) => 
+
+                result 
+                    ? 
+                    [
+                        ...result.data.map(({id}) => ({type: 'SpecialtySubject' as const, id})),
+                        {type: 'SpecialtySubject', id: 'SPECIALTYLIST'},
+                    ]
+                    :
+                    [{type: 'SpecialtySubject', id: 'SPECIALTYLIST'}]
         }),
 
         getSubject: builder.query<ApiResponse<Subject>,{id: number}>({
@@ -40,7 +57,7 @@ const subjectApi = peesadApi.injectEndpoints({
                 method: 'POST',
                 body,
             }),
-            invalidatesTags: [{ type: 'Subject', id: 'LIST' },{type: 'Subject', id: 'SEARCH'}],
+            invalidatesTags: [{ type: 'Subject', id: 'LIST' },{type: 'Subject', id: 'SEARCH'},{ type: 'SpecialtySubject', id: 'SPECIALTYLIST' },],
         }),
 
         editSubject: builder.mutation<ApiResponse<Subject>, UpdateSubject & {id:number}> ({
@@ -51,7 +68,7 @@ const subjectApi = peesadApi.injectEndpoints({
                 body: {...body, id:undefined},
             }),
 
-            invalidatesTags: (body) => [{ type: 'Subject', id: body?.data?.id }, {type: 'Subject', id: 'SEARCH'}],
+            invalidatesTags: (body) => [{ type: 'Subject', id: body?.data?.id }, {type: 'Subject', id: 'SEARCH'},{ type: 'SpecialtySubject', id: 'SPECIALTYLIST' },],
         }),
 
         searchSubjects: builder.query<ApiResponseAll<Subject>, {keyword?: string, page: number, limit: number}> ({
@@ -71,10 +88,27 @@ const subjectApi = peesadApi.injectEndpoints({
                 [{type: 'Subject', id: 'SEARCH'}] 
 
         }),
+        searchSpecialtySubjects: builder.query<ApiResponseAll<Subject>, {keyword?: string, page: number, limit: number}> ({
+
+            query: (body) => ({
+                url: `subjects/search-specialty?keyword=${body.keyword}&page=${body.page}&limit=${body.limit}`,
+                method: 'GET'
+            }),
+            providesTags: (result) => 
+                result 
+                ? 
+                [
+                    ...result.data.map(({id}) => ({type: 'Subject' as const, id})),
+                    {type: 'SpecialtySubject', id: 'SEARCH'},
+                ]
+                :
+                [{type: 'SpecialtySubject', id: 'SEARCH'}] 
+
+        }),
     }),
 
     overrideExisting: 'throw'
 
 })
 
-export const {useGetSubjectsQuery, useGetSubjectQuery, useAddSubjectMutation, useEditSubjectMutation, useSearchSubjectsQuery} = subjectApi
+export const {useGetSubjectsQuery, useGetSubjectQuery, useAddSubjectMutation, useEditSubjectMutation, useSearchSubjectsQuery, useGetSpecialitySubjectsQuery, useSearchSpecialtySubjectsQuery} = subjectApi

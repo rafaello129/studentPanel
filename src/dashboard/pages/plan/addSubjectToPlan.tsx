@@ -2,31 +2,36 @@ import { Dispatch, SetStateAction, useMemo, useState } from "react";
 import {useGetSpecialtyQuery } from "../../../services/api/providers/specialtyApi";
 import { Outlet } from 'react-router-dom';
 import { Specialty } from "../../../interfaces/specialty";
-import { SubjectList } from './subjectList';
-import Loading from "../shared/Loading";
+import { SubjectList } from "../../components/specialty/subjectList";
+import Loading from "../../components/shared/Loading";
+import { GeneralSubjectList } from "../../components/subjects/generalSubjectsList";
+import { GeneralSubjectLista } from "./generalSubjectLista";
+import { useGetPlanQuery } from "../../../services/api/providers/planApi";
+import { Plan } from "../../../interfaces/plan";
+
 
 
 interface Props {
     setShowModal: Dispatch<SetStateAction<boolean>>,
-    sty: Specialty
+    pln: Plan
     
 }   
 
 
 
-export const AddSubjectToSpecialtyPage = ({ sty, setShowModal }: & Props) => {
+export const AddSubjectToPlanPage = ({ pln, setShowModal }: & Props) => {
     
     const [page, setPage] = useState<number>(1);
     const [selectedSpecialty, ] = useState<number | undefined>();
     const [selectedSemester, setSelectedSemester] = useState<string | undefined>();
 
 
-    const specialty =  useGetSpecialtyQuery({id: sty.id});
-    const {data: specialtyResponse } = specialty;
-    console.log(specialty);
-    console.log(specialtyResponse);
-    const spty = useMemo(() => specialtyResponse?.data || null, [specialty]);
-    console.log("Specialty for subject assignation: ",spty);
+    const plan =  useGetPlanQuery({id: pln.id});
+    const {data: planResponse } = plan;
+    console.log(plan);
+    console.log(planResponse);
+    const plnn = useMemo(() => planResponse?.data || null, [plan]);
+    console.log("Specialty for subject assignation: ",plnn);
 
 
     return (
@@ -45,16 +50,16 @@ export const AddSubjectToSpecialtyPage = ({ sty, setShowModal }: & Props) => {
                     
                     <div className="modal-body">
                         {
-                            spty ?
+                            plnn ?
 
-                                <>
-                                    <h6 className="ms-3"><strong>Clave: </strong> {" "} {spty.key}</h6>
+                                <>  
+                                    <h6 className="ms-3"><strong>Clave: </strong> {" "} {plnn.key}</h6>
 
-                                    <h6 className="ms-3"><strong>Especialidad: </strong> {" "} {spty.name}</h6>
+                                    <h6 className="ms-3"><strong>Especialidad: </strong> {" "} {plnn.name}</h6>
 
                                     <div className="container mt-4">
                                         {
-                                            spty.subjects ?
+                                            plnn.subjects ?
                                                 (
                                                 <div className="card">
                                                 <div className="card-header bg-primary text-white">
@@ -69,7 +74,7 @@ export const AddSubjectToSpecialtyPage = ({ sty, setShowModal }: & Props) => {
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        {spty.subjects.map(sty => (
+                                                        {pln.subjects.map(sty => (
                                                         <tr key={sty.id}>
                                                             <td>
                                                             {sty.name}
@@ -92,7 +97,8 @@ export const AddSubjectToSpecialtyPage = ({ sty, setShowModal }: & Props) => {
                                                 )
                                         }
                                     </div>
-                                    <SubjectList sty={spty} />
+                                    
+                                    <GeneralSubjectLista pln={pln} />
                                 
                                 </>
                             : 

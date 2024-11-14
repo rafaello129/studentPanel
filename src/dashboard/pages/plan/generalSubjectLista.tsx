@@ -5,16 +5,19 @@ import { Student } from '../../../interfaces/student';
 import { useGetStudentsQuery } from '../../../services/api/providers/studentApi';
 import { useGetCareersQuery } from '../../../services/api/providers/careerApi';
 import { apiAssignStudent } from '../../../api/classes-Providers';
-import Pagination from '../shared/Pagination';
+
 import question from '../../../assets/icons/question.svg';
 import { Specialty, CreateSpecialty } from '../../../interfaces/specialty';
-import { useGetSpecialitySubjectsQuery, useGetSubjectsQuery, useSearchSpecialtySubjectsQuery } from '../../../services/api/providers/subjectsApi';
+import { useGetSpecialitySubjectsQuery, useGetSubjectsQuery, useSearchSpecialtySubjectsQuery, useSearchSubjectsQuery } from '../../../services/api/providers/subjectsApi';
 import { useAssignSubjectToSpecialtyMutation } from '../../../services/api/providers/specialtyApi';
+import Pagination from '../../components/shared/Pagination';
+import { useAssignSubjectToPlanMutation } from '../../../services/api/providers/planApi';
+import { Plan } from '../../../interfaces/plan';
 
 export type RegisteredSpecialtyProps = {
-    sty: Specialty;
+    pln: Plan;
 };
-export const SubjectList = ({ sty, }: RegisteredSpecialtyProps) => {
+export const GeneralSubjectLista = ({ pln }: RegisteredSpecialtyProps) => {
 
     const [searchKeyword, setSearchKeyword] = useState<string>("");
 
@@ -23,11 +26,11 @@ export const SubjectList = ({ sty, }: RegisteredSpecialtyProps) => {
     const [semesters, setSemesters] = useState<number[] | undefined>(undefined);
     const limit = 10;
 
-    const [assingSubject, result] = useAssignSubjectToSpecialtyMutation()
+    const [assingSubject, result] = useAssignSubjectToPlanMutation()
 
     const res = (!searchKeyword) 
-    ? useGetSpecialitySubjectsQuery({ page: page, limit: limit, specialty: true  }) 
-    : useSearchSpecialtySubjectsQuery({ page: page, limit: limit, keyword: searchKeyword}, { skip: !searchKeyword });
+    ? useGetSubjectsQuery({ page: page, limit: limit, specialty: false}) 
+    : useSearchSubjectsQuery({ page: page, limit: limit, keyword: searchKeyword}, { skip: !searchKeyword });
     const { data: subjectResponse } = res;
     const subjects = useMemo(() => subjectResponse?.data || [], [subjectResponse]);
     const totalSubjects = subjectResponse?.total || 0; // Total de materias para la paginación
@@ -40,10 +43,10 @@ export const SubjectList = ({ sty, }: RegisteredSpecialtyProps) => {
 
     
 
-    const assignToSpecialty = async (subjectId: number | undefined) => {
+    const assignToPlan = async (subjectId: number | undefined) => {
         try {
             if (subjectId) {
-                const res = await assingSubject( {subjectId, specialtyId: sty.id} );
+                const res = await assingSubject( {subjectId, planId: pln.id} );
                 console.log(res);
                 Swal.fire({
                     icon: 'success',
@@ -87,7 +90,7 @@ export const SubjectList = ({ sty, }: RegisteredSpecialtyProps) => {
                                 </thead>
                                 <tbody>
                                     {subjects
-                                        .filter(list => !sty.subjects.some(sub=> sub.id === list.id))
+                                        .filter(list => !pln.subjects.some(sub=> sub.id === list.id))
                                         .map(list => (
                                             <tr key={list.id}>
                                                 <td>{list.name} </td>
@@ -95,9 +98,9 @@ export const SubjectList = ({ sty, }: RegisteredSpecialtyProps) => {
                                                 <td className="text-center">
                                                     <button
                                                         className="btn btn-outline-secondary btn-sm"
-                                                        onClick={() => assignToSpecialty(list.id)}
+                                                        onClick={() => assignToPlan(list.id)}
                                                     >
-                                                        Asignar a este plan de especialidad
+                                                        Asignar a este Plan de Estudios
                                                     </button>
                                                 </td>
                                             </tr>

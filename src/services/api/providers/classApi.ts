@@ -47,11 +47,12 @@ const classApi = peesadApi.injectEndpoints({
       invalidatesTags: ['Class'],
     }),
 
-    downloadTemplate: builder.query<Blob, void>({
+    downloadTemplate: builder.query<string, void>({
       query: () => ({
         url: 'class/download-template',
         method: 'GET',
-        responseHandler: (response) => response.blob(),
+        responseHandler: (response) => response.blob().then(blob => URL.createObjectURL(blob))
+        
       }),
     }),
 

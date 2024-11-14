@@ -1,4 +1,6 @@
 import { Career } from "./career";
+import { Specialty } from "./specialty";
+import { Subject } from "./subject";
 
 export interface Plan {
     
@@ -6,11 +8,17 @@ export interface Plan {
 
   name?: string;
 
+  key: string;
+
   isCurrent?: boolean;
 
   isDeleted?: boolean;
 
   career?: Career;
+
+  subjects: Subject[]
+
+  specialties: Specialty[]
 
 }
 

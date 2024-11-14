@@ -6,7 +6,7 @@ export interface Subject {
   name?: string;
   clave?: string;
   isActive?: boolean;
-  specialty?: Specialty
+  specialty?: boolean
   
 } 
 
@@ -14,6 +14,7 @@ export interface CreateSubject {
 
   clave: string;
   name: string;
+  specialty?: boolean;
 }
 
 export interface UpdateSubject {
@@ -21,6 +22,6 @@ export interface UpdateSubject {
   name?: string;
   clave?: string;
   isActive?: boolean;
-  specialty?: Specialty
+  specialty?: boolean
 
 }
