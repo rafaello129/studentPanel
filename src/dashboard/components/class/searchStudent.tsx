@@ -6,6 +6,8 @@ import { useGetCareersQuery } from '../../../services/api/providers/careerApi';
 import { apiAssignStudent } from '../../../api/classes-Providers';
 import Pagination from '../shared/Pagination';
 import question from '../../../assets/icons/question.svg';
+import { Accordion, Button } from 'react-bootstrap';
+import { useDownloadTemplateAssignStudentQuery, useUploadStudentExcelMutation } from '../../../services/api/providers/classApi';
 
 export type RegisteredClassProps = {
     cls: Class;
@@ -20,6 +22,9 @@ const SearchStudent = ({ cls, updateClass, onFilterChange }: RegisteredClassProp
     const [selectedSemester, setSelectedSemester] = useState<string | undefined>();
     const [semesters, setSemesters] = useState<number[] | undefined>(undefined);
     const limit = 10;
+
+    const { data: template, refetch: refetchTemplate } = useDownloadTemplateAssignStudentQuery();
+    const [uploadStudentExcel] = useUploadStudentExcelMutation();
 
     const { data: studentResponse, refetch: refetchStudents } = useGetAvailableStudentsQuery({
         page,
@@ -84,7 +89,7 @@ const SearchStudent = ({ cls, updateClass, onFilterChange }: RegisteredClassProp
 
                 updateClass(updatedClass);
 
-                refetchStudents(); 
+                refetchStudents();
             }
         } catch (error) {
             console.error('Error:', error);
@@ -97,6 +102,27 @@ const SearchStudent = ({ cls, updateClass, onFilterChange }: RegisteredClassProp
 
     console.log("prueba", cls);
     console.log("carrera: ", selectedCareer, "semestre: ", selectedSemester, "estudiantes: ", students);
+
+    const handleDownloadTemplate = () => {
+        if (template) {
+            const url = URL.createObjectURL(template);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'assign-student-template.xlsx');
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+        }
+    };
+    
+    const handleStudentUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            const formData = new FormData();
+            formData.append('file', file);
+            await uploadStudentExcel(formData);
+        }
+    };
 
     return (
         <div className="container mt-4">
@@ -135,6 +161,43 @@ const SearchStudent = ({ cls, updateClass, onFilterChange }: RegisteredClassProp
                         </select>
                         <button className="btn btn-primary" onClick={handleFilterChange}>Filtrar</button>
                     </div>
+
+                    {/* Sección de instrucciones y opciones de Excel para asignar alumnos */}
+                    <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-2">
+                            {/* Instrucciones para carga rápida */}
+                            <Accordion className="col-md-8">
+                                <Accordion.Item eventKey="0">
+                                    <Accordion.Header>
+                                        <strong>Instrucciones para Asignación Rápida de Alumnos</strong>
+                                    </Accordion.Header>
+                                    <Accordion.Body>
+                                        <p>
+                                            Para asignar alumnos en lote, descarga la plantilla de Excel, completa los datos necesarios en cada columna y luego carga el archivo de regreso aquí. Asegúrate de seguir las instrucciones en cada columna de la plantilla.
+                                        </p>
+                                    </Accordion.Body>
+                                </Accordion.Item>
+                            </Accordion>
+
+                            {/* Botones de descarga y carga de plantilla */}
+                            <div className="d-flex gap-2">
+                                <Button
+                                    variant="warning"
+                                    className="d-flex align-items-center"
+                                    onClick={handleDownloadTemplate}
+                                >
+                                    Descargar Plantilla <i className="fa-solid fa-download ms-1"></i>
+                                </Button>
+                                <label htmlFor="uploadExcel" className="btn btn-outline-secondary d-flex align-items-center mb-0">
+                                    Subir Excel <i className="fa-solid fa-upload ms-1"></i>
+                                </label>
+                                <input
+                                    type="file"
+                                    id="uploadExcel"
+                                    onChange={handleStudentUpload}
+                                    style={{ display: 'none' }}
+                                />
+                            </div>
+                        </div>
 
                     {students.length > 0 ? (
                         <>

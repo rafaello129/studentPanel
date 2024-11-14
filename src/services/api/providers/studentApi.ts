@@ -136,12 +136,30 @@ const studentApi = peesadApi.injectEndpoints({
                     ]
                     :
                     [{ type: 'Student', id: 'SEARCH' }]
-        })
+        }),
+
+        downloadCreateStudentTemplate: builder.query<Blob, void>({
+            query: () => ({
+              url: 'students/download-create-student-template',
+              method: 'GET',
+              responseHandler: (response) => response.blob(),
+            }),
+          }),
+      
+          uploadCreateStudentExcel: builder.mutation<ApiResponse<any>, FormData>({
+            query: (body) => ({
+              url: 'students/upload-create-student-excel',
+              method: 'POST',
+              body,
+            }),
+            invalidatesTags: ['Student'],
+          })
+
     }),
     overrideExisting: 'throw'
 })
 
-export const { useGetStudentQuery, useGetStudentsQuery, useGetAvailableStudentsQuery, useAddStudentMutation, useMultiAddStudentMutation, useEditStudentMutation, useSearchStudentsQuery, useSearchStudentsByNoControlQuery } = studentApi
+export const { useGetStudentQuery, useGetStudentsQuery, useGetAvailableStudentsQuery, useAddStudentMutation, useMultiAddStudentMutation, useEditStudentMutation, useSearchStudentsQuery, useSearchStudentsByNoControlQuery, useDownloadCreateStudentTemplateQuery, useUploadCreateStudentExcelMutation } = studentApi
 
 export const createMultipleStudents = (file: File, idCareer: number, idUnit: number, semester: number, multiCreateFunction: Function, result: any) => {
 
