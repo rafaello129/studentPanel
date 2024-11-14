@@ -45,12 +45,12 @@ export const PlanList = ({plans, isFetching}: PlanListProps) => {
     
     return (
 
-        <div className="card mt-3 p-2">
+        <div className="card p-2">
             {
                 showModalEdit && <EditPlanModal setShowModal={setShowModalEdit} plan={selectedPlan} />
             }
 
-            <table className="table text-center">
+            <table className="table text-center table-striped">
                 <thead >
                     <tr>
                         <th scope="col">Planes</th>

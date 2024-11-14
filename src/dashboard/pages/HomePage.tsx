@@ -16,19 +16,19 @@ export const HomePage = () => {
     {
       title: "Paso 1: Crear carrera",
       description: "Ingrese a la sección de Carreras y cree una nueva carrera.",
-      link: "/carrer",
+      link: "/academic-domain/career",
       icon: carrerIcon,
     },
     {
       title: "Paso 2: Crear unidad",
       description: "Ingrese a la sección de Unidades y cree una nueva unidad asociada a la carrera.",
-      link: "/unit",
+      link: "/academic-domain/unit",
       icon: unidIcon,
     },
     {
       title: "Paso 3: Crear estudiantes",
       description: "Ingrese a la sección de Alumnos y agregue nuevos estudiantes.",
-      link: "/student",
+      link:"/academic-domain/student",
       icon: student,
     },
     {

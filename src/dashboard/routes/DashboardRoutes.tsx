@@ -36,6 +36,7 @@ import MyEvaluation from '../pages/MyEvaluation/MyEvaluationPage';
 import MyEvaluationDetail from '../components/MyEvaluation/MyEvaluationDetail';
 
 import PeriodPage from '../pages/period/PeriodPage';
+import { AcademicDomainLayout } from '../layouts/AcademicDomainLayout';
 
 export const DashboardRoutes = () => {
   
@@ -46,11 +47,20 @@ export const DashboardRoutes = () => {
     <DashboardLayout>
       <Routes>
         <Route path='home' element={<HomePage />} />
-        <Route path='carrer' element={<CarrerPage />} />
+        
         <Route path='class' element={<ClassPage />} />
-        <Route path='student' element={<StudentPage />} />
+        
         <Route path='users' element={<UsersPage />} />
-        <Route path='unit' element={<UnitPage />} />
+        
+
+        <Route path='academic-domain' element={<AcademicDomainLayout/>}>
+            <Route index element={<Navigate to={'/academic-domain/career'}></Navigate>} />
+            <Route path='career' element={<CarrerPage />} />
+            <Route path='unit' element={<UnitPage />} />
+            <Route path='student' element={<StudentPage />} />
+            <Route path='*' element={<Navigate to='/home' />} />
+        </Route>
+
         <Route path='academic-enviroment' element={<AcademicEnviromentLayout />}>
             <Route index element={<Navigate to={'/academic-enviroment/subjects'}></Navigate>}/>
             <Route path='subjects' element={<GeneralSubjectPage />} />
@@ -62,7 +72,6 @@ export const DashboardRoutes = () => {
         <Route path='management' element={<ManagementPage setSelectedClass={setSelectedClass} />} />
         
         /*Probando */
-        <Route path='ListEvaluaciones' element={<EvaluationList></EvaluationList>} />
         <Route path='CrearEvaluaciones' element={<CreateEvaluationForm></CreateEvaluationForm>} />
         <Route path='ClonarEvaluacion' element={<CloneEvaluationButton></CloneEvaluationButton>} />
         <Route path='AsignarEvaluation' element={<AssignUsersToEvaluation></AssignUsersToEvaluation>} />

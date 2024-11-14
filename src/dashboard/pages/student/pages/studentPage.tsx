@@ -76,7 +76,7 @@ export const StudentPage = () => {
     };
 
     return (
-        <div className="p-5">
+        <div className="p-2">
             {showModalCreate && <CreateStudentModal setShowModal={setShowModalCreate} />}
             {showModalUpload && <UploadFileStudent setShowModal={setShowModalUpload} />}
 

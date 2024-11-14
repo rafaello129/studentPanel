@@ -25,7 +25,7 @@ export const UnitPage = () => {
     console.log(unitResponse);
 
     return (
-        <div className="p-5">
+        <div className="p-2">
 
             {
                 showModalCreate && <CreateUnitModal setShowModal={setShowModalCreate} />

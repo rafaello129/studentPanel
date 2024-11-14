@@ -54,10 +54,10 @@ const specialtyApi = peesadApi.injectEndpoints({
             invalidatesTags: (body) => [{ type: 'Specialty', id: body?.data?.id }, {type: 'Specialty', id: 'SEARCH'}],
         }),
 
-        searchSpecialty: builder.query<ApiResponseAll<Specialty>, {keyword?: string, page: number, limit: number}> ({
+        searchSpecialty: builder.query<ApiResponseAll<Specialty>, {keyword?: string, page: number, limit: number,  career_id?:number}> ({
 
             query: (body) => ({
-                url: `specialties/search?keyword=${body.keyword}&page=${body.page}&limit=${body.limit}`,
+                url: `specialties/search?keyword=${body.keyword}&page=${body.page}&limit=${body.limit}` +  (body.career_id !== undefined ? `&career_id=${body.career_id}`: ''),
                 method: 'GET'
             }),
             providesTags: (result) => 
@@ -82,10 +82,32 @@ const specialtyApi = peesadApi.injectEndpoints({
 
             invalidatesTags: (body) => [{ type: 'Specialty', id: body?.data?.id }, {type: 'Specialty', id: 'LIST'}],
         }),
+
+        searchSpecialtyByCareer: builder.query<ApiResponseAll<Specialty>,PaginationQueryParamsType & {career_id?: number}> ({
+
+            query: ({ page = 1, limit = 1, isActive, career_id }) =>({
+                url: `specialties/findAll?page=${page}&limit=${limit}` +
+                (isActive !== undefined ? `&is_current=${isActive}` : '') + ( career_id !== undefined ? `&career_id=${career_id}`: '' ),
+                method: 'GET',
+            }),
+            providesTags: (result) => 
+
+                result 
+                    ? 
+                    [
+                        ...result.data.map(({id}) => ({type: 'Specialty' as const, id})),
+                        {type: 'Specialty', id: 'LIST'},
+                    ]
+                    :
+                    [{type: 'Specialty', id: 'LIST'}],
+            
+            
+        }),
+
     }),
 
     overrideExisting: 'throw'
 
 })
 
-export const {useGetSpecialtiesQuery, useGetSpecialtyQuery, useAddSpecialtyMutation, useEditSpecialtyMutation, useSearchSpecialtyQuery, useAssignSubjectToSpecialtyMutation} = specialtyApi;
+export const {useGetSpecialtiesQuery, useGetSpecialtyQuery, useAddSpecialtyMutation, useEditSpecialtyMutation, useSearchSpecialtyQuery, useAssignSubjectToSpecialtyMutation, useSearchSpecialtyByCareerQuery} = specialtyApi;

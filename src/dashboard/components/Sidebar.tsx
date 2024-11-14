@@ -55,49 +55,17 @@ export const Sidebar = () => {
                 <span className='ms-2'>PERIODOS</span>
               </NavLink>
             </li>
+            
             <li className='nav-item'>
-              <span className='nav-link d-flex align-items-center'>
+              <NavLink
+                style={({ isActive }) => (isActive ? activeStyle : undefined)}
+                className='nav-link d-flex align-items-center'
+                to='/academic-domain'
+              >
                 <img src={centerAcademicIcon} width={28} alt='Academic Center Icon' />
-                <span className='ms-1 fw-light'>ENTORNO ACADÉMICO</span>
-              </span>
+                <span className='ms-2'>ENTORNO ACADÉMICO</span>
+              </NavLink>
 
-              <ul className='navbar-nav'>
-                <li className='nav-item'>
-                  <NavLink
-                    style={({ isActive }) => (isActive ? activeStyle : undefined)}
-                    className='nav-link d-flex align-items-center'
-                    to='/carrer'
-                  >
-                    <img src={carrerIcon} width={28} alt='Carrer Icon' />
-                    <span className='ms-2'>CARRERAS</span>
-                  </NavLink>
-                </li>
-
-
-
-                <li className='nav-item'>
-                  <NavLink
-                    style={({ isActive }) => (isActive ? activeStyle : undefined)}
-                    className='nav-link d-flex align-items-center'
-                    to='/unit'
-                  >
-                    <img src={unidIcon} width={28} alt='Unit Icon' />
-                    <span className='ms-2'>UNIDADES</span>
-                  </NavLink>
-                </li>
-
-                <li className='nav-item'>
-                  <NavLink
-                    style={({ isActive }) => (isActive ? activeStyle : undefined)}
-                    className='nav-link d-flex align-items-center'
-                    to='/student'
-                  >
-                    <img src={student} width={28} alt='Student Icon' />
-                    <span className='ms-2'>ALUMNOS</span>
-                  </NavLink>
-                </li>
-
-              </ul>
             </li>
 
 

@@ -40,7 +40,7 @@ export default function ClassPage() {
   const [showEditClassModal, setShowEditClassModal] = useState(false);
   const [showCreatePackageModal, setShowCreatePackageModal] = useState(false);
 
-  const { data: template, refetch: refetchTemplate } = useDownloadTemplateQuery();
+  const { data: template } = useDownloadTemplateQuery();
   const [uploadClassExcel] = useUploadClassExcelMutation();
 
   if (isLoading) {
@@ -50,7 +50,7 @@ export default function ClassPage() {
 
   const handleDownloadTemplate = () => {
     if (template) {
-      const url = URL.createObjectURL(template);
+      const url = template;
       const link = document.createElement('a');
       link.href = url;
       link.setAttribute('download', 'class-template.xlsx');

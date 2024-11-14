@@ -1,6 +1,11 @@
 // src/components/EvaluationList.tsx
 
-import React, { useState } from 'react';
+              
+import SchoolIcon from '@mui/icons-material/School';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
+
+import React, { useMemo, useState } from 'react';
 import {
   useGetEvaluationsQuery,
 } from '../../../services/api/providers/evaluationApi';
@@ -17,6 +22,7 @@ import {
   TextField,
   Typography,
   List,
+  Divider,
   ListItem,
   ListItemText,
   ListItemButton,
@@ -25,7 +31,13 @@ import { SelectChangeEvent } from '@mui/material/Select';
 import { useGetAllAcademicLevelsQuery } from '../../../services/api/providers/academicLevelApi';
 import { useNavigate } from 'react-router-dom';
 
-const EvaluationList: React.FC = () => {
+interface props{
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>,
+  setShowModal2: React.Dispatch<React.SetStateAction<boolean>>,
+  setShowModal3: React.Dispatch<React.SetStateAction<boolean>>,
+}
+
+const EvaluationList: React.FC<props> = ( {setShowModal, setShowModal2, setShowModal3}) => {
   // Estado para los filtros y paginación
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -41,13 +53,20 @@ const EvaluationList: React.FC = () => {
   } = useGetAllAcademicLevelsQuery();
 
   // Obtener las evaluaciones con los filtros aplicados
-  const { data, error, isLoading } = useGetEvaluationsQuery({
+  const evaluationRes = useGetEvaluationsQuery({
     page,
     limit,
-    isActive,
     isTemplate,
     academicLevelId,
   });
+
+  const {data: evaluationResponse} = evaluationRes;
+  const evaluations = useMemo(() => evaluationResponse?.data || [], [evaluationResponse])
+  console.log(evaluationRes);
+  console.log(evaluationResponse);
+
+  
+
 
   // Hook para la navegación
   const navigate = useNavigate();
@@ -91,7 +110,7 @@ const EvaluationList: React.FC = () => {
       </Typography>
 
       {/* Controles de Filtro */}
-      <Box sx={{ display: 'flex', gap: 2, mb: 4 }}>
+      <Box sx={{ display: 'flex', gap: 2, mb: 4 , justifyContent:'center', alignContent:'center'}}>
         <FormControlLabel
           control={
             <Checkbox
@@ -114,8 +133,8 @@ const EvaluationList: React.FC = () => {
           label="Mostrar Solo Plantillas"
         />
 
-        <FormControl variant="outlined" sx={{ minWidth: 200 }}>
-          <InputLabel id="academic-level-label">Nivel Académico</InputLabel>
+        <FormControl variant="outlined" sx={{ minWidth: 180, alignContent:'center', justifyContent:'center' }}>
+          <InputLabel className='mt-2' id="academic-level-label">Nivel Académico</InputLabel>
           <Select
             labelId="academic-level-label"
             value={academicLevelId ? String(academicLevelId) : '0'}
@@ -132,6 +151,7 @@ const EvaluationList: React.FC = () => {
         </FormControl>
 
         <TextField
+        className='mt-2'
           label="Evaluaciones por Página"
           type="number"
           value={limit}
@@ -139,41 +159,91 @@ const EvaluationList: React.FC = () => {
           variant="outlined"
           sx={{ width: 150 }}
         />
+
+
+                <Button variant="contained" color="primary" onClick={() => setShowModal(true)}>
+                    Nueva Evaluación
+                </Button>
+                <Button variant="contained" color="primary" onClick={() => setShowModal2(true)}>
+                    Clonar Evaluación
+                </Button>
+                <Button variant="contained" color="primary" onClick={() => setShowModal3(true)}>
+                    Asignar Usuario
+                </Button>
+
       </Box>
 
       {/* Mostrar estado de carga o error */}
-      {isLoading || isLoadingAcademicLevels ? (
+      {evaluationRes.isLoading || isLoadingAcademicLevels ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
           <CircularProgress />
         </Box>
-      ) : error || errorAcademicLevels ? (
+      ) : evaluationRes.isError || errorAcademicLevels ? (
         <Typography color="error">
           Error al cargar las evaluaciones o niveles académicos.
         </Typography>
       ) : (
         <>
+          <div className='card'>
+
           {/* Lista de Evaluaciones */}
           <List>
-            {data?.data.map((evaluation) => (
-              <ListItem disablePadding key={evaluation.id}>
-                <ListItemButton onClick={() => handleEvaluationClick(evaluation.id, evaluation.isTemplate)}>
-                  <ListItemText
-                    primary={evaluation.title}
-                    secondary={
-                      <>
-                        <p>{evaluation.description}</p>
-                        <p>
-                          Nivel Académico: {evaluation.academicLevel?.name || 'N/A'}
-                        </p>
-                        <p>Es Plantilla: {evaluation.isTemplate ? 'Sí' : 'No'}</p>
-                        <p>Está Activa: {evaluation.isActive ? 'Sí' : 'No'}</p>
-                      </>
-                    }
-                  />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
+    {evaluations.map((evaluation) => (
+      <React.Fragment key={evaluation.id}>
+        <Divider />
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => handleEvaluationClick(evaluation.id, evaluation.isTemplate)}>
+            <div style={{ display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'space-evenly' }}>
+              {/* Title and Description */}
+              <div style={{ flex: .3 }}>
+                <Typography variant="h6" component="h4" style={{ fontWeight: 'bold', marginBottom: '4px' }}>
+                  {evaluation.title}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  {evaluation.description}
+                </Typography>
+              </div>
+              
+              {/* Academic Level */}
+              <div style={{ textAlign: 'center', padding: '0 10px' }}>
+                <SchoolIcon style={{ color: '#1976d2', marginBottom: '4px' }} />
+                <Typography variant="body2">
+                  Nivel Académico: 
+                </Typography>
+                <Typography variant="body2">
+                  {evaluation.academicLevel?.name || 'N/A'}
+                </Typography>
+              </div>
+              
+              {/* Is Template */}
+              <div style={{ textAlign: 'center', padding: '0 10px' }}>
+                {evaluation.isTemplate ? <CheckCircleIcon color="success" /> : <CancelIcon color="error" />}
+                <Typography variant="body2">
+                  Es Plantilla: 
+                </Typography>
+                <Typography variant="body2">
+                  {evaluation.isTemplate ? 'Sí' : 'No'}
+                </Typography>
+              </div>
+              
+              {/* Is Active */}
+              <div style={{ textAlign: 'center', padding: '0 10px' }}>
+                {evaluation.isActive ? <CheckCircleIcon color="success" /> : <CancelIcon color="error" />}
+                <Typography variant="body2">
+                  Está Activa: 
+                </Typography>
+                <Typography variant="body2">
+                  {evaluation.isActive ? 'Sí' : 'No'}
+                </Typography>
+              </div>
+        
+            </div>
+          </ListItemButton>
+        </ListItem>
+      </React.Fragment>
+    ))}
+  </List>
+  </div>
 
           {/* Controles de Paginación */}
           <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
@@ -185,12 +255,12 @@ const EvaluationList: React.FC = () => {
               Anterior
             </Button>
             <Typography variant="body1">
-              Página {data?.page} de {Math.ceil((data?.total || 1) / (data?.limit || 1))}
+              Página {evaluationResponse?.page} de {Math.ceil((evaluationResponse?.total || 1) / (evaluationResponse?.limit || 1))}
             </Typography>
             <Button
               variant="contained"
               onClick={() => handlePageChange(page + 1)}
-              disabled={data && data.data.length < limit}
+              disabled={evaluationResponse && evaluationResponse.data.length < limit}
             >
               Siguiente
             </Button>

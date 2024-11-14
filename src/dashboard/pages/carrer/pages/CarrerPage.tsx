@@ -31,7 +31,7 @@ export const CarrerPage = () => {
     };
 
     return (
-        <div className="p-5">
+        <div className="p-2">
 
 
             {
