@@ -1,9 +1,9 @@
 // src/components/questions/QuestionListComponent.tsx
 
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, IconButton, Paper } from '@mui/material';
-import { Edit } from '@mui/icons-material';
-import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
+import { Box, Typography, IconButton, Paper, Card, Collapse } from '@mui/material';
+import { DragIndicator, Edit, ExpandLess, ExpandMore } from '@mui/icons-material';
+import { DragDropContext, Droppable, Draggable, DropResult, DraggableProvided, DraggableStateSnapshot, DroppableProvided } from '@hello-pangea/dnd';
 import { Question } from '../../../interfaces/question';
 import { useGetQuestionsBySectionQuery, useUpdateQuestionMutation } from '../../../services/api/providers/questionApi';
 import CreateQuestionComponent, { QuestionTypeEnum } from './CreateQuestionComponent';
@@ -19,7 +19,12 @@ const QuestionListComponent: React.FC<QuestionListComponentProps> = ({ sectionId
   const { data, refetch } = useGetQuestionsBySectionQuery(sectionId);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [editingQuestionId, setEditingQuestionId] = useState<number | null>(null);
-
+  const [expandedQuestions, setExpandedQuestions] = useState<number[]>([]);
+  const toggleExpand = (questionId: number) => {
+    setExpandedQuestions((prev) =>
+      prev.includes(questionId) ? prev.filter((id) => id !== questionId) : [...prev, questionId]
+    );
+  };
   const [updateQuestion] = useUpdateQuestionMutation();
 
   useEffect(() => {
@@ -68,49 +73,62 @@ const QuestionListComponent: React.FC<QuestionListComponentProps> = ({ sectionId
       </Typography>
 
       <DragDropContext onDragEnd={handleDragEnd}>
-        <Droppable droppableId="questions">
-          {(droppableProvided) => (
-            <Box ref={droppableProvided.innerRef} {...droppableProvided.droppableProps}>
-              {questions.map((question, index) => (
-                <Draggable key={question.id} draggableId={question.id.toString()} index={index}>
-                  {(draggableProvided) => (
-                    <Paper
-                      ref={draggableProvided.innerRef}
-                      {...draggableProvided.draggableProps}
-                      sx={{
-                        mb: 2,
-                        p: 2,
-                        border: '1px solid #ccc',
-                        borderRadius: 2,
-                        backgroundColor: '#f9f9f9',
-                      }}
-                    >
-                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Box {...draggableProvided.dragHandleProps} sx={{ mr: 2, cursor: 'grab' }}>
-                          <Typography variant="h6">☰</Typography>
-                        </Box>
-                        <Typography variant="body1" sx={{ flexGrow: 1 }}>
-                          {question.text}
-                        </Typography>
-                        <IconButton onClick={() => setEditingQuestionId(question.id)}>
-                          <Edit />
-                        </IconButton>
-                        <DeleteQuestionButton questionId={question.id} refetchQuestions={refetch} />
+      <Droppable droppableId="questions">
+        {(provided: DroppableProvided) => (
+          <Box ref={provided.innerRef} {...provided.droppableProps}>
+            {questions.map((question, index) => (
+              <Draggable key={question.id} draggableId={question.id.toString()} index={index}>
+                {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
+                  <Card
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    sx={{
+                      mb: 2,
+                      backgroundColor: snapshot.isDragging ? '#e3f2fd' : '#fff',
+                      boxShadow: snapshot.isDragging ? 4 : 1,
+                      borderRadius: 2,
+                    }}
+                  >
+                    <Box sx={{ display: 'flex', alignItems: 'center', p: 2 }}>
+                      <Box
+                        {...provided.dragHandleProps}
+                        sx={{ mr: 2, cursor: 'grab', color: '#90a4ae' }}
+                      >
+                        <DragIndicator />
                       </Box>
-                      {/* Lista de opciones de respuesta para esta pregunta */}
-                      <AnswerOptionListComponent 
-                        questionId={question.id} 
-                        questionType={question.questionType.name as QuestionTypeEnum} // Pasar el tipo de pregunta
+                      <Typography variant="body1" sx={{ flexGrow: 1 }}>
+                        {question.text}
+                      </Typography>
+                      <IconButton
+                        onClick={() => toggleExpand(question.id)}
+                        aria-label={
+                          expandedQuestions.includes(question.id)
+                            ? 'Colapsar pregunta'
+                            : 'Expandir pregunta'
+                        }
+                      >
+                        {expandedQuestions.includes(question.id) ? <ExpandLess /> : <ExpandMore />}
+                      </IconButton>
+                      <IconButton onClick={() => setEditingQuestionId(question.id)}>
+                        <Edit />
+                      </IconButton>
+                      <DeleteQuestionButton questionId={question.id} refetchQuestions={refetch} />
+                    </Box>
+                    <Collapse in={expandedQuestions.includes(question.id)} timeout="auto" unmountOnExit>
+                      <AnswerOptionListComponent
+                        questionId={question.id}
+                        questionType={question.questionType.name as QuestionTypeEnum}
                       />
-                    </Paper>
-                  )}
-                </Draggable>
-              ))}
-              {droppableProvided.placeholder}
-            </Box>
-          )}
-        </Droppable>
-      </DragDropContext>
+                    </Collapse>
+                  </Card>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </Box>
+        )}
+      </Droppable>
+    </DragDropContext>
 
       {/* Componente para editar una pregunta */}
       {editingQuestionId !== null && (

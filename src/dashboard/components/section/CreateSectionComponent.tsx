@@ -6,10 +6,18 @@ import {
   Typography,
   Snackbar,
   Alert,
+  Card,
+  CardContent,
+  Grid,
+  InputAdornment,
 } from '@mui/material';
 import { CreateSectionDto } from '../../../interfaces/create-section.dto';
 import { useCreateSectionMutation } from '../../../services/api/providers/sectionApi';
-
+import {
+  Title as TitleIcon,
+  Description as DescriptionIcon,
+  FormatListNumbered as OrderIcon,
+} from '@mui/icons-material';
 interface CreateSectionProps {
   evaluationId: number;
   refetchEvaluation: () => void;
@@ -56,56 +64,93 @@ const CreateSectionComponent: React.FC<CreateSectionProps> = ({ evaluationId, re
   };
 
   return (
-    <Box sx={{ maxWidth: 600, mx: 'auto', mt: 4 }}>
-      <Typography variant="h5" component="h2" gutterBottom>
-        Crear Nueva Sección
-      </Typography>
-      <form onSubmit={handleSubmit}>
-        <TextField
-          label="Título"
-          name="title"
-          value={formData.title}
-          onChange={handleChange}
-          fullWidth
-          required
-          margin="normal"
-          variant="outlined"
-        />
+    <Card sx={{ maxWidth: 600, mx: 'auto', mt: 4 }}>
+      <CardContent>
+        {/* Título del formulario */}
+        <Typography variant="h5" component="h2" gutterBottom align="center">
+          Crear Nueva Sección
+        </Typography>
 
-        <TextField
-          label="Descripción"
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-          fullWidth
-          multiline
-          rows={4}
-          margin="normal"
-          variant="outlined"
-        />
+        {/* Formulario */}
+        <form onSubmit={handleSubmit}>
+          <Grid container spacing={2}>
+            {/* Campo Título */}
+            <Grid item xs={12}>
+              <TextField
+                label="Título"
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+                fullWidth
+                required
+                variant="outlined"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <TitleIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
 
-        <TextField
-          label="Orden"
-          name="order"
-          type="number"
-          value={formData.order || ''}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          variant="outlined"
-        />
+            {/* Campo Descripción */}
+            <Grid item xs={12}>
+              <TextField
+                label="Descripción"
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                fullWidth
+                multiline
+                rows={4}
+                variant="outlined"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <DescriptionIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
+{/* 
+            Campo Orden
+            <Grid item xs={12}>
+              <TextField
+                label="Orden"
+                name="order"
+                type="number"
+                value={formData.order || ''}
+                onChange={handleChange}
+                fullWidth
+                variant="outlined"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <OrderIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid> */}
 
-        <Box sx={{ mt: 2 }}>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            disabled={isLoading}
-          >
-            {isLoading ? 'Creando...' : 'Crear Sección'}
-          </Button>
-        </Box>
-      </form>
+            {/* Botón Enviar */}
+            <Grid item xs={12} textAlign="center">
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                disabled={isLoading}
+                fullWidth
+                sx={{ py: 1.5 }}
+              >
+                {isLoading ? 'Creando...' : 'Crear Sección'}
+              </Button>
+            </Grid>
+          </Grid>
+        </form>
+      </CardContent>
 
       {/* Snackbar para éxito */}
       <Snackbar
@@ -118,6 +163,7 @@ const CreateSectionComponent: React.FC<CreateSectionProps> = ({ evaluationId, re
           onClose={() => setSuccessOpen(false)}
           severity="success"
           sx={{ width: '100%' }}
+          variant="filled"
         >
           Sección creada exitosamente.
         </Alert>
@@ -134,11 +180,12 @@ const CreateSectionComponent: React.FC<CreateSectionProps> = ({ evaluationId, re
           onClose={() => setErrorOpen(false)}
           severity="error"
           sx={{ width: '100%' }}
+          variant="filled"
         >
           Error al crear la sección.
         </Alert>
       </Snackbar>
-    </Box>
+    </Card>
   );
 };
 

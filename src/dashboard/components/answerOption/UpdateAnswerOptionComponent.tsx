@@ -11,10 +11,17 @@ import {
   Snackbar,
   Alert,
   Typography,
+  CircularProgress,
+  Grid,
+  InputAdornment,
 } from '@mui/material';
 import { AnswerOption } from '../../../interfaces/answer-option';
 import { useGetAnswerOptionByIdQuery, useUpdateAnswerOptionMutation } from '../../../services/api/providers/answerOptionApi';
-
+import {
+  TextFields as TextFieldsIcon,
+  Score as ScoreIcon,
+  Reorder as ReorderIcon,
+} from '@mui/icons-material';
 interface UpdateAnswerOptionComponentProps {
   answerOptionId: number;
   open: boolean;
@@ -66,50 +73,100 @@ const UpdateAnswerOptionComponent: React.FC<UpdateAnswerOptionComponentProps> = 
   return (
     <>
       <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-        <DialogTitle>Editar Opción de Respuesta</DialogTitle>
-        <DialogContent>
-          {isFetching ? (
-            <Typography>Loading...</Typography>
-          ) : (
-            <>
-              <TextField
-                autoFocus
-                margin="dense"
-                label="Texto"
-                fullWidth
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-                required
-              />
-              <TextField
-                margin="dense"
-                label="Puntuación"
-                type="number"
-                fullWidth
-                value={score}
-                onChange={(e) => setScore(Number(e.target.value))}
-                required
-              />
-              <TextField
-                margin="dense"
-                label="Orden"
-                type="number"
-                fullWidth
-                value={order}
-                onChange={(e) => setOrder(Number(e.target.value))}
-                required
-              />
-              {/* Puedes agregar más campos si es necesario */}
-            </>
-          )}
+      <DialogTitle>Editar Opción de Respuesta</DialogTitle>
+      {isFetching ? (
+        <DialogContent sx={{ textAlign: 'center', py: 5 }}>
+          <CircularProgress />
+          <Typography variant="subtitle1" sx={{ mt: 2 }}>
+            Cargando...
+          </Typography>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={onClose}>Cancelar</Button>
-          <Button onClick={handleUpdate} variant="contained" disabled={isUpdating || isFetching}>
-            {isUpdating ? 'Guardando...' : 'Guardar'}
-          </Button>
-        </DialogActions>
-      </Dialog>
+      ) : (
+        <form id="edit-answer-option-form" onSubmit={handleUpdate}>
+          <DialogContent>
+            <Grid container spacing={2}>
+              {/* Campo Texto */}
+              <Grid item xs={12}>
+                <TextField
+                  autoFocus
+                  label="Texto"
+                  fullWidth
+                  required
+                  variant="outlined"
+                  value={text}
+                  onChange={(e) => setText(e.target.value)}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <TextFieldsIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+
+              {/* Campo Puntuación */}
+              <Grid item xs={12} >
+                <TextField
+                  label="Puntuación"
+                  type="number"
+                  fullWidth
+                  required
+                  variant="outlined"
+                  value={score}
+                  onChange={(e) => setScore(Number(e.target.value))}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <ScoreIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+
+              {/* Campo Orden */}
+              {/* <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Orden"
+                  type="number"
+                  fullWidth
+                  required
+                  variant="outlined"
+                  value={order}
+                  onChange={(e) => setOrder(Number(e.target.value))}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <ReorderIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid> */}
+
+              {/* Campos adicionales si es necesario */}
+              {/* ... */}
+            </Grid>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={onClose} color="secondary">
+              Cancelar
+            </Button>
+            <Button
+              type="submit"
+              form="edit-answer-option-form"
+              variant="contained"
+              color="primary"
+              disabled={isUpdating}
+              startIcon={isUpdating ? <CircularProgress size={20} /> : null}
+            >
+              {isUpdating ? 'Guardando...' : 'Guardar'}
+            </Button>
+          </DialogActions>
+        </form>
+      )}
+    </Dialog>
 
       {/* Snackbar para éxito */}
       <Snackbar

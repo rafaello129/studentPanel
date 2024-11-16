@@ -11,8 +11,17 @@ import {
   Snackbar,
   Alert,
   Typography,
+  CircularProgress,
+  Grid,
+  InputAdornment,
 } from '@mui/material';
 import { useCreateAnswerOptionMutation } from '../../../services/api/providers/answerOptionApi';
+import {
+  AddCircle,
+  TextFields as TextFieldsIcon,
+  Score as ScoreIcon,
+  Reorder as ReorderIcon,
+} from '@mui/icons-material';
 
 interface CreateAnswerOptionComponentProps {
   questionId: number;
@@ -56,44 +65,96 @@ const CreateAnswerOptionComponent: React.FC<CreateAnswerOptionComponentProps> = 
 
   return (
     <>
-      <Button variant="outlined" onClick={() => setOpen(true)}>
+     <Button
+        variant="contained"
+        color="primary"
+        startIcon={<AddCircle />}
+        onClick={() => setOpen(true)}
+      >
         Crear Opción de Respuesta
       </Button>
       <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="sm">
         <DialogTitle>Nueva Opción de Respuesta</DialogTitle>
+        <br />
         <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            label="Texto"
-            fullWidth
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            required
-          />
-          <TextField
-            margin="dense"
-            label="Puntuación"
-            type="number"
-            fullWidth
-            value={score}
-            onChange={(e) => setScore(Number(e.target.value))}
-            required
-          />
-          <TextField
-            margin="dense"
-            label="Orden"
-            type="number"
-            fullWidth
-            value={order}
-            onChange={(e) => setOrder(Number(e.target.value))}
-            required
-          />
-          {/* Puedes agregar más campos si es necesario */}
+          <form id="create-answer-option-form" onSubmit={handleCreate}>
+            <Grid container spacing={2}>
+              {/* Campo Texto */}
+              <Grid item xs={12}>
+                <TextField
+                  label="Texto"
+                  fullWidth
+                  required
+                  variant="outlined"
+                  value={text}
+                  onChange={(e) => setText(e.target.value)}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <TextFieldsIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+
+              {/* Campo Puntuación */}
+              <Grid item xs={12} >
+                <TextField
+                  label="Puntuación"
+                  type="number"
+                  fullWidth
+                  required
+                  variant="outlined"
+                  value={score}
+                  onChange={(e) => setScore(Number(e.target.value))}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <ScoreIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+
+              {/* Campo Orden */}
+              {/* <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Orden"
+                  type="number"
+                  fullWidth
+                  required
+                  variant="outlined"
+                  value={order}
+                  onChange={(e) => setOrder(Number(e.target.value))}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <ReorderIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid> */}
+
+              {/* Campos adicionales si es necesario */}
+              {/* ... */}
+            </Grid>
+          </form>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpen(false)}>Cancelar</Button>
-          <Button onClick={handleCreate} variant="contained" disabled={isLoading}>
+          <Button onClick={() => setOpen(false)} color="secondary">
+            Cancelar
+          </Button>
+          <Button
+            type="submit"
+            form="create-answer-option-form"
+            variant="contained"
+            color="primary"
+            disabled={isLoading}
+            startIcon={isLoading ? <CircularProgress size={20} /> : null}
+          >
             {isLoading ? 'Creando...' : 'Crear'}
           </Button>
         </DialogActions>
