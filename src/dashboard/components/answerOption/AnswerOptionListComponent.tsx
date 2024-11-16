@@ -1,8 +1,8 @@
 // src/components/answerOption/AnswerOptionListComponent.tsx
 
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, IconButton, Paper, Radio, RadioGroup, FormControlLabel, Checkbox } from '@mui/material';
-import { Edit } from '@mui/icons-material';
+import { Box, Typography, IconButton, Paper, Radio, RadioGroup, FormControlLabel, Checkbox, Card } from '@mui/material';
+import { DragIndicator, Edit } from '@mui/icons-material';
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
 
 import { AnswerOption } from '../../../interfaces/answer-option';
@@ -113,45 +113,55 @@ const AnswerOptionListComponent: React.FC<AnswerOptionListComponentProps> = ({ q
       {/* Mostrar las opciones solo si la pregunta no es abierta */}
       {questionType !== QuestionTypeEnum.OPEN_ENDED && (
         <DragDropContext onDragEnd={handleDragEnd}>
-          <Droppable droppableId="answerOptions">
-            {(droppableProvided) => (
-              <Box ref={droppableProvided.innerRef} {...droppableProvided.droppableProps} sx={{ mt: 2 }}>
-                {answerOptions.map((option, index) => (
-                  <Draggable key={option.id} draggableId={option.id.toString()} index={index}>
-                    {(draggableProvided) => (
-                      <Paper
-                        ref={draggableProvided.innerRef}
-                        {...draggableProvided.draggableProps}
-                        sx={{
-                          mb: 2,
-                          p: 2,
-                          display: 'flex',
-                          alignItems: 'center',
-                          backgroundColor: '#f1f1f1',
-                        }}
+        <Droppable droppableId="answerOptions">
+          {(provided) => (
+            <Box ref={provided.innerRef} {...provided.droppableProps} sx={{ mt: 2 }}>
+              {answerOptions.map((option, index) => (
+                <Draggable key={option.id} draggableId={option.id.toString()} index={index}>
+                  {(provided, snapshot) => (
+                    <Card
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      sx={{
+                        mb: 2,
+                        p: 2,
+                        display: 'flex',
+                        alignItems: 'center',
+                        backgroundColor: snapshot.isDragging ? '#e3f2fd' : '#fff',
+                        boxShadow: snapshot.isDragging ? 4 : 1,
+                        borderRadius: 2,
+                      }}
+                    >
+                      <Box
+                        {...provided.dragHandleProps}
+                        sx={{ mr: 2, cursor: 'grab', color: '#90a4ae' }}
                       >
-                        <Box {...draggableProvided.dragHandleProps} sx={{ mr: 2, cursor: 'grab' }}>
-                          <Typography variant="h6">☰</Typography>
-                        </Box>
-                        <Box sx={{ flexGrow: 1 }}>
-                          <Typography variant="body1">{option.text}</Typography>
-                          <Typography variant="caption" color="text.secondary">
-                            Puntuación: {option.score} | Orden: {option.order}
-                          </Typography>
-                        </Box>
-                        <IconButton onClick={() => setEditingAnswerOptionId(option.id)}>
-                          <Edit />
-                        </IconButton>
-                        <DeleteAnswerOptionButton answerOptionId={option.id} refetchAnswerOptions={refetch} />
-                      </Paper>
-                    )}
-                  </Draggable>
-                ))}
-                {droppableProvided.placeholder}
-              </Box>
-            )}
-          </Droppable>
-        </DragDropContext>
+                        <DragIndicator />
+                      </Box>
+                      <Box sx={{ flexGrow: 1 }}>
+                        <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                          {option.text}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          Puntuación: {option.score} | Orden: {option.order}
+                        </Typography>
+                      </Box>
+                      <IconButton onClick={() => setEditingAnswerOptionId(option.id)}>
+                        <Edit />
+                      </IconButton>
+                      <DeleteAnswerOptionButton
+                        answerOptionId={option.id}
+                        refetchAnswerOptions={refetch}
+                      />
+                    </Card>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </Box>
+          )}
+        </Droppable>
+      </DragDropContext>
       )}
 
       {/* Componente para editar una opción de respuesta */}

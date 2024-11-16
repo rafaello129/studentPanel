@@ -12,10 +12,14 @@ import {
   MenuItem,
   Snackbar,
   Alert,
-  Typography
+  Typography,
+  CircularProgress,
+  Grid,
+  InputAdornment
 } from '@mui/material';
 import { useGetQuestionByIdQuery, useUpdateQuestionMutation } from '../../../services/api/providers/questionApi';
 import { QuestionTypeEnum } from '../../../interfaces/question-type'; // Asegúrate de tener esta importación correcta
+import { QuestionMark } from '@mui/icons-material';
 
 interface UpdateQuestionComponentProps {
   questionId: number;
@@ -68,52 +72,84 @@ const UpdateQuestionComponent: React.FC<UpdateQuestionComponentProps> = ({ quest
 
   return (
     <>
-      <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-        <DialogTitle>Editar Pregunta</DialogTitle>
-        <DialogContent>
-          {isFetching ? (
-            <Typography>Loading...</Typography>
-          ) : (
-            <>
-              <TextField
-                autoFocus
-                margin="dense"
-                label="Texto de la pregunta"
-                fullWidth
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-              />
-              <FormControl fullWidth sx={{ mt: 2 }}>
-                <InputLabel>Tipo de Pregunta</InputLabel>
-                <Select
-                  value={questionType}
-                  label="Tipo de Pregunta"
-                  onChange={(e) => setQuestionType(e.target.value as QuestionTypeEnum)}
-                >
-                  <MenuItem value={QuestionTypeEnum.OPEN_ENDED}>Abierta</MenuItem>
-                  <MenuItem value={QuestionTypeEnum.SINGLE_CHOICE}>Selección Única</MenuItem>
-                  <MenuItem value={QuestionTypeEnum.MULTIPLE_CHOICE}>Selección Múltiple</MenuItem>
-                  {/* Agrega más tipos si es necesario */}
-                </Select>
-              </FormControl>
-              {/* Puedes agregar más campos según sea necesario */}
-            </>
-          )}
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
+      <DialogTitle>Editar Pregunta</DialogTitle>
+      {isFetching ? (
+        <DialogContent sx={{ textAlign: 'center', py: 5 }}>
+          <CircularProgress />
+          <Typography variant="subtitle1" sx={{ mt: 2 }}>
+            Cargando...
+          </Typography>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={onClose} color="primary">
-            Cancelar
-          </Button>
-          <Button
-            onClick={handleUpdate}
-            variant="contained"
-            color="primary"
-            disabled={isUpdating || isFetching}
-          >
-            {isUpdating ? 'Guardando...' : 'Guardar'}
-          </Button>
-        </DialogActions>
-      </Dialog>
+      ) : (
+        <form onSubmit={handleUpdate}>
+          <DialogContent>
+            <Grid container spacing={2}>
+              {/* Campo Texto de la Pregunta */}
+              <Grid item xs={12}>
+                <TextField
+                  autoFocus
+                  label="Texto de la pregunta"
+                  fullWidth
+                  required
+                  variant="outlined"
+                  value={text}
+                  onChange={(e) => setText(e.target.value)}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <QuestionMark />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+
+              {/* Campo Tipo de Pregunta */}
+              <Grid item xs={12}>
+                <FormControl fullWidth required variant="outlined">
+                  <InputLabel>Tipo de Pregunta</InputLabel>
+                  <Select
+                    value={questionType}
+                    label="Tipo de Pregunta"
+                    onChange={(e) =>
+                      setQuestionType(e.target.value as QuestionTypeEnum)
+                    }
+                  >
+                    <MenuItem value={QuestionTypeEnum.OPEN_ENDED}>
+                      Abierta
+                    </MenuItem>
+                    <MenuItem value={QuestionTypeEnum.SINGLE_CHOICE}>
+                      Selección Única
+                    </MenuItem>
+                    <MenuItem value={QuestionTypeEnum.MULTIPLE_CHOICE}>
+                      Selección Múltiple
+                    </MenuItem>
+                    {/* Agrega más tipos si es necesario */}
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              {/* Campos adicionales según el tipo de pregunta */}
+             
+            </Grid>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={onClose} color="secondary">
+              Cancelar
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={isUpdating}
+            >
+              {isUpdating ? 'Guardando...' : 'Guardar'}
+            </Button>
+          </DialogActions>
+        </form>
+      )}
+    </Dialog>
 
       {/* Snackbar para éxito */}
       <Snackbar

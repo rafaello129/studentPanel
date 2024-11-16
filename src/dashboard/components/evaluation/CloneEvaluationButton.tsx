@@ -98,7 +98,7 @@ const CloneEvaluationButton: React.FC = () => {
         }}
       >
         <Typography variant="h5" component="h1" gutterBottom align="center">
-          Clonar Evaluación
+          Programar Evaluación
         </Typography>
 
         {(isLoadingEvaluations || isLoadingClasses) ? (
@@ -110,12 +110,12 @@ const CloneEvaluationButton: React.FC = () => {
         ) : (
           <form>
             <FormControl fullWidth required margin="normal" variant="outlined">
-              <InputLabel id="template-select-label">Seleccionar Evaluación a Clonar</InputLabel>
+              <InputLabel id="template-select-label">Seleccionar Evaluación a Programar</InputLabel>
               <Select
                 labelId="template-select-label"
                 value={templateId ? String(templateId) : ''}
                 onChange={handleTemplateChange}
-                label="Seleccionar Evaluación a Clonar"
+                label="Seleccionar Evaluación a Programar"
               >
                 <MenuItem value="" disabled>
                   Selecciona una evaluación
@@ -175,7 +175,7 @@ const CloneEvaluationButton: React.FC = () => {
                 disabled={isCloning || !templateId || !scheduledDate}
                 startIcon={isCloning ? <CircularProgress size={20} /> : null}
               >
-                {isCloning ? 'Clonando...' : 'Clonar Evaluación'}
+                {isCloning ? 'Clonando...' : 'Programar Evaluación'}
               </Button>
             </Box>
           </form>
@@ -190,7 +190,7 @@ const CloneEvaluationButton: React.FC = () => {
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
         <Alert onClose={() => setSuccessOpen(false)} severity="success" sx={{ width: '100%' }}>
-          Evaluación clonada exitosamente
+          Evaluación programada exitosamente
         </Alert>
       </Snackbar>
       {/* Snackbar para error */}
@@ -201,7 +201,7 @@ const CloneEvaluationButton: React.FC = () => {
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
         <Alert onClose={() => setErrorOpen(false)} severity="error" sx={{ width: '100%' }}>
-          Error al clonar la evaluación
+          Error al programar la evaluación
         </Alert>
       </Snackbar>
     </Container>

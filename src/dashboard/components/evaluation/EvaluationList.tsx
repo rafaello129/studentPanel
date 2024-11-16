@@ -26,7 +26,16 @@ import {
   ListItem,
   ListItemText,
   ListItemButton,
+  Grid,
+  Tooltip,
 } from '@mui/material';
+import {
+ 
+  Article as TemplateIcon,
+  Poll as NotTemplateIcon,
+  RadioButtonChecked as ActiveIcon,
+  RadioButtonUnchecked as InactiveIcon,
+} from '@mui/icons-material';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { useGetAllAcademicLevelsQuery } from '../../../services/api/providers/academicLevelApi';
 import { useNavigate } from 'react-router-dom';
@@ -38,11 +47,16 @@ interface props{
 }
 
 const EvaluationList: React.FC<props> = ( {setShowModal, setShowModal2, setShowModal3}) => {
+ 
+   // Cambiar el tipo de estado a 'string' en lugar de 'boolean'
+   const [isActive, setIsActive] = React.useState('true');
+   const [isTemplate, setIsTemplate] = React.useState('false');
   // Estado para los filtros y paginación
+  const isActiveBoolean = isActive === 'true';
+const isTemplateBoolean = isTemplate === 'true';
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [isActive, setIsActive] = useState<boolean>(true); // Por defecto en true
-  const [isTemplate, setIsTemplate] = useState<boolean>(true); // Por defecto en true
+
   const [academicLevelId, setAcademicLevelId] = useState<number | undefined>(undefined);
 
   // Obtener los niveles académicos para el filtro
@@ -56,8 +70,9 @@ const EvaluationList: React.FC<props> = ( {setShowModal, setShowModal2, setShowM
   const evaluationRes = useGetEvaluationsQuery({
     page,
     limit,
-    isTemplate,
+    isTemplate:isTemplateBoolean,
     academicLevelId,
+    isActive: isActiveBoolean
   });
 
   const {data: evaluationResponse} = evaluationRes;
@@ -71,14 +86,14 @@ const EvaluationList: React.FC<props> = ( {setShowModal, setShowModal2, setShowM
   // Hook para la navegación
   const navigate = useNavigate();
 
-  // Manejadores de eventos para los filtros
-  const handleIsActiveChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setIsActive(event.target.checked);
+  const handleIsActiveChange = (event) => {
+    setIsActive(event.target.value);
   };
 
-  const handleIsTemplateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setIsTemplate(event.target.checked);
+  const handleIsTemplateChange = (event) => {
+    setIsTemplate(event.target.value);
   };
+
 
   const handleAcademicLevelChange = (event: SelectChangeEvent<string>) => {
     const value = Number(event.target.value);
@@ -102,6 +117,7 @@ const EvaluationList: React.FC<props> = ( {setShowModal, setShowModal2, setShowM
       navigate(`/evaluations/view/${evaluationId}`);
     }
   };
+// Si necesitas usar valores booleanos más adelante
 
   return (
     <Box sx={{ p: 4 }}>
@@ -111,27 +127,32 @@ const EvaluationList: React.FC<props> = ( {setShowModal, setShowModal2, setShowM
 
       {/* Controles de Filtro */}
       <Box sx={{ display: 'flex', gap: 2, mb: 4 , justifyContent:'center', alignContent:'center'}}>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={isActive === true}
-              onChange={handleIsActiveChange}
-              color="primary"
-            />
-          }
-          label="Mostrar Solo Activas"
-        />
+      <FormControl variant="outlined">
+        <InputLabel id="isActive-label">Estado</InputLabel>
+        <Select
+          labelId="isActive-label"
+          value={isActive}
+          onChange={handleIsActiveChange}
+          label="Estado"
+        >
+          <MenuItem value="true">Activas</MenuItem>
+          <MenuItem value="false">Inactivas</MenuItem>
+        </Select>
+      </FormControl>
 
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={isTemplate === true}
-              onChange={handleIsTemplateChange}
-              color="primary"
-            />
-          }
-          label="Mostrar Solo Plantillas"
-        />
+      {/* Para "Mostrar Solo Plantillas" */}
+      <FormControl variant="outlined">
+        <InputLabel id="isTemplate-label">Tipo</InputLabel>
+        <Select
+          labelId="isTemplate-label"
+          value={isTemplate}
+          onChange={handleIsTemplateChange}
+          label="Tipo"
+        >
+          <MenuItem value="true">Plantillas</MenuItem>
+          <MenuItem value="false">Programadas</MenuItem>
+        </Select>
+      </FormControl>
 
         <FormControl variant="outlined" sx={{ minWidth: 180, alignContent:'center', justifyContent:'center' }}>
           <InputLabel className='mt-2' id="academic-level-label">Nivel Académico</InputLabel>
@@ -188,60 +209,76 @@ const EvaluationList: React.FC<props> = ( {setShowModal, setShowModal2, setShowM
 
           {/* Lista de Evaluaciones */}
           <List>
-    {evaluations.map((evaluation) => (
-      <React.Fragment key={evaluation.id}>
-        <Divider />
-        <ListItem disablePadding>
-          <ListItemButton onClick={() => handleEvaluationClick(evaluation.id, evaluation.isTemplate)}>
-            <div style={{ display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'space-evenly' }}>
-              {/* Title and Description */}
-              <div style={{ flex: .3 }}>
-                <Typography variant="h6" component="h4" style={{ fontWeight: 'bold', marginBottom: '4px' }}>
-                  {evaluation.title}
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  {evaluation.description}
-                </Typography>
-              </div>
-              
-              {/* Academic Level */}
-              <div style={{ textAlign: 'center', padding: '0 10px' }}>
-                <SchoolIcon style={{ color: '#1976d2', marginBottom: '4px' }} />
-                <Typography variant="body2">
-                  Nivel Académico: 
-                </Typography>
-                <Typography variant="body2">
-                  {evaluation.academicLevel?.name || 'N/A'}
-                </Typography>
-              </div>
-              
-              {/* Is Template */}
-              <div style={{ textAlign: 'center', padding: '0 10px' }}>
-                {evaluation.isTemplate ? <CheckCircleIcon color="success" /> : <CancelIcon color="error" />}
-                <Typography variant="body2">
-                  Es Plantilla: 
-                </Typography>
-                <Typography variant="body2">
-                  {evaluation.isTemplate ? 'Sí' : 'No'}
-                </Typography>
-              </div>
-              
-              {/* Is Active */}
-              <div style={{ textAlign: 'center', padding: '0 10px' }}>
-                {evaluation.isActive ? <CheckCircleIcon color="success" /> : <CancelIcon color="error" />}
-                <Typography variant="body2">
-                  Está Activa: 
-                </Typography>
-                <Typography variant="body2">
-                  {evaluation.isActive ? 'Sí' : 'No'}
-                </Typography>
-              </div>
-        
-            </div>
-          </ListItemButton>
-        </ListItem>
-      </React.Fragment>
-    ))}
+          {evaluations.map((evaluation) => (
+        <React.Fragment key={evaluation.id}>
+          <Divider />
+          <ListItem disablePadding>
+            <ListItemButton
+              onClick={() =>
+                handleEvaluationClick(evaluation.id, evaluation.isTemplate)
+              }
+            >
+              <Grid
+                container
+                alignItems="center"
+                spacing={2}
+                sx={{ width: '100%', padding: 2 }}
+              >
+                {/* Título y Descripción */}
+                <Grid item xs={12} sm={4}>
+                  <Typography variant="h6" fontWeight="bold" gutterBottom>
+                    {evaluation.title}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    {evaluation.description}
+                  </Typography>
+                </Grid>
+
+                {/* Nivel Académico */}
+                <Grid item xs={12} sm={2} textAlign="center">
+                  <SchoolIcon color="primary" fontSize="large" />
+                  <Typography variant="body2">Nivel Académico:</Typography>
+                  <Typography variant="body2">
+                    {evaluation.academicLevel?.name || 'N/A'}
+                  </Typography>
+                </Grid>
+
+                {/* Indicadores Visuales */}
+                <Grid item xs={12} sm={4} textAlign="center">
+                  <Box
+                    display="flex"
+                    justifyContent="flex-end"
+                    alignItems="end"
+                    gap={4}
+                  >
+                    {/* Es Plantilla */}
+                    <Tooltip
+                      title={evaluation.isTemplate ? 'Plantilla' : 'Encuesta'}
+                    >
+                      {evaluation.isTemplate ? (
+                        <TemplateIcon color="info" fontSize="large" />
+                      ) : (
+                        <NotTemplateIcon color="error" fontSize="large" />
+                      )}
+                    </Tooltip>
+
+                    {/* Está Activa */}
+                    <Tooltip
+                      title={evaluation.isActive ? 'Está Activa' : 'Inactiva'}
+                    >
+                      {evaluation.isActive ? (
+                        <ActiveIcon color="success" fontSize="large" />
+                      ) : (
+                        <InactiveIcon color="disabled" fontSize="large" />
+                      )}
+                    </Tooltip>
+                  </Box>
+                </Grid>
+              </Grid>
+            </ListItemButton>
+          </ListItem>
+        </React.Fragment>
+      ))}
   </List>
   </div>
 

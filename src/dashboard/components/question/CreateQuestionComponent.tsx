@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions, FormControl, InputLabel, Select, MenuItem, Grid, InputAdornment } from '@mui/material';
 import { useCreateQuestionMutation } from '../../../services/api/providers/questionApi';
+import { AddCircle, QuestionMark } from '@mui/icons-material';
 export enum QuestionTypeEnum {
   SINGLE_CHOICE = 'MULTIPLE_CHOICE',
   MULTIPLE_CHOICE = 'MULTIPLE_SELECT',
@@ -20,6 +21,8 @@ const CreateQuestionComponent: React.FC<CreateQuestionComponentProps> = ({ secti
 
   const [createQuestion] = useCreateQuestionMutation();
 
+  
+  
   const handleCreate = async () => {
     try {
       await createQuestion({
@@ -38,38 +41,76 @@ const CreateQuestionComponent: React.FC<CreateQuestionComponentProps> = ({ secti
 
   return (
     <>
-      <Button variant="outlined" onClick={() => setOpen(true)}>
+     <Button
+        variant="contained"
+        color="primary"
+        startIcon={<AddCircle />}
+        onClick={() => setOpen(true)}
+      >
         Crear Pregunta
       </Button>
-      <Dialog open={open} onClose={() => setOpen(false)}>
+      <Dialog open={open} onClose={() => setOpen(false)} maxWidth="sm" fullWidth>
         <DialogTitle>Nueva Pregunta</DialogTitle>
+        <br />
         <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            label="Texto de la pregunta"
-            fullWidth
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-          />
-          <FormControl fullWidth sx={{ mt: 2 }}>
-            <InputLabel>Tipo de Pregunta</InputLabel>
-            <Select
-              value={questionType}
-              label="Tipo de Pregunta"
-              onChange={(e) => setQuestionType(e.target.value as QuestionTypeEnum)}
-            >
-              <MenuItem value={QuestionTypeEnum.OPEN_ENDED}>Abierta</MenuItem>
-              <MenuItem value={QuestionTypeEnum.SINGLE_CHOICE}>Selección Única</MenuItem>
-              <MenuItem value={QuestionTypeEnum.MULTIPLE_CHOICE}>Selección Múltiple</MenuItem>
-              {/* Agrega más tipos si es necesario */}
-            </Select>
-          </FormControl>
-          {/* Si el tipo de pregunta requiere opciones de respuesta, puedes agregar campos aquí */}
+          <form onSubmit={handleCreate}>
+            <Grid container spacing={2}>
+              {/* Campo Texto de la Pregunta */}
+              <Grid item xs={12}>
+                <TextField
+                  autoFocus
+                  label="Texto de la pregunta"
+                  name="text"
+                  value={text}
+                  onChange={(e) => setText(e.target.value)}
+                  fullWidth
+                  required
+                  variant="outlined"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <QuestionMark />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+
+              {/* Campo Tipo de Pregunta */}
+              <Grid item xs={12}>
+                <FormControl fullWidth required variant="outlined">
+                  <InputLabel>Tipo de Pregunta</InputLabel>
+                  <Select
+                    value={questionType}
+                    label="Tipo de Pregunta"
+                    onChange={(e) =>
+                      setQuestionType(e.target.value as QuestionTypeEnum)
+                    }
+                  >
+                    <MenuItem value={QuestionTypeEnum.OPEN_ENDED}>
+                      Abierta
+                    </MenuItem>
+                    <MenuItem value={QuestionTypeEnum.SINGLE_CHOICE}>
+                      Selección Única
+                    </MenuItem>
+                    <MenuItem value={QuestionTypeEnum.MULTIPLE_CHOICE}>
+                      Selección Múltiple
+                    </MenuItem>
+                    {/* Agrega más tipos si es necesario */}
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              {/* Campos adicionales según el tipo de pregunta */}
+            
+            </Grid>
+          </form>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpen(false)}>Cancelar</Button>
-          <Button onClick={handleCreate} variant="contained">
+          <Button onClick={() => setOpen(false)} color="secondary">
+            Cancelar
+          </Button>
+          <Button onClick={handleCreate} variant="contained" color="primary">
             Crear
           </Button>
         </DialogActions>

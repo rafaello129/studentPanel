@@ -10,9 +10,12 @@ import {
     AccordionSummary,
     AccordionDetails,
     Button,
-    Modal
+    Modal,
+    IconButton,
+    Paper
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import CloseIcon from '@mui/icons-material/Close';
 
 const EvaluationInstructions = () => (
     <Accordion>
@@ -78,70 +81,180 @@ export const EvaluationPage = () => {
 
             {/* Modal para el formulario de creación */}
             <Modal open={openModal} onClose={handleCloseModal}>
-                <Box
-                    sx={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        width: 460,
-                        bgcolor: 'background.paper',
-                        boxShadow: 24,
-                        p: 4,
-                        borderRadius: 1,
-                    }}
-                >
-                    <CreateEvaluationForm />
-                    <Box textAlign="right" mt={2}>
-                        <Button onClick={handleCloseModal} color="secondary">Cerrar</Button>
-                    </Box>
-                </Box>
-            </Modal>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '100vh',
+          p: 2,
+        }}
+      >
+        <Paper
+          elevation={3}
+          sx={{
+            position: 'relative',
+            width: '100%',
+            maxWidth: 600,
+            p: 4,
+            borderRadius: 2,
+            textAlign: 'center', // Centrar el contenido dentro del modal
+          }}
+        >
+          {/* Botón de cierre en la esquina superior derecha */}
+          <IconButton
+            aria-label="close"
+            onClick={handleCloseModal}
+            sx={{
+              position: 'absolute',
+              top: 8,
+              right: 8,
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+
+          {/* Título del modal */}
+          <Typography variant="h6" component="h2" gutterBottom>
+            Crear Nueva Evaluación
+          </Typography>
+
+          {/* Descripción */}
+          <Typography variant="body1" gutterBottom>
+            Completa el formulario para crear una nueva evaluación.
+          </Typography>
+
+          {/* Componente personalizado */}
+          <Box mt={2}>
+            <CreateEvaluationForm />
+          </Box>
+
+          {/* Botón de cierre en la parte inferior */}
+          <Box mt={4} textAlign="center">
+            <Button onClick={handleCloseModal} variant="contained" color="secondary">
+              Cerrar
+            </Button>
+          </Box>
+        </Paper>
+      </Box>
+    </Modal>
 
         
             <Modal open={openModal2} onClose={handleCloseModal2}>
-                <Box
-                    sx={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        width: 600,
-                        bgcolor: 'background.paper',
-                        boxShadow: 24,
-                        p: 1,
-                        borderRadius: 1,
-                    }}
-                >
-                    <CloneEvaluationButton />
-                    <Box textAlign="right" mt={2}>
-                        <Button onClick={handleCloseModal} color="secondary">Cerrar</Button>
-                    </Box>
-                </Box>
+        <Box
+            sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '100vh',
+            p: 2,
+            }}
+        >
+            <Paper
+            elevation={3}
+            sx={{
+                position: 'relative',
+                width: '100%',
+                maxWidth: 600,
+                p: 4,
+                borderRadius: 2,
+            }}
+            >
+            {/* Botón de cierre en la esquina superior derecha */}
+            <IconButton
+                aria-label="close"
+                onClick={handleCloseModal2}
+                sx={{
+                position: 'absolute',
+                top: 8,
+                right: 8,
+                }}
+            >
+                <CloseIcon />
+            </IconButton>
+
+            {/* Título del modal */}
+            <Typography variant="h6" component="h2" gutterBottom>
+                programar Evaluación
+            </Typography>
+
+            {/* Contenido principal del modal */}
+            <Typography variant="body1" gutterBottom>
+            Inicia la programación de una evaluación usando una plantilla
+            </Typography>
+
+            {/* Componente personalizado */}
+            <Box mt={2}>
+                <CloneEvaluationButton />
+            </Box>
+
+            {/* Botón de cierre en la parte inferior */}
+            <Box mt={4} textAlign="right">
+                <Button onClick={handleCloseModal2} variant="contained" color="secondary">
+                Cerrar
+                </Button>
+            </Box>
+            </Paper>
+        </Box>
             </Modal>
 
             <Modal open={openModal3} onClose={handleCloseModal3}>
-                <Box
-                    sx={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        width: 500,
-                        height: 425,
-                        bgcolor: 'background.paper',
-                        boxShadow: 24,
-                        p: 2,
-                        borderRadius: 1,
-                    }}
-                >
-                    <AssignUsersToEvaluation />
-                    <Box textAlign="right" mt={2}>
-                        <Button onClick={handleCloseModal} color="secondary">Cerrar</Button>
-                    </Box>
-                </Box>
-            </Modal>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '100vh',
+          p: 2,
+        }}
+      >
+        <Paper
+          elevation={3}
+          sx={{
+            position: 'relative',
+            width: '100%',
+            maxWidth: 600,
+            p: 4,
+            borderRadius: 2,
+          }}
+        >
+          {/* Botón de cierre en la esquina superior derecha */}
+          <IconButton
+            aria-label="close"
+            onClick={handleCloseModal3}
+            sx={{
+              position: 'absolute',
+              top: 8,
+              right: 8,
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
 
+          {/* Título del modal */}
+          <Typography variant="h6" component="h2" gutterBottom>
+            Asignar Usuarios a la Evaluación
+          </Typography>
+
+          {/* Descripción */}
+          <Typography variant="body1" gutterBottom>
+            Selecciona los usuarios que deseas asignar a esta evaluación.
+          </Typography>
+
+          {/* Componente personalizado */}
+          <Box mt={2}>
+            <AssignUsersToEvaluation />
+          </Box>
+
+          {/* Botón de cierre en la parte inferior */}
+          <Box mt={4} textAlign="right">
+            <Button onClick={handleCloseModal3} variant="contained" color="secondary">
+              Cerrar
+            </Button>
+          </Box>
+        </Paper>
+      </Box>
+    </Modal>
             <EvaluationList  setShowModal={setOpenModal} setShowModal2={setOpenModal2} setShowModal3={setOpenModal3}/>
 
             {/* Contenedor para los botones en la misma fila */}
