@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { EvaluationWithClassDto } from '../../../interfaces/class';
 import { useGetUserEvaluationsQuery } from '../../../services/api/providers/evaluationApi';
 
-const MyEvaluation: React.FC = () => {
+const MyEvaluations: React.FC = () => {
   const { data, error, isLoading } = useGetUserEvaluationsQuery();
 
   console.log('Evaluaciones del usuario:', data);
@@ -73,4 +73,4 @@ const MyEvaluation: React.FC = () => {
   );
 };
 
-export default MyEvaluation;
+export default MyEvaluations;

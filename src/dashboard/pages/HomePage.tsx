@@ -86,7 +86,7 @@ export const HomePage = () => {
       </div>
 
       {/* Sección de pasos para la configuración académica */}
-      <div className="mb-5">
+      {/* <div className="mb-5">
         <h3 className="mb-3">Pasos para configurar el entorno académico</h3>
         <div className="row">
           {academicSteps.map((step, index) => (
@@ -110,6 +110,7 @@ export const HomePage = () => {
       </div>
 
       {/* Sección de pasos para la creación de evaluaciones */}
+     {/*
       <div className="mb-5">
         <h3 className="mb-3">Pasos para crear evaluaciones</h3>
         <div className="row">
@@ -131,7 +132,8 @@ export const HomePage = () => {
             </div>
           ))}
         </div>
-      </div>
+      </div> 
+      */}
     </div>
   );
 };

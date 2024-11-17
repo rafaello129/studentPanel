@@ -1,8 +1,9 @@
 // src/components/MyEvaluation.tsx
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { EvaluationWithClassDto } from '../../../interfaces/evaluation-with-class.dto';
 import { useGetUserEvaluationsQuery } from '../../../services/api/providers/evaluationApi';
+import { Box, Typography, List } from '@mui/material';
+import { EvaluationWithClassDto } from '../../../interfaces/class';
+import MyEvaluationItem from '../../components/MyEvaluation/MyEvaluationItem';
 
 const MyEvaluation: React.FC = () => {
   const { data, error, isLoading } = useGetUserEvaluationsQuery();
@@ -10,65 +11,35 @@ const MyEvaluation: React.FC = () => {
   console.log('Evaluaciones del usuario:', data);
 
   if (isLoading) {
-    return <div>Cargando evaluaciones...</div>;
+    return <Typography>Cargando evaluaciones...</Typography>;
   }
 
   if (error) {
-    return <div>Error al cargar las evaluaciones.</div>;
+    return <Typography color="error">Error al cargar las evaluaciones.</Typography>;
   }
 
   if (!Array.isArray(data) || data.length === 0) {
-    return <div>No tienes evaluaciones asignadas.</div>;
+    return <Typography>No tienes evaluaciones asignadas.</Typography>;
   }
 
+  const totalEvaluations = data.length;
+
   return (
-    <div>
-      <h2>Tus Evaluaciones</h2>
-      <ul style={{ listStyleType: 'none', padding: 0 }}>
+    <Box p={4}>
+      <Typography variant="h4" gutterBottom>
+        Tus Evaluaciones
+      </Typography>
+      <List>
         {data.map((item: EvaluationWithClassDto, index: number) => (
-          <li
+          <MyEvaluationItem
             key={`${item.evaluation.id}-${item.class.id}-${index}`}
-            style={{
-              marginBottom: '20px',
-              border: '1px solid #ccc',
-              padding: '15px',
-              borderRadius: '5px',
-            }}
-          >
-            <h3>{item.evaluation.title}</h3>
-            <p>{item.evaluation.description}</p>
-            <p>
-              <strong>Fecha Programada:</strong>{' '}
-              {item.evaluation.scheduledDate
-                ? new Date(item.evaluation.scheduledDate).toLocaleDateString()
-                : 'No programada'}
-            </p>
-            <p>
-              <strong>Asignatura:</strong> {item.class.subjectName}
-            </p>
-            <p>
-              <strong>Nombre de la Asignatura:</strong> {item.class.subject.name}
-            </p>
-            <p>
-              <strong>Clave de la Asignatura:</strong> {item.class.subject.clave}
-            </p>
-            <p>
-              <strong>Asignatura Activa:</strong>{' '}
-              {item.class.subject.isActive ? 'Sí' : 'No'}
-            </p>
-            <p>
-              <strong>Profesor:</strong>{' '}
-              {item.class.teacher.user
-                ? `${item.class.teacher.user.name} ${item.class.teacher.user.lastName}`
-                : 'Información del profesor no disponible'}
-            </p>
-            <Link to={`/evaluation/${item.evaluation.id}`}>
-              <button>Responder Evaluación</button>
-            </Link>
-          </li>
+            item={item}
+            index={index}
+            total={totalEvaluations}
+          />
         ))}
-      </ul>
-    </div>
+      </List>
+    </Box>
   );
 };
 

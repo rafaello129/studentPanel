@@ -32,11 +32,11 @@ import SectionDetails from '../components/section/SectionDetails';
 import SectionsList from '../components/section/SectionsList';
 import UpdateSectionComponent from '../components/section/UpdateSectionComponent';
 import EvaluationView from '../components/evaluation/EvaluationView';
-import MyEvaluation from '../pages/MyEvaluation/MyEvaluationPage';
 import MyEvaluationDetail from '../components/MyEvaluation/MyEvaluationDetail';
 
 import PeriodPage from '../pages/period/PeriodPage';
 import { AcademicDomainLayout } from '../layouts/AcademicDomainLayout';
+import MyEvaluation from '../pages/MyEvaluation/MyEvaluationPage';
 
 export const DashboardRoutes = () => {
   

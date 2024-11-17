@@ -22,9 +22,9 @@ export const userResponseApi = peesadApi.injectEndpoints({
         }),
         
         // Obtener las respuestas de un usuario para una evaluación específica
-        getUserResponsesByEvaluation: builder.query<UserResponseResponse, number>({
-          query: (evaluationId) => `user-responses/evaluation/${evaluationId}`,
-          providesTags: (result, error, evaluationId) => [{ type: 'UserResponse', id: evaluationId }],
+        getUserResponsesByEvaluation: builder.query<UserResponseResponse, { evaluationId: number, idClass:number }>({
+          query: ({evaluationId, idClass}) => `user-responses/evaluation/${evaluationId}/${idClass}`,
+          providesTags: (result, error, { evaluationId, idClass }) => [{ type: 'UserResponse', id: `${evaluationId}-${idClass}` }],
         }),
         
         // Obtener todas las respuestas de los usuarios para una evaluación específica (admin)

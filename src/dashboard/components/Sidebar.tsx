@@ -45,7 +45,7 @@ export const Sidebar = () => {
                 <span className='ms-2'>HOME</span>
               </NavLink>
             </li>
-            <li className='nav-item'>
+            {/* <li className='nav-item'>
               <NavLink
                 style={({ isActive }) => (isActive ? activeStyle : undefined)}
                 className='nav-link d-flex align-items-center'
@@ -137,8 +137,8 @@ export const Sidebar = () => {
                 <img src={nivel} width={28} alt='User Icon' />
                 <span className='ms-2'>NIVELES ACADEMICOS</span>
               </NavLink>
-            </li>
-            {/*
+            </li> */}
+            
                         <li className='nav-item'>
               <NavLink
                 style={({ isActive }) => (isActive ? activeStyle : undefined)}
@@ -149,7 +149,7 @@ export const Sidebar = () => {
                 <span className='ms-2'>Mis evaluaciones</span>
               </NavLink>
             </li>
-            */}
+           
 
           </ul>
         </div>

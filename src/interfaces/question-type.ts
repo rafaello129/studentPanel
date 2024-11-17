@@ -22,3 +22,4 @@ export interface QuestionType {
     sectionId?: number; // Si necesitas referencia a la sección
     // Añade otros campos si es necesario
   }
+  
