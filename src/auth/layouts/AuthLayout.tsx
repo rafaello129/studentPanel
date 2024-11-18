@@ -23,7 +23,7 @@ export const AuthLayout: React.FC<Props> = ({ children }) => {
               <div className="d-flex flex-column align-items-center justify-content-center w-100 w-md-50 p-1">
                 <div className="d-flex flex-column justify-content-center  align-items-center">
                   <img src={logoPeesad} alt="escudo-y-logo" width={150} />
-                  <h2 className='mt-2'>PEESaD PORTAL</h2>
+                  <h2 className='mt-2'>PEESaD ESTUDIANTE</h2>
                   
                 </div>
                 <div className="w-100">
