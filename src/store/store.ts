@@ -4,9 +4,12 @@ import { authSlice } from './auth/authSlice';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import { authApi } from '../services/api/providers/authProvider';
 import responseReducer from './slices/responseSlice';
+import classReducer from './slices/classSlice';
 
 export const store = configureStore({
   reducer: {
+    class: classReducer,
+
     auth: authSlice.reducer,
     [peesadApi.reducerPath]: peesadApi.reducer,
     [authApi.reducerPath]: authApi.reducer,

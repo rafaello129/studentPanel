@@ -7,7 +7,7 @@ import MyEvaluationItem from '../../components/MyEvaluation/MyEvaluationItem';
 
 const MyEvaluation: React.FC = () => {
   const { data, error, isLoading } = useGetUserEvaluationsQuery();
-
+  console.log(error);
   console.log('Evaluaciones del usuario:', data);
 
   if (isLoading) {

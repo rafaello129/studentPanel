@@ -37,6 +37,8 @@ import MyEvaluationDetail from '../components/MyEvaluation/MyEvaluationDetail';
 import PeriodPage from '../pages/period/PeriodPage';
 import { AcademicDomainLayout } from '../layouts/AcademicDomainLayout';
 import MyEvaluation from '../pages/MyEvaluation/MyEvaluationPage';
+import SubjectPage from '../pages/SubjectPage/SubjectPage';
+import GradesPage from '../pages/grades/GradesPage';
 
 export const DashboardRoutes = () => {
   
@@ -52,6 +54,7 @@ export const DashboardRoutes = () => {
         
         <Route path='users' element={<UsersPage />} />
         
+        <Route path='Subject' element={<SubjectPage />} />
 
         <Route path='academic-domain' element={<AcademicDomainLayout/>}>
             <Route index element={<Navigate to={'/academic-domain/career'}></Navigate>} />
@@ -83,6 +86,7 @@ export const DashboardRoutes = () => {
   {/* Nueva ruta para ver detalles de una evaluación en modo solo lectura */}
   <Route path="/evaluations/view/:id" element={<EvaluationView />} />
 
+  <Route path="grades" element={<GradesPage></GradesPage>} />
 
         <Route path='Evaluation' element={<EvaluationPage></EvaluationPage>} />
         <Route path='period' element={<PeriodPage/>} />
