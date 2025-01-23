@@ -33,11 +33,11 @@ const GradesPage = () => {
   const selectedClass = useSelector((state: RootState) => state.class.selectedClass);
 
   const activities: Activity[] = [
-    { id: 1, title: 'Actividad 1', grade: 85 },
-    { id: 2, title: 'Actividad 2', grade: 90 },
-    { id: 3, title: 'Actividad 3', grade: 78 },
-    { id: 4, title: 'Actividad 4', grade: 92 },
-    { id: 5, title: 'Actividad 5', grade: 88 },
+    { id: 1, title: 'Proyecto', grade: 88 },
+    { id: 2, title: 'Cuadro comparativo', grade: 100 },
+    { id: 3, title: 'Crucigrama', grade: 100 },
+    { id: 4, title: 'Sopa de letras', grade: 100 },
+    { id: 5, title: 'Examen', grade: 100 },
   ];
 
   const averageGrade = activities.reduce((sum, activity) => sum + activity.grade, 0) / activities.length;
