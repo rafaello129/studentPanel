@@ -6,12 +6,15 @@ import {  HashRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './store/store.ts';
 import { AuthProvider } from './context/AuthProvider.tsx';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+const theme = createTheme();
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
+    <ThemeProvider theme={theme}>
     <Provider store={store}>
       <AuthProvider>
         <HashRouter>
@@ -19,6 +22,7 @@ root.render(
         </ HashRouter>
       </AuthProvider>
     </Provider>
+    </ThemeProvider>
   </React.StrictMode>
 );
 

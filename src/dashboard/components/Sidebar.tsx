@@ -160,6 +160,17 @@ export const Sidebar = () => {
               </NavLink>
             </li>          
 
+            <li className='nav-item'>
+              
+                  <NavLink
+                style={({ isActive }) => (isActive ? activeStyle : undefined)}
+                className='nav-link d-flex align-items-center'
+                to='/classes'
+                  >
+                    <img src={user} width={35} alt='ver lista' />
+                    <span className='fs-6'>Material Didactico</span>
+                  </NavLink>
+                </li>
           </ul>
         </div>
       </div>

@@ -7,6 +7,8 @@ import { Teacher } from './teacher';
 import { Tutor } from './tutor';
 
 export interface Class {
+  classes?: Class[];
+  periodName?: string;
   id: number;
   isCurrent: boolean;
   isDeleted: boolean;

@@ -39,11 +39,19 @@ import { AcademicDomainLayout } from '../layouts/AcademicDomainLayout';
 import MyEvaluation from '../pages/MyEvaluation/MyEvaluationPage';
 import SubjectPage from '../pages/SubjectPage/SubjectPage';
 import GradesPage from '../pages/grades/GradesPage';
+import StudentAssignedClassesPage from '../pages/classes/StudentAssignedClassesPage';
+import AssignedTasksPage from '../pages/classes/AssignedTasksPage';
+import ClassDetailsPage from '../pages/classes/ClassDetailsPage';
+import StudentActivitiesPage from '../pages/StudentActivities/StudentActivitiesPage';
+import ActivityDetailPage from '../pages/StudentActivities/ActivityDetailPage';
+import SubmissionManagementPage from '../pages/StudentActivities/SubmissionManagementPage';
 
 export const DashboardRoutes = () => {
   
   const [selectedClass, setSelectedClass] = useState<Class | null>(null)
-
+  const userString = localStorage.getItem('user');
+  const user = userString ? JSON.parse(userString) : null;
+  const userId = user?.id;
 
   return (
     <DashboardLayout>
@@ -63,7 +71,7 @@ export const DashboardRoutes = () => {
             <Route path='student' element={<StudentPage />} />
             <Route path='*' element={<Navigate to='/home' />} />
         </Route>
-
+    
         <Route path='academic-enviroment' element={<AcademicEnviromentLayout />}>
             <Route index element={<Navigate to={'/academic-enviroment/subjects'}></Navigate>}/>
             <Route path='subjects' element={<GeneralSubjectPage />} />
@@ -101,9 +109,20 @@ export const DashboardRoutes = () => {
             )
           }
         />
+        
+        <Route path="/classes" element={<StudentAssignedClassesPage studentId={userId} />} />
+        <Route path="/class-details" element={<ClassDetailsPage />} />
+      <Route path="/class-details" element={<ClassDetailsPage />} />
 
         {/* TODO: Descomentar en proxima versión y redireccionar a /inicio  */}
         <Route path='/*' element={<Navigate to='/home' />} />
+
+        <Route path="/class/:classId/assigned-tasks" element={<StudentActivitiesPage />} />
+        <Route path="/activity-details/:scheduleId/" element={<ActivityDetailPage />} />
+
+        {/* NEW route: submission management for student submissions (files, comments, etc.) */}
+        <Route path="/submissions/:scheduleId" element={<SubmissionManagementPage />} />
+
       </Routes>
     </DashboardLayout>
   );

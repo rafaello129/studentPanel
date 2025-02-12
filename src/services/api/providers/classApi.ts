@@ -15,11 +15,16 @@ export interface ClassQueryParams {
   idCareer?: string;
   relationCheck?: boolean;
 }
-
+export type PaginationQueryType = {
+  page?: number;
+  limit?: number;
+  pageSize?:number;
+  isActive?: boolean;
+};
 const classApi = peesadApi.injectEndpoints({
   endpoints: (builder) => ({
     getClasses: builder.query<ApiResponseAll<Class>, PaginationQueryParamsType & { packageId?: number, relationCheck?: boolean }>({
-      query: ({ page = 1, limit = 1, isActive, packageId, relationCheck }) => ({
+      query: ({ page = 1, limit = 1, isActive, packageId, relationCheck }) => ({    
         url: `class/findAll?page=${page}&pageSize=${limit}` +
           (isActive !== undefined ? `&isCurrent=${isActive}` : '') +
           (packageId !== undefined ? `&packageId=${packageId}` : '') +
@@ -81,7 +86,27 @@ const classApi = peesadApi.injectEndpoints({
       }),
       invalidatesTags: ['Class'],
     }),
-
+    getClassesByStudentId: builder.query<
+    ApiResponseAll<Class>,
+    PaginationQueryType & { studentId: number; isCurrent?: boolean }
+  >({
+    query: ({ page = 1, pageSize = 10, isCurrent, studentId }) => (
+      {
+      url: `class/findAllStudent?page=${page}&pageSize=${pageSize}&studentId=${studentId}&isCurrent=${isCurrent}`,
+      method: 'GET',
+    }),
+    providesTags: ['Classes'],
+  }),
+  getAssignedActivities: builder.query<
+  { status: boolean; data: any[] },
+  number
+>({
+  query: (classId) => ({
+    url: `class/${classId}/assigned-activities`,
+    method: 'GET',
+  }),
+  providesTags: ['ScheduledActivities'],
+}),
   }),
   overrideExisting: 'throw',
 });
@@ -93,6 +118,10 @@ export const {
   useDownloadTemplateQuery,
   useUploadClassExcelMutation,
   useDownloadTemplateAssignStudentQuery,
-  useUploadStudentExcelMutation
+  useUploadStudentExcelMutation,
+  useGetClassesByStudentIdQuery,
+  useGetAssignedActivitiesQuery,
+
+
 } = classApi;
 
